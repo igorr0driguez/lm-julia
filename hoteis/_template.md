@@ -8,7 +8,7 @@
 ## Status de implementação
 - [ ] Etapas JUL.IA ATIVADA e JUL.IA DESATIVADA criadas no pipeline
 - [ ] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
-- [ ] Robô de Entrada configurado (campos, etapa, condicionais, check de buffer vazio para conversa iniciada pelo hotel)
+- [ ] Robô de Entrada configurado (campos, etapa, condicionais)
 - [ ] Salesbot de Recepção configurado
 - [ ] Salesbot Enviar Fotos configurado
 - [ ] hotel_resort configurado corretamente no Robô de Entrada

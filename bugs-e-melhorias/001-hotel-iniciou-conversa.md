@@ -1,49 +1,36 @@
 # 001 — Hotel inicia conversa via WABA e Jul.IA é ativada indevidamente
 
 ## Tipo
-Bug
+Limitação conhecida
 
 ## Status
-Resolvido (aguardando aplicar no Kommo)
-
-## Prioridade
-Alta
+Fechado — solução via processo operacional
 
 ## Escopo
-Termas Park Hotel — Robô de Entrada (pipeline ID: 11631008)
+Termas Park Hotel (e qualquer hotel/central cujo número seja acessado por WhatsApp fora do Kommo)
 
 ---
 
 ## Descrição
 
-O Termas Park Hotel possui uma equipe de balcão que usa o WhatsApp Web conectado via WABA (funcionalidade beta do Kommo) para iniciar atendimentos manualmente. Quando um agente do hotel envia a **primeira mensagem** para um lead novo (conversa outbound), o Kommo cria o lead no pipeline e dispara o Robô de Entrada automaticamente.
+O Kommo permite uso do WhatsApp via app/web conectado à conta WABA (funcionalidade beta). Se um atendente envia a primeira mensagem para um lead fora do Kommo, o lead entra no pipeline e o Robô de Entrada dispara normalmente, ativando a Jul.IA. Resultado: IA começa a responder numa conversa que já estava sendo conduzida manualmente.
 
-O Robô de Entrada não distinguia entre conversas iniciadas pelo cliente (inbound) e pelo hotel (outbound), ativando a Jul.IA em ambos os casos. Resultado: a IA respondia numa conversa que o hotel já estava conduzindo manualmente, gerando sobreposição de atendimento e confusão para o cliente.
+## Por que não há solução técnica viável
 
-## Causa raiz
+O Robô de Entrada não tem como distinguir de forma confiável se a conversa foi iniciada inbound (cliente) ou outbound (hotel). Quando o hotel envia a primeira mensagem e o cliente responde, o lead entra no Kommo já com a mensagem do cliente — e o buffer estará preenchido de qualquer forma. Alternativas via API do Kommo (checagem de notas/mensagens no n8n) criariam complexidade e fragilidade desproporcionais para um caso edge que depende de comportamento fora do controle do sistema.
 
-O Robô de Entrada assumia que toda conversa nova tinha sido iniciada pelo cliente. O campo `mensagem_buffer` é populado pela última mensagem *incoming* do contato — se a conversa foi iniciada pelo hotel (outbound), não há mensagem incoming e o campo fica vazio. Essa diferença não era verificada.
+## Solução: processo operacional
 
-## Solução implementada
+Equipes que acessam o WhatsApp fora do Kommo devem:
 
-Adicionada verificação no Robô de Entrada, logo após salvar o `mensagem_buffer`:
+**Ao iniciar um contato proativo com um lead:**
+1. Abrir o lead no Kommo logo que ele aparecer no pipeline
+2. Acionar o robô **[MANUAL] Desativar Jul.IA** imediatamente
+3. Conduzir o atendimento manualmente a partir daí
 
-- **`mensagem_buffer` preenchido** → cliente iniciou → fluxo normal de ativação da Jul.IA
-- **`mensagem_buffer` vazio** → hotel iniciou → adiciona nota "Conversa iniciada pelo hotel — IA não ativada" e encerra o robô sem ativar a IA nem mudar de etapa
-
-Operador Kommo usado: `mensagem_buffer` → **está preenchido** (branch normal).
-
-## Arquivos alterados
-
-- `kommo/robos.md` — Robô de Entrada documentado com o novo branch
-- `CONTEXT.md` — problema e solução registrados
-
-## Aplicar no Kommo
-
-Editar manualmente o Robô de Entrada do pipeline Termas Park Hotel (ID: 11631008) no designer de robôs do Kommo, inserindo a condição após a ação 1 (salvar buffer).
+O robô de desativação manual já existe exatamente para isso.
 
 ## Notas
 
-- Afeta apenas o Termas Park Hotel atualmente (única equipe usando WABA fora do Kommo)
-- Ao expandir para outros hotéis, o mesmo branch deve ser replicado no Robô de Entrada de cada pipeline
-- "não contém" não existe no Kommo — usar "está preenchido" para detectar mensagem incoming
+- Fora do Kommo = fora do escopo técnico do sistema
+- Hotéis que operam inteiramente pelo Kommo não têm esse problema

@@ -42,13 +42,11 @@ Ver `robos.md` para documentação completa de cada robô.
 - Mensagem livre → envia Salesbot de Recepção + webhook first_contact ao n8n
 - Detecção via condição "contém" no Kommo (não existe operador "não contém")
 
-## Detecção de conversa iniciada pelo hotel (WABA)
+## Limitação conhecida — WABA fora do Kommo
 - O Kommo permite uso do WhatsApp via app/web conectado à conta WABA (funcionalidade beta)
-- Se o hotel envia a primeira mensagem (outbound), o lead é criado e o Robô de Entrada dispara — mas não há mensagem incoming do cliente, então `mensagem_buffer` fica vazio
-- **Padrão obrigatório em todos os Robôs de Entrada**: verificar `mensagem_buffer` logo após a ação 1 (salvar buffer)
-  - `mensagem_buffer` **está preenchido** → cliente iniciou → fluxo normal
-  - `mensagem_buffer` **está vazio** → hotel iniciou → nota + encerrar sem ativar IA
-- Operadores disponíveis no Kommo: "está preenchido" / "está vazio" (campo texto)
+- Se um atendente inicia conversa pelo WhatsApp fora do Kommo, o lead entra no pipeline e a Jul.IA ativa normalmente — sem como distinguir tecnicamente se foi o hotel ou o cliente quem iniciou
+- **Sem solução técnica viável**: o salesbot não tem como checar a direção da primeira mensagem de forma confiável antes de ativar a IA
+- **Solução: processo operacional** — equipes que usam WhatsApp fora do Kommo devem acionar o robô **[MANUAL] Desativar Jul.IA** assim que o lead entrar no pipeline
 
 ## Query params dos webhooks
 

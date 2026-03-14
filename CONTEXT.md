@@ -29,11 +29,10 @@ Atualizado em: março/2026
 
 ## Problemas conhecidos
 
-- **Hotel inicia conversa via WABA → Jul.IA ativa indevidamente** (Termas Park Hotel): equipe do balcão usa WhatsApp Web via WABA beta para iniciar atendimentos. Quando enviavam a primeira mensagem (outbound), o Robô de Entrada ativava a Jul.IA sem precisar. Solução: verificar se `mensagem_buffer` está vazio após ação 1 — se vazio, hotel iniciou, não ativar IA. Ver `bugs-e-melhorias/001-hotel-iniciou-conversa.md`. **Pendente aplicar no Kommo.**
+- **Hotel inicia conversa via WABA → Jul.IA ativa indevidamente**: equipe do Termas Park usa WhatsApp fora do Kommo (WABA beta). Não há solução técnica viável — o sistema não consegue distinguir quem iniciou a conversa de forma confiável. **Solução: processo operacional** — equipe deve acionar o robô [MANUAL] Desativar Jul.IA assim que o lead aparecer. Ver `bugs-e-melhorias/001-hotel-iniciou-conversa.md`.
 
 ## Últimas alterações
-- 2026-03-14 | kommo/robos.md | Robô de Entrada: novo branch para detectar conversa iniciada pelo hotel (mensagem_buffer vazio)
-- 2026-03-14 | bugs-e-melhorias/001-hotel-iniciou-conversa.md | criado — bug documentado com causa raiz e solução
+- 2026-03-14 | bugs-e-melhorias/001-hotel-iniciou-conversa.md | criado — limitação conhecida documentada com decisão de processo
 - 2026-03-14 | ARQUITETURA.md | criado — fluxo completo do sistema documentado
 - 2026-03-14 | kommo/robos.md | criado — todos os robôs documentados com fluxos
 - 2026-03-14 | kommo/CLAUDE.md | atualizado — campos, robôs, limitações técnicas
