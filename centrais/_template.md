@@ -12,7 +12,7 @@
 ## Status de implementação
 - [ ] Etapas JUL.IA ATIVADA e JUL.IA DESATIVADA criadas no pipeline da central
 - [ ] Gatilho do salesbot "Chamar Gust.IA" configurado na etapa JUL.IA ATIVADA
-- [ ] Robô de Entrada (Central) configurado (triagem por termos, condicionais por hotel)
+- [ ] Robô de Entrada (Central) configurado (triagem por termos, condicionais por hotel, check de buffer vazio para conversa iniciada pelo hotel)
 - [ ] hotel_resort configurado corretamente no Robô de Entrada para cada hotel
 - [ ] Termos de identificação de cada hotel mapeados no Robô de Entrada
 - [ ] Material dos hotéis coletado

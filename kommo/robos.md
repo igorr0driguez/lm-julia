@@ -137,11 +137,14 @@ Diferente do hotel individual porque um único número atende múltiplos hotéis
 
 **Fluxo:**
 1. Lê a mensagem do cliente (95%+ vêm de landing page com formato: "Olá, gostaria de mais informações sobre o [hotel]")
-2. Busca termos do nome dos hotéis da central na mensagem
-3. **Se identificou hotel:**
+2. **Verificação: `mensagem_buffer` está vazio?**
+   - **SIM:** central/hotel iniciou a conversa → adiciona nota "Conversa iniciada pelo hotel — IA não ativada" → fim do robô
+   - **NÃO:** cliente enviou mensagem → segue fluxo abaixo
+3. Busca termos do nome dos hotéis da central na mensagem
+4. **Se identificou hotel:**
    - Fluxo igual ao Robô de Entrada individual (define variáveis, muda etapa, verifica "cotação")
    - Tudo dentro de um único salesbot (sem pipeline separado por hotel nessa etapa)
-4. **Se não identificou hotel:**
+5. **Se não identificou hotel:**
    - Define `hotel ou resort` = nome da central (ex: "Central Gravatal")
    - Define `hotel_resort` = identificador da central (ex: "central_gravatal")
    - Muda etapa → **JUL.IA ATIVADA** da central
