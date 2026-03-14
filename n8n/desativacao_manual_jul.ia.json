@@ -9,10 +9,7 @@
       },
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [
-        -80,
-        384
-      ],
+      "position": [-928, 400],
       "id": "9ebc3bac-01f6-4168-a07d-a3f3f28530cb",
       "name": "Webhook Desativação Manual",
       "webhookId": "desativacao-manual-julia"
@@ -26,10 +23,7 @@
       },
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
-      "position": [
-        208,
-        176
-      ],
+      "position": [-624, 192],
       "id": "42a69230-4e38-4c3f-883f-4aa62554d298",
       "name": "Get Lead Data",
       "credentials": {
@@ -45,10 +39,7 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        400,
-        176
-      ],
+      "position": [-432, 192],
       "id": "1972d27c-e77d-4524-9c1a-2fcb6a4682a4",
       "name": "Parse Lead Data"
     },
@@ -61,10 +52,7 @@
       },
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
-      "position": [
-        208,
-        384
-      ],
+      "position": [-208, 656],
       "id": "bc1d2188-cd3e-451c-982a-46a12c475523",
       "name": "Get Pipelines Data",
       "credentials": {
@@ -80,10 +68,7 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        400,
-        384
-      ],
+      "position": [-16, 656],
       "id": "de43f85d-eaac-4e71-96f4-5b53b9c521a9",
       "name": "Parse Pipelines Data"
     },
@@ -96,10 +81,7 @@
       },
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
-      "position": [
-        208,
-        592
-      ],
+      "position": [-208, 864],
       "id": "e60a7726-c4ee-40db-bd5b-e96f3aa6f18f",
       "name": "Get custom_fields",
       "credentials": {
@@ -115,10 +97,7 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        400,
-        592
-      ],
+      "position": [-16, 864],
       "id": "0644baab-a8f2-494c-acf2-98555b625a1c",
       "name": "Parse custom_fields Data"
     },
@@ -128,10 +107,7 @@
       },
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
-      "position": [
-        640,
-        368
-      ],
+      "position": [640, 368],
       "id": "16d4f2ae-0e1d-4894-874b-a0ac58547b48",
       "name": "Merge"
     },
@@ -141,10 +117,7 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        848,
-        384
-      ],
+      "position": [848, 384],
       "id": "ddac9104-d2b0-407a-a7c3-1bc61260a731",
       "name": "Find New Lead Status"
     },
@@ -161,10 +134,7 @@
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
-      "position": [
-        1040,
-        384
-      ],
+      "position": [1040, 384],
       "id": "a856e68c-adf0-4c43-a465-f1295e321eea",
       "name": "Desativar 'jul.ia_ativa'",
       "credentials": {
@@ -187,10 +157,7 @@
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
-      "position": [
-        1248,
-        384
-      ],
+      "position": [1248, 384],
       "id": "5b092bbb-06e8-4a97-98b7-3205dafeec97",
       "name": "Nota de Desativação Manual",
       "credentials": {
@@ -219,10 +186,7 @@
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
-      "position": [
-        1440,
-        384
-      ],
+      "position": [1440, 384],
       "id": "6405bdad-0651-4bdb-84b8-61d595287077",
       "name": "Mover para Etapa JUL.IA DESATIVADA",
       "credentials": {
@@ -248,12 +212,69 @@
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [
-        1648,
-        384
-      ],
+      "position": [1648, 384],
       "id": "fb7e8458-d49f-497d-9848-4ee4eaa53e93",
       "name": "Confirmação"
+    },
+    {
+      "parameters": {
+        "url": "=https://lmresorts.kommo.com/api/v4/leads/{{ $item(\"0\").$node[\"Webhook Desativação Manual\"].json.body[\"leads[add][0][id]\"] }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [80, 128],
+      "id": "2055d6c9-21e4-4b5a-a001-beea30c993c3",
+      "name": "Get Lead by ID",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawString = $input.item.json.data;\n\nlet raw;\ntry {\n  raw = JSON.parse(rawString);\n} catch (e) {\n  return { json: { error: \"Erro ao ler JSON do Kommo\" } };\n}\n\nconst leadOrganizado = {\n  lead_id: raw.id,\n  lead_name: raw.name,\n  pipeline_id: raw.pipeline_id,\n  status_id: raw.status_id,\n  price: raw.price,\n  responsible_user_id: raw.responsible_user_id,\n  group_id: raw.group_id,\n  created_by: raw.created_by,\n  updated_by: raw.updated_by,\n  created_at_unix: raw.created_at,\n  updated_at_unix: raw.updated_at,\n  closed_at: raw.closed_at,\n  loss_reason_id: raw.loss_reason_id,\n  account_id: raw.account_id,\n  score: raw.score,\n  is_deleted: raw.is_deleted,\n  tags: raw._embedded?.tags || [],\n  companies: raw._embedded?.companies || [],\n  custom_fields: {}\n};\n\nif (raw.custom_fields_values && Array.isArray(raw.custom_fields_values)) {\n  raw.custom_fields_values.forEach(field => {\n    // Mantém o field_code original, senão usa field_name original, senão field_id\n    const key = field.field_code || field.field_name || field.field_id;\n    const val = field.values[0] ? field.values[0].value : null;\n    leadOrganizado.custom_fields[key] = val;\n  });\n}\n\nreturn { json: leadOrganizado };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [352, 224],
+      "id": "cfc1f19b-5cd4-4118-893f-7aca26e299e1",
+      "name": "Tratar Dados Lead"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a50df6ae-c49e-4932-8f19-53ab17187a2c",
+              "leftValue": "={{ $json.json }}",
+              "rightValue": "=",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [-224, 192],
+      "id": "10f09e14-41b7-48d1-9283-cb6e6144d9da",
+      "name": "If"
     }
   ],
   "pinData": {
@@ -266,17 +287,17 @@
             "x-real-ip": "142.0.207.172",
             "x-forwarded-for": "142.0.207.172",
             "x-forwarded-proto": "https",
-            "content-length": "191",
+            "content-length": "190",
             "user-agent": "amoCRM-Webhooks/3.0",
             "content-type": "application/x-www-form-urlencoded",
-            "x-amocrm-requestid": "c6c5d194-0fb1-4192-b0a9-214dea255d80",
+            "x-amocrm-requestid": "02c08aa7-bb40-4323-9b5f-cb1eeb6368f6",
             "accept-encoding": "gzip"
           },
           "params": {},
           "query": {},
           "body": {
-            "leads[add][0][id]": "24722318",
-            "leads[add][0][status_id]": "101800475",
+            "leads[add][0][id]": "24783184",
+            "leads[add][0][status_id]": "89329100",
             "leads[add][0][pipeline_id]": "11631008",
             "account[id]": "33299435",
             "account[subdomain]": "lmresorts"
@@ -327,7 +348,7 @@
       "main": [
         [
           {
-            "node": "Merge",
+            "node": "If",
             "type": "main",
             "index": 0
           }
@@ -432,6 +453,46 @@
           }
         ]
       ]
+    },
+    "Get Lead by ID": {
+      "main": [
+        [
+          {
+            "node": "Tratar Dados Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Get Lead by ID",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tratar Dados Lead": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
@@ -440,7 +501,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "c2bfef9a-1f62-4ca7-8fd6-361813d2bb2d",
+  "versionId": "14646e14-1c44-4404-9665-c62f1bffffa4",
   "meta": {
     "instanceId": "e60b74ab053ed0d2b808977bf7f742d40a11fa4d10865b3095732a10341c3c2f"
   },
