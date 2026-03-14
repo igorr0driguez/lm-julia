@@ -80,21 +80,29 @@ Primeiro robô acionado quando um lead chega ao pipeline. Prepara o contexto e i
 
 **Ações em sequência:**
 1. Salva primeira mensagem do cliente no campo `mensagem_buffer`
-2. Altera responsável do lead para o contato técnico
-3. Adiciona nota: "IA em atendimento"
-4. Define `jul.ia_ativa` = true
-5. Define nome do lead = nome do contato (legibilidade na interface)
-6. Define campo `hotel ou resort` (valor estético, visível para vendedores)
-7. Define campo `hotel_resort` (valor técnico, is_api_only)
-8. Muda etapa do lead → **JUL.IA ATIVADA**
+2. **Verificação: `mensagem_buffer` está vazio?**
+   - **SIM (hotel iniciou a conversa via WABA):**
+     - Adiciona nota: "Conversa iniciada pelo hotel — IA não ativada"
+     - Fim do robô (sem mudança de etapa, sem `jul.ia_ativa`)
+   - **NÃO (cliente enviou mensagem → fluxo normal):**
+     - Altera responsável do lead para o contato técnico
+     - Adiciona nota: "IA em atendimento"
+     - Define `jul.ia_ativa` = true
+     - Define nome do lead = nome do contato (legibilidade na interface)
+     - Define campo `hotel ou resort` (valor estético, visível para vendedores)
+     - Define campo `hotel_resort` (valor técnico, is_api_only)
+     - Muda etapa do lead → **JUL.IA ATIVADA**
 
-**Condicional pós-setup:**
+**Condicional pós-setup (apenas branch NÃO acima):**
 - Se `mensagem_buffer` contém "cotação":
   - Vai direto ao "Chamar Jul.IA" (sem mensagem de recepção — lead veio com formulário preenchido)
 - Se não contém "cotação":
   - Dispara **Salesbot de Recepção** (mensagem pedindo dados de cotação)
   - Envia webhook ao n8n com params: `first_contact=true`, `buffer=true`, `follow_up=false`, `assistant=julia`
   - (n8n registra contexto mas não chama IA nem responde)
+
+**Por que `mensagem_buffer` vazio indica conversa iniciada pelo hotel:**
+O campo é populado pela última mensagem *incoming* do contato. Se o hotel enviou a primeira mensagem (outbound via WABA beta), não há mensagem incoming — o campo fica vazio. Operador usado no Kommo: `mensagem_buffer` → **está preenchido** (para o branch normal). Obs.: "não contém" não existe no Kommo, mas "está preenchido" / "está vazio" são operadores disponíveis.
 
 ---
 
