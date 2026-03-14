@@ -1,0 +1,129 @@
+{
+  "name": "Cache custom_fields",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "daysInterval": 3,
+              "triggerAtHour": 3
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        304,
+        176
+      ],
+      "id": "911660ba-41c6-4466-8c65-fde7839fc26e",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "custom_fields",
+        "value": "={{ JSON.stringify($json) }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        1008,
+        176
+      ],
+      "id": "461e4c6c-7fc3-4bf7-be3d-20062122a073",
+      "name": "Redis",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://lmresorts.kommo.com/api/v4/leads/custom_fields",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        560,
+        176
+      ],
+      "id": "594794b8-96f6-4745-926a-e14a4329bc60",
+      "name": "Get custom_fields",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = JSON.parse($input.first().json.data);\nconst fields = raw._embedded.custom_fields;\n\nconst organized = fields.map(field => ({\n  id: field.id,\n  name: field.name,\n  code: field.code,\n  type: field.type,\n  group_id: field.group_id,\n  sort: field.sort,\n  is_api_only: field.is_api_only,\n  is_deletable: field.is_deletable,\n  is_predefined: field.is_predefined,\n  entity_type: field.entity_type,\n  enums: field.enums ?? null,       // opções se for campo select/radio\n  required_statuses: field.required_statuses ?? [],\n  hidden_statuses: field.hidden_statuses ?? []\n}));\n\n// Índices úteis para lookups rápidos\nconst by_id = {};\nconst by_code = {};\nconst by_name = {};\n\norganized.forEach(f => {\n  by_id[f.id] = f;\n  if (f.code) by_code[f.code] = f;\n  by_name[f.name.toLowerCase()] = f;\n});\n\nreturn [{\n  json: {\n    total: raw._total_items,\n    fields: organized,\n    by_id,\n    by_code,\n    by_name\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        800,
+        176
+      ],
+      "id": "71cb7837-dc96-415d-b688-17f08cc92cf4",
+      "name": "Tratar dados custom_fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get custom_fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get custom_fields": {
+      "main": [
+        [
+          {
+            "node": "Tratar dados custom_fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tratar dados custom_fields": {
+      "main": [
+        [
+          {
+            "node": "Redis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "ac5b47f6-ff0b-4623-abb9-e6060aa7d88e",
+  "meta": {
+    "instanceId": "e60b74ab053ed0d2b808977bf7f742d40a11fa4d10865b3095732a10341c3c2f"
+  },
+  "id": "q4PXS5vBCw0MyteyxwUh_",
+  "tags": []
+}

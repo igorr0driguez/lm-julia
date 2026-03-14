@@ -1,0 +1,429 @@
+{
+  "name": "Agente Jul.IA",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "Nome"
+            },
+            {
+              "name": "Numero"
+            },
+            {
+              "name": "Mensagem"
+            },
+            {
+              "name": "idconversa"
+            },
+            {
+              "name": "Hotel"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        32,
+        -32
+      ],
+      "id": "81110c1f-f299-4a81-b689-c6eb1f858456",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "36118dfe-3dd7-496c-aabd-10dc9f19b428",
+              "name": "Nome",
+              "value": "={{ $json.Nome }}",
+              "type": "string"
+            },
+            {
+              "id": "3887ac4b-88b3-4e84-8915-9fa6da85c034",
+              "name": "Numero",
+              "value": "={{ $json.Numero }}",
+              "type": "string"
+            },
+            {
+              "id": "d5d04e4f-8c7e-4516-86b9-4b937b794a49",
+              "name": "Mensagem",
+              "value": "={{ $json.Mensagem }}",
+              "type": "string"
+            },
+            {
+              "id": "0030c94f-8c48-4f05-9b1b-5c03e7ef36c7",
+              "name": "sender",
+              "value": "={{ $item(\"0\").$node[\"When Executed by Another Workflow\"].json[\"Hotel\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "b4542123-5169-45fd-ac29-7c039f49d5a8",
+              "name": "prompt",
+              "value": "={{ JSON.parse($item(\"0\").$node[\"When Executed by Another Workflow\"].json[\"Prompt\"]) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        256,
+        -32
+      ],
+      "id": "2acf3dfa-ef88-402f-8251-53e01a91f998",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $item(\"0\").$node[\"Edit Fields\"].json[\"Mensagem\"] }}",
+        "options": {
+          "systemMessage": "=## DADOS DO CLIENTE\nNome: {{ $item(\"0\").$node[\"Edit Fields\"].json[\"Nome\"] }}\nNúmero: {{ $item(\"0\").$node[\"Edit Fields\"].json[\"Numero\"] }}\nCanal: {{ $item(\"0\").$node[\"Edit Fields\"].json[\"sender\"] }}\nData atual: {{ $now }}\nResumo da conversa: {{ $('Redis').item.json.propertyName }}\n\n\n{{ JSON.parse($item(\"0\").$node[\"Busca Empresa\"].json[\"empresa\"]) }}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1072,
+        -32
+      ],
+      "id": "0f9417a0-7066-4bc4-adb5-3df741db0c02",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1.1,
+      "position": [
+        1504,
+        320
+      ],
+      "id": "91e677f3-af47-4501-9ca4-02a9754e9e07",
+      "name": "Think"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "key": "=cliente - {{ $item(\"0\").$node[\"When Executed by Another Workflow\"].json[\"Numero\"] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        480,
+        -32
+      ],
+      "id": "ff4163b2-32be-464c-9547-a3482d9f25c3",
+      "name": "Redis",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "dP4z6NDY2qFVXjmwOhhxc"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nome": "={{ $('When Executed by Another Workflow').item.json.Nome }}",
+            "Mensagem": "={{ $('When Executed by Another Workflow').item.json.Mensagem }}",
+            "Numero": "={{ $('When Executed by Another Workflow').item.json.Numero }}",
+            "Resumo IA": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Resumo_IA', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Mensagem",
+              "displayName": "Mensagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Numero",
+              "displayName": "Numero",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Resumo IA",
+              "displayName": "Resumo IA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1376,
+        320
+      ],
+      "id": "8f09325a-def1-4d49-af4a-e1a6a45447ea",
+      "name": "Armazena"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6d20a0b7-2762-4850-9c77-a9bbd6c730cc",
+              "name": "conversationId",
+              "value": "={{ $item(\"0\").$node[\"When Executed by Another Workflow\"].json[\"idconversa\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "50579017-f5b5-4b13-acbb-e17217cf43e2",
+              "name": "output",
+              "value": "={{ $('AI Agent').item.json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1648,
+        -32
+      ],
+      "id": "dd5bd2d2-a956-432b-a4c5-7da0931136ee",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "empresa",
+        "key": "=empresa: {{ $('When Executed by Another Workflow').item.json.Hotel }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        752,
+        -32
+      ],
+      "id": "cb953973-825a-416d-9b11-72e0b60732df",
+      "name": "Busca Empresa",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        880,
+        208
+      ],
+      "id": "499b2bf9-6f38-4ebd-8d80-b4fc6a873a54",
+      "name": "OpenAI Chat Model",
+      "retryOnFail": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "cV7M2s5fsu3E9q4X",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Edit Fields').item.json.Numero }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        1136,
+        208
+      ],
+      "id": "956d630b-8663-46d7-b716-e816e981edcc",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "yNRcayABe7Nl5i2Q",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "Nome": "Jonathan",
+          "Numero": "24620984",
+          "Mensagem": " já falei \n 03 de setembro",
+          "idconversa": "25944622",
+          "Hotel": "internacionalgravatal"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Redis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis": {
+      "main": [
+        [
+          {
+            "node": "Busca Empresa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Armazena": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca Empresa": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "f76e14ba-97f1-49ae-aaf0-79cd879bb328",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e60b74ab053ed0d2b808977bf7f742d40a11fa4d10865b3095732a10341c3c2f"
+  },
+  "id": "X1AUr3jR4SfHSvEDXvVGs",
+  "tags": []
+}

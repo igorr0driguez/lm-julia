@@ -1,0 +1,382 @@
+{
+  "name": "Handoff Gustavo.IA → Jul.IA",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "lead_id"
+            },
+            {
+              "name": "contact_id"
+            },
+            {
+              "name": "return_url"
+            },
+            {
+              "name": "message"
+            },
+            {
+              "name": "hotel_resort"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1cb8f11c-ded0-4904-bc4d-e39082cefaa1",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "lead_data",
+        "key": "={{ $item(\"0\").$node[\"When Executed by Another Workflow\"].json[\"lead_id\"] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        256,
+        -112
+      ],
+      "id": "d9396c53-a59c-4774-913d-be5a2563b698",
+      "name": "Get Lead Data",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "pipelines_data",
+        "key": "pipelines",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        256,
+        96
+      ],
+      "id": "80d2bbd1-3706-4aec-80d3-a9dbbab77649",
+      "name": "Get Pipelines Data",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item.json;\nlet leadData = item.lead_data;\n\nif (typeof leadData === 'string') {\n  leadData = JSON.parse(leadData);\n}\n\nreturn { json: leadData };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        -112
+      ],
+      "id": "836d2bc8-0c66-4b15-b520-aee52866ae81",
+      "name": "Parse Lead Data"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Quando vem do Redis, já vem tratado - só precisa parsear\n\nconst item = $input.item.json;\nlet pipelinesData = item.pipelines_data;\n\n// Se veio como string, parseia\nif (typeof pipelinesData === 'string') {\n  pipelinesData = JSON.parse(pipelinesData);\n}\n\n// Retorna direto (já está no formato correto)\nreturn { json: pipelinesData };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        96
+      ],
+      "id": "a9e4fb90-06bd-42d5-bb54-34a9c4af3c3a",
+      "name": "Parse Pipelines Data"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        736,
+        -16
+      ],
+      "id": "8f31442c-3108-44f4-910d-677a3126ea97",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Code Node: Resolve Pipeline Destino\n// Recebe: hotel_resort (string) + pipelines cache (do Redis)\n// Retorna: pipeline_id destino + status_id \"JUL.IA ATIVADA\"\n\nconst items = $input.all();\nconst lead = items[0].json;\nconst pipelines = items.slice(1).map(i => i.json);\n\n// Input do workflow\nconst hotelResort = $('When Executed by Another Workflow').first().json.hotel_resort;\n\n// Mapeamento hardcoded: hotel_resort → pipeline_id\nconst hotelToPipeline = {\n  'hotel_internacional': 9377539,\n  'termas_gravatal': 9361827,\n  'termas_do_lago': 9377947,\n  'cabanas': 9379711,\n  'park_hotel': 11631008,\n  'fazzenda': 9391183,\n  'ita_thermas': 9392163,\n  'machadinho_thermas': 10835031,\n  'lagos_de_jurema': 10637211,\n  'jardins_de_jurema': 10637219,\n  'tirolesa': 12074732,\n  'aguas_de_palmas': 12621844,\n  'dona_francisca': 13142691,\n  'recanto_cataratas_resort': 9515771,\n  'mabu_thermas': 9418391,\n  'vivaz_cataratas': 12736543,\n};\n\n// Mapeamento de nomes bonitos (pra PATCH no campo visual)\nconst hotelToName = {\n  'hotel_internacional': 'Hotel Internacional Gravatal',\n  'termas_gravatal': 'Hotel Termas (Gravatal)',\n  'termas_do_lago': 'Hotel Termas do Lago',\n  'cabanas': 'Cabanas Termas Hotel',\n  'park_hotel': 'Termas Park Hotel',\n  'fazzenda': 'Fazzenda Park Resort',\n  'ita_thermas': 'Itá Thermas Resort e Spa',\n  'machadinho_thermas': 'Machadinho Thermas Resort SPA',\n  'lagos_de_jurema': 'Lagos de Jurema',\n  'jardins_de_jurema': 'Jardins de Jurema',\n  'tirolesa': 'Hotel Tirolesa',\n  'aguas_de_palmas': 'Águas de Palmas',\n  'dona_francisca': 'Dona Francisca',\n  'recanto_cataratas_resort': 'Recanto Cataratas Resort',\n  'mabu_thermas': 'Mabu Thermas Grand Resort',\n  'vivaz_cataratas': 'Vivaz Cataratas Resort',\n};\n\n// 1. Resolve pipeline_id destino\nconst targetPipelineId = hotelToPipeline[hotelResort];\nif (!targetPipelineId) {\n  throw new Error(`hotel_resort \"${hotelResort}\" não mapeado em hotelToPipeline`);\n}\n\n// 2. Busca o pipeline no cache do Redis\nconst pipelineKey = targetPipelineId.toString();\nconst pipeline = pipelines.find(p => p[pipelineKey]);\nconst pipelineData = pipeline?.[pipelineKey];\n\nif (!pipelineData) {\n  throw new Error(`Pipeline ${pipelineKey} não encontrado no cache Redis`);\n}\n\n// 3. Resolve status_id da etapa \"JUL.IA ATIVADA\"\nlet juliaAtivadaStatusId = null;\nfor (const [statusId, statusName] of Object.entries(pipelineData.statuses)) {\n  if (statusName === \"JUL.IA ATIVADA\") {\n    juliaAtivadaStatusId = statusId;\n    break;\n  }\n}\n\nif (!juliaAtivadaStatusId) {\n  throw new Error(`Etapa \"JUL.IA ATIVADA\" não encontrada no pipeline ${pipelineData.name}`);\n}\n\nreturn [{\n  json: {\n    ...lead,\n    target_pipeline_id: targetPipelineId,\n    target_status_id: parseInt(juliaAtivadaStatusId),\n    hotel_resort: hotelResort,\n    name_hotel_resort: hotelToName[hotelResort] || hotelResort,\n    pipeline_name: pipelineData.name\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        -16
+      ],
+      "id": "d12ea862-87e2-4a4b-b340-29c716de47b4",
+      "name": "Resolver Pipeline Destino"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://lmresorts.kommo.com/api/v4/leads/{{ $item(\"0\").$node[\"When Executed by Another Workflow\"].json[\"lead_id\"] }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"pipeline_id\": {{ $json.target_pipeline_id }},\n  \"status_id\": {{ $json.target_status_id }},\n  \"custom_fields_values\": [\n    {\n      \"field_id\": 1055308,\n      \"values\": [{ \"value\": {{ JSON.stringify($json.hotel_resort) }} }]\n    },\n    {\n      \"field_id\": 1033070,\n      \"values\": [{ \"value\": {{ JSON.stringify($json.name_hotel_resort) }} }]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1136,
+        -16
+      ],
+      "id": "debb8ea6-3bba-4e40-b7c2-1ea197e15f3a",
+      "name": "Mover para Etapa JUL.IA ATIVADA no Pipeline Destino",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "wcKClpCF2nV4wE_TBiT53",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/wcKClpCF2nV4wE_TBiT53",
+          "cachedResultName": "Backend Jul.IA"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "return_url": "={{ $('When Executed by Another Workflow').first().json.return_url }}",
+            "lead_id": "={{ $('When Executed by Another Workflow').first().json.lead_id }}",
+            "assistant": "julia",
+            "timestamp": "={{ $now }}",
+            "name": "={{ $('Parse Lead Data').first().json.lead_name }}",
+            "contact_id": "={{ $('When Executed by Another Workflow').first().json.contact_id }}",
+            "message": "={{ $('When Executed by Another Workflow').first().json.message }}",
+            "hotel-resort": "={{ $('When Executed by Another Workflow').first().json.hotel_resort }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "return_url",
+              "displayName": "return_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "contact_id",
+              "displayName": "contact_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "assistant",
+              "displayName": "assistant",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "hotel-resort",
+              "displayName": "hotel-resort",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1360,
+        -16
+      ],
+      "id": "84d24894-5c86-4b8d-b839-91d61da7e641",
+      "name": "Call 'Backend Jul.IA'"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get Lead Data": {
+      "main": [
+        [
+          {
+            "node": "Parse Lead Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Pipelines Data": {
+      "main": [
+        [
+          {
+            "node": "Parse Pipelines Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get Lead Data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Pipelines Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Lead Data": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Pipelines Data": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Resolver Pipeline Destino",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resolver Pipeline Destino": {
+      "main": [
+        [
+          {
+            "node": "Mover para Etapa JUL.IA ATIVADA no Pipeline Destino",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mover para Etapa JUL.IA ATIVADA no Pipeline Destino": {
+      "main": [
+        [
+          {
+            "node": "Call 'Backend Jul.IA'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "7d948b74-8395-424c-8747-16a956147109",
+  "meta": {
+    "instanceId": "e60b74ab053ed0d2b808977bf7f742d40a11fa4d10865b3095732a10341c3c2f"
+  },
+  "id": "Ijr4FTHOxcGT_0lBAZoOJ",
+  "tags": []
+}

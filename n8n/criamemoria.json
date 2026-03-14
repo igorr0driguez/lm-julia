@@ -1,0 +1,280 @@
+{
+  "name": "CriaMemoria",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "Nome"
+            },
+            {
+              "name": "Mensagem"
+            },
+            {
+              "name": "Numero"
+            },
+            {
+              "name": "Resumo IA"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        -80
+      ],
+      "id": "793404a6-bd68-41e7-bcd3-cc426df49e18",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $item(\"0\").$node[\"When Executed by Another Workflow\"].json[\"Mensagem\"] }}",
+        "options": {
+          "systemMessage": "=Você é um assistente que mantém um resumo **acumulativo** e ultra-conciso de conversas com clientes.\n\n## TAREFA\n\nReceba o **RESUMO ANTERIOR** e a **NOVA INTERAÇÃO**. Produza um **RESUMO ATUALIZADO** que INTEGRE ambos.\n\n---\n\n**Cliente:** {{ $item(\"0\").$node[\"When Executed by Another Workflow\"].json[\"Nome\"] }}\n\n**Nova Interação:**\n{{ $item(\"0\").$node[\"When Executed by Another Workflow\"].json[\"Resumo IA\"] }}\n\n**Resumo Anterior:**\n{{ $item(\"0\").$node[\"Puxa\"].json[\"propertyName\"] }}\n\n---\n\n## REGRAS DE ACUMULAÇÃO (CRÍTICO)\n\n1. O resumo atualizado **DEVE conter TODAS** as informações do resumo anterior + as novas informações substanciais.\n2. **NUNCA descarte** dados do resumo anterior. Apenas adicione ou condense.\n3. Se a nova interação não adiciona nada relevante, retorne o resumo anterior **EXATAMENTE** como está, sem reescrever.\n\n## REGRAS DE CONTEÚDO\n\n- Ignore saudações, cumprimentos e mensagens vazias de conteúdo.\n- Registre APENAS informações acionáveis: dados fornecidos, perguntas específicas, solicitações, objeções, decisões.\n- Elimine redundâncias — não repita a mesma informação com palavras diferentes.\n\n## FORMATO\n\n- Máximo 5 linhas.\n- Use frases curtas: \"Cliente [ação]. Atendente [ação].\"\n- Ordem cronológica.\n\n## EXEMPLOS\n\n**Exemplo de acumulação correta:**\n\n> RESUMO ANTERIOR:\n> Cliente informou 2 adultos. Atendente solicitou data de entrada.\n>\n> NOVA INTERAÇÃO:\n> Cliente informou data de entrada 03/05/2026. Atendente solicitou data de saída.\n>\n> ✅ RESUMO ATUALIZADO:\n> Cliente informou 2 adultos e data de entrada 03/05/2026. Atendente solicitou data de saída.\n\n**Bom vs Ruim:**\n\n- ✅ BOM: \"Cliente perguntou preço do hotel. Atendente informou R$500/noite. Cliente achou caro, pediu opções mais baratas.\"\n- ❌ RUIM: \"Cliente iniciou contato com saudação. Aguardando encaminhamento de solicitações...\"\n- ❌ RUIM: Resumo que perde informações do resumo anterior.\n\n---\n\nAtualize o resumo apenas com informações substanciais da nova interação. Se não houver nada novo, mantenha o resumo anterior inalterado."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        592,
+        -80
+      ],
+      "id": "36d2b32a-c107-452c-9ada-20f671cb2c75",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        576,
+        144
+      ],
+      "id": "6d2f9676-01b9-43d7-ac78-d268710c41f2",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "cV7M2s5fsu3E9q4X",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "=cliente - {{ $item(\"0\").$node[\"When Executed by Another Workflow\"].json[\"Numero\"] }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        944,
+        -80
+      ],
+      "id": "4f355f9d-2aa9-4853-8538-c26ca7f49c72",
+      "name": "Deleta",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "key": "=cliente - {{ $item(\"0\").$node[\"When Executed by Another Workflow\"].json[\"Numero\"] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        352,
+        -80
+      ],
+      "id": "e39acd9f-939f-4a8b-99c3-1f8663bbe566",
+      "name": "Puxa",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "=cliente - {{ $item(\"0\").$node[\"When Executed by Another Workflow\"].json[\"Numero\"] }}",
+        "value": "={{ $item(\"0\").$node[\"AI Agent\"].json[\"output\"] }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        -80
+      ],
+      "id": "2150b586-7e0d-4c16-930a-a73c705a152f",
+      "name": "Redis",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "=cliente - {{ $item(\"0\").$node[\"When Executed by Another Workflow\"].json[\"Numero\"] }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        976,
+        176
+      ],
+      "id": "e9c24590-6b1e-4b45-a923-d82f26b44b4c",
+      "name": "Deleta1",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "62723a32-a729-46f0-9c5d-73c709d74eda",
+              "name": "Resumo",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1360,
+        -80
+      ],
+      "id": "2b8498c2-7730-418a-9df1-49e81bb458db",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "Nome": "Gabriel Ribeiro",
+          "Mensagem": "Boa tarde",
+          "Numero": "+55 55 98601-8726",
+          "Resumo IA": "Mensagem inicial enviada ao cliente Gabriel Ribeiro."
+        }
+      }
+    ],
+    "Puxa": [
+      {
+        "json": {
+          "propertyName": "Todos os dias da semana eu gosto de rir, hahaha"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Puxa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Deleta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deleta": {
+      "main": [
+        [
+          {
+            "node": "Redis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Puxa": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "dfacaa4d-2130-46e2-93f0-5df7c5f88d8e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e60b74ab053ed0d2b808977bf7f742d40a11fa4d10865b3095732a10341c3c2f"
+  },
+  "id": "dP4z6NDY2qFVXjmwOhhxc",
+  "tags": []
+}

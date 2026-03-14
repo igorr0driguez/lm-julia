@@ -1,0 +1,449 @@
+{
+  "name": "Desativação Manual Jul.IA",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lmresortskommo_desativacaomanual",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        384
+      ],
+      "id": "9ebc3bac-01f6-4168-a07d-a3f3f28530cb",
+      "name": "Webhook Desativação Manual",
+      "webhookId": "desativacao-manual-julia"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "lead_data",
+        "key": "={{ $json.body[\"leads[add][0][id]\"] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        208,
+        176
+      ],
+      "id": "42a69230-4e38-4c3f-883f-4aa62554d298",
+      "name": "Get Lead Data",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item.json;\nlet leadData = item.lead_data;\n\nif (typeof leadData === 'string') {\n  leadData = JSON.parse(leadData);\n}\n\nreturn { json: leadData };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        176
+      ],
+      "id": "1972d27c-e77d-4524-9c1a-2fcb6a4682a4",
+      "name": "Parse Lead Data"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "pipelines_data",
+        "key": "pipelines",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        208,
+        384
+      ],
+      "id": "bc1d2188-cd3e-451c-982a-46a12c475523",
+      "name": "Get Pipelines Data",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item.json;\nlet pipelinesData = item.pipelines_data;\n\nif (typeof pipelinesData === 'string') {\n  pipelinesData = JSON.parse(pipelinesData);\n}\n\nreturn { json: pipelinesData };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        384
+      ],
+      "id": "de43f85d-eaac-4e71-96f4-5b53b9c521a9",
+      "name": "Parse Pipelines Data"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "custom_fields_data",
+        "key": "custom_fields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        208,
+        592
+      ],
+      "id": "e60a7726-c4ee-40db-bd5b-e96f3aa6f18f",
+      "name": "Get custom_fields",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item.json;\nlet custom_fields_data = item.custom_fields_data;\n\nif (typeof custom_fields_data === 'string') {\n  custom_fields_data = JSON.parse(custom_fields_data);\n}\n\nreturn { json: custom_fields_data };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        592
+      ],
+      "id": "0644baab-a8f2-494c-acf2-98555b625a1c",
+      "name": "Parse custom_fields Data"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        640,
+        368
+      ],
+      "id": "16d4f2ae-0e1d-4894-874b-a0ac58547b48",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst lead = items[0].json;\nconst pipelines = items.slice(1).map(i => i.json);\n\nconst pipeline = pipelines.find(p => p[lead.pipeline_id]);\nconst pipelineData = pipeline?.[lead.pipeline_id];\n\nlet juliaDesativadaStatusId = null;\nif (pipelineData?.statuses) {\n  for (const [statusId, statusName] of Object.entries(pipelineData.statuses)) {\n    if (statusName === \"JUL.IA DESATIVADA\") {\n      juliaDesativadaStatusId = statusId;\n      break;\n    }\n  }\n}\n\nreturn [{\n  json: {\n    ...lead,\n    julia_desativada_status_id: juliaDesativadaStatusId\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        848,
+        384
+      ],
+      "id": "ddac9104-d2b0-407a-a7c3-1bc61260a731",
+      "name": "Find New Lead Status"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://lmresorts.kommo.com/api/v4/leads/{{ $item(\"0\").$node[\"Find New Lead Status\"].json[\"lead_id\"] }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"custom_fields_values\": [\n    {\n      \"field_id\": {{ parseInt($item(\"2\").$node[\"Merge\"].json[\"by_name\"][\"jul.ia_ativa\"][\"id\"]) }},\n      \"values\": [\n        { \"value\": false }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1040,
+        384
+      ],
+      "id": "a856e68c-adf0-4c43-a465-f1295e321eea",
+      "name": "Desativar 'jul.ia_ativa'",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://lmresorts.kommo.com/api/v4/leads/{{ $item(\"0\").$node[\"Find New Lead Status\"].json[\"lead_id\"] }}/notes",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "[\n  {\n    \"note_type\": \"common\",\n    \"params\": {\n      \"text\": \"⛔ JUL.IA DESATIVADA MANUALMENTE\\n━━━━━━━━━━━━━━━━━━━━━━\\nDesativação executada manualmente no lead.\\nMais informações no log de atividades.\"\n    }\n  }\n]",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1248,
+        384
+      ],
+      "id": "5b092bbb-06e8-4a97-98b7-3205dafeec97",
+      "name": "Nota de Desativação Manual",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://lmresorts.kommo.com/api/v4/leads/{{ $item(\"0\").$node[\"Find New Lead Status\"].json[\"lead_id\"] }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "status_id",
+              "value": "={{ parseInt($item(\"0\").$node[\"Find New Lead Status\"].json[\"julia_desativada_status_id\"]) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1440,
+        384
+      ],
+      "id": "6405bdad-0651-4bdb-84b8-61d595287077",
+      "name": "Mover para Etapa JUL.IA DESATIVADA",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "confirm-001",
+              "name": "status",
+              "value": "Julia desativada manualmente com sucesso.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1648,
+        384
+      ],
+      "id": "fb7e8458-d49f-497d-9848-4ee4eaa53e93",
+      "name": "Confirmação"
+    }
+  ],
+  "pinData": {
+    "Webhook Desativação Manual": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "jeab-n8n.theworkpc.com",
+            "x-real-ip": "142.0.207.172",
+            "x-forwarded-for": "142.0.207.172",
+            "x-forwarded-proto": "https",
+            "content-length": "191",
+            "user-agent": "amoCRM-Webhooks/3.0",
+            "content-type": "application/x-www-form-urlencoded",
+            "x-amocrm-requestid": "c6c5d194-0fb1-4192-b0a9-214dea255d80",
+            "accept-encoding": "gzip"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "leads[add][0][id]": "24722318",
+            "leads[add][0][status_id]": "101800475",
+            "leads[add][0][pipeline_id]": "11631008",
+            "account[id]": "33299435",
+            "account[subdomain]": "lmresorts"
+          },
+          "webhookUrl": "https://jeab-n8n.theworkpc.com/webhook/lmresortskommo_desativacaomanual",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook Desativação Manual": {
+      "main": [
+        [
+          {
+            "node": "Get Lead Data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Pipelines Data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get custom_fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Lead Data": {
+      "main": [
+        [
+          {
+            "node": "Parse Lead Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Lead Data": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Pipelines Data": {
+      "main": [
+        [
+          {
+            "node": "Parse Pipelines Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Pipelines Data": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get custom_fields": {
+      "main": [
+        [
+          {
+            "node": "Parse custom_fields Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse custom_fields Data": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Find New Lead Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find New Lead Status": {
+      "main": [
+        [
+          {
+            "node": "Desativar 'jul.ia_ativa'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Desativar 'jul.ia_ativa'": {
+      "main": [
+        [
+          {
+            "node": "Nota de Desativação Manual",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nota de Desativação Manual": {
+      "main": [
+        [
+          {
+            "node": "Mover para Etapa JUL.IA DESATIVADA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mover para Etapa JUL.IA DESATIVADA": {
+      "main": [
+        [
+          {
+            "node": "Confirmação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "c2bfef9a-1f62-4ca7-8fd6-361813d2bb2d",
+  "meta": {
+    "instanceId": "e60b74ab053ed0d2b808977bf7f742d40a11fa4d10865b3095732a10341c3c2f"
+  },
+  "id": "gjw6bTsrndcz6aV80vTVT",
+  "tags": []
+}

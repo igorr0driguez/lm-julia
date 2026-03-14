@@ -1,0 +1,130 @@
+{
+  "name": "Cache Users",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtHour": 4
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -448,
+        -80
+      ],
+      "id": "d2d36372-12cd-465e-90ce-1692b7e9b844",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "users",
+        "value": "={{ JSON.stringify($json) }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        192,
+        -80
+      ],
+      "id": "91916f4b-469d-40dd-ad2a-83a0f3a4fe5d",
+      "name": "Redis",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://lmresorts.kommo.com/api/v4/users",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -224,
+        -80
+      ],
+      "id": "7b194bbf-d86a-436c-ae77-0a2d51525921",
+      "name": "Get Users",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.first().json.data;\nconst parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;\n\nconst users = parsed?._embedded?.users ?? [];\n\nconst by_id = {};\nconst by_name = {};\n\nfor (const user of users) {\n  const rights = user.rights ?? {};\n\n  const clean = {\n    id: user.id,\n    name: user.name,\n    email: user.email,\n    lang: user.lang ?? null,\n\n    // Flags de status\n    is_admin: rights.is_admin ?? false,\n    is_active: rights.is_active ?? true,\n    is_free: rights.is_free ?? false,\n\n    // Grupos e papéis\n    group_id: rights.group_id ?? null,\n    role_id: rights.role_id ?? null,\n\n    // Acesso a módulos\n    mail_access: rights.mail_access ?? false,\n    catalog_access: rights.catalog_access ?? false,\n    files_access: rights.files_access ?? false,\n\n    // Permissões gerais por entidade\n    permissions: {\n      leads: rights.leads ?? null,\n      contacts: rights.contacts ?? null,\n      companies: rights.companies ?? null,\n      tasks: rights.tasks ?? null,\n    },\n\n    // Permissões granulares por etapa/pipeline\n    status_rights: rights.status_rights ?? [],\n    catalog_rights: rights.catalog_rights ?? [],\n    custom_fields_rights: rights.custom_fields_rights ?? null,\n  };\n\n  by_id[String(user.id)] = clean;\n\n  const nameKey = user.name?.toLowerCase().trim().replace(/\\s+/g, '_');\n  if (nameKey) by_name[nameKey] = clean;\n}\n\nconst result = {\n  total: users.length,\n  updated_at: new Date().toISOString(),\n  users: Object.values(by_id),\n  by_id,\n  by_name,\n};\n\nreturn [{ json: result }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        -80
+      ],
+      "id": "5718d749-7a05-4057-8eb9-fcf517f95e9d",
+      "name": "Tratar dados Users"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Users",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Users": {
+      "main": [
+        [
+          {
+            "node": "Tratar dados Users",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tratar dados Users": {
+      "main": [
+        [
+          {
+            "node": "Redis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "45eb2b74-35f1-4491-b582-5667db2a28da",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e60b74ab053ed0d2b808977bf7f742d40a11fa4d10865b3095732a10341c3c2f"
+  },
+  "id": "39IzmrksZmEfrmWV",
+  "tags": []
+}

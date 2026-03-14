@@ -1,0 +1,12 @@
+{
+  "widget": {
+    "name": "Jul.IA",
+    "description": "Integração da IA Jul.IA com o Kommo via n8n. Permite enviar mensagens ao webhook e notificar atendentes quando o atendimento da IA for finalizado.",
+    "short_description": "IA Jul.IA integrada ao Kommo"
+  },
+  "salesbot": {
+    "handler_julia_name": "Jul.IA — Enviar mensagem",
+    "handler_notify_name": "Jul.IA — Notificar atendente",
+    "webhook_url": "URL do Webhook (n8n)"
+  }
+}

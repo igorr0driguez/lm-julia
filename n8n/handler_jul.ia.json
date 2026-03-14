@@ -1,0 +1,1268 @@
+{
+  "name": "Handler Jul.IA",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "f754dd2e-2eef-4721-8a33-75c7ecc81f28",
+                    "leftValue": "flavia",
+                    "rightValue": "={{ $item(\"0\").$node[\"Webhook lmresortskommo\"].json[\"query\"][\"assistant\"] }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Flav.IA"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "=julia",
+                    "rightValue": "={{ $item(\"0\").$node[\"Webhook lmresortskommo\"].json[\"query\"][\"assistant\"] }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "626b4942-8147-40cf-9688-72324c1e2a19"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Jul.IA"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1504,
+        352
+      ],
+      "id": "bbc813fb-260e-49a3-b520-f6e375eacb6c",
+      "name": "Definir Agente"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "290e1e48-3bc5-4afa-a0e2-e26d4f9a1801",
+              "leftValue": "={{ $item(\"0\").$node[\"Webhook lmresortskommo\"].json[\"query\"][\"hotel_resort\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2208,
+        1552
+      ],
+      "id": "ee36b298-c330-42f2-9cf9-05e5eacd03d8",
+      "name": "Se primeiro contato"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Code Node: Identificar Hotel/Resort (Primeiro Contato)\n// Executa apenas quando query.hotel_resort existe\n\nconst mapeamento = {\n  // CENTRAL TERMAS DE GRAVATAL\n  'central_gravatal': {\n    hotel_resort: 'central_gravatal',\n    name_hotel_resort: 'Central Termas de Gravatal',\n    is_central: true\n  },\n  'hotel_internacional': {\n    hotel_resort: 'hotel_internacional',\n    name_hotel_resort: 'Hotel Internacional Gravatal',\n    is_central: false\n  },\n  'termas_gravatal': {\n    hotel_resort: 'termas_gravatal',\n    name_hotel_resort: 'Hotel Termas (Gravatal)',\n    is_central: false\n  },\n  'termas_do_lago': {\n    hotel_resort: 'termas_do_lago',\n    name_hotel_resort: 'Hotel Termas do Lago',\n    is_central: false\n  },\n  'cabanas': {\n    hotel_resort: 'cabanas',\n    name_hotel_resort: 'Cabanas Termas Hotel',\n    is_central: false\n  },\n  'park_hotel': {\n    hotel_resort: 'park_hotel',\n    name_hotel_resort: 'Termas Park Hotel',\n    is_central: false\n  },\n  'fazzenda': {\n    hotel_resort: 'fazzenda',\n    name_hotel_resort: 'Fazzenda Park Resort',\n    is_central: false\n  },\n  'ita_thermas': {\n    hotel_resort: 'ita_thermas',\n    name_hotel_resort: 'Itá Thermas Resort e Spa',\n    is_central: false\n  },\n  'machadinho_thermas': {\n    hotel_resort: 'machadinho_thermas',\n    name_hotel_resort: 'Machadinho Thermas Resort SPA',\n    is_central: false\n  },\n  \n  // CENTRAL JUREMA ÁGUAS QUENTES\n  'central_jurema': {\n    hotel_resort: 'central_jurema',\n    name_hotel_resort: 'Central Jurema Águas Quentes',\n    is_central: true\n  },\n  'lagos_de_jurema': {\n    hotel_resort: 'lagos_de_jurema',\n    name_hotel_resort: 'Lagos de Jurema',\n    is_central: false\n  },\n  'jardins_de_jurema': {\n    hotel_resort: 'jardins_de_jurema',\n    name_hotel_resort: 'Jardins de Jurema',\n    is_central: false\n  },\n  \n  // CENTRAL PIRATUBA\n  'central_piratuba': {\n    hotel_resort: 'central_piratuba',\n    name_hotel_resort: 'Central Piratuba',\n    is_central: true\n  },\n  'tirolesa': {\n    hotel_resort: 'tirolesa',\n    name_hotel_resort: 'Hotel Tirolesa',\n    is_central: false\n  },\n  'aguas_de_palmas': {\n    hotel_resort: 'aguas_de_palmas',\n    name_hotel_resort: 'Águas de Palmas',\n    is_central: false\n  },\n  'dona_francisca': {\n    hotel_resort: 'dona_francisca',\n    name_hotel_resort: 'Dona Francisca',\n    is_central: false\n  },\n  'recanto_cataratas_resort': {\n    hotel_resort: 'recanto_cataratas_resort',\n    name_hotel_resort: 'Recanto Cataratas Resort',\n    is_central: false\n  },\n  \n  // CENTRAL RESORTS\n  'central_resorts': {\n    hotel_resort: 'central_resorts',\n    name_hotel_resort: 'Central Resorts',\n    is_central: true\n  },\n  'mabu_thermas': {\n    hotel_resort: 'mabu_thermas',\n    name_hotel_resort: 'Mabu Thermas Grand Resort',\n    is_central: false\n  },\n  'vivaz_cataratas': {\n    hotel_resort: 'vivaz_cataratas',\n    name_hotel_resort: 'Vivaz Cataratas Resort',\n    is_central: false\n  },\n  \n  // CENTRAL GRAMADO\n  'central_gramado': {\n    hotel_resort: 'central_gramado',\n    name_hotel_resort: 'Central Gramado',\n    is_central: true\n  }\n};\n\n// Pega o query param (suporta ambos os nomes por compatibilidade)\nconst hotelResortParam = $json.query['hotel_resort'] || $json.query['hotel-resort'];\n\n// Se não encontrou, retorna erro\nif (!hotelResortParam) {\n  console.error('Query param hotel_resort não encontrado');\n  return {\n    erro: true,\n    mensagem: 'Query param hotel_resort ausente',\n    query: $json.query,\n    body: $json.body\n  };\n}\n\n// Busca no mapeamento\nconst info = mapeamento[hotelResortParam];\n\nif (!info) {\n  console.error('Hotel/Resort não mapeado:', hotelResortParam);\n  return {\n    erro: true,\n    mensagem: 'Hotel/Resort não encontrado no mapeamento',\n    hotel_resort_recebido: hotelResortParam,\n    query: $json.query,\n    body: $json.body\n  };\n}\n\n// Retorna todos os dados + info do hotel\nreturn {\n  // Informações do hotel/resort identificado\n  hotel_resort: info.hotel_resort,\n  name_hotel_resort: info.name_hotel_resort,\n  is_central: info.is_central,\n  \n  // Query params completos\n  query: $json.query,\n  \n  // Body completo (exceto token por segurança)\n  message: $json.body['data[message]'],\n  lead_id: $json.body['data[lead_id]'],\n  contact_id: $json.body['data[contact_id]'],\n  name: $json.body['data[name]'],\n  pipeline_id: $json.body['data[pipeline_id]'],\n  return_url: $json.body.return_url,\n  \n  // Metadata\n  origem: 'primeiro_contato'\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2432,
+        1520
+      ],
+      "id": "1f0cee1b-7b97-4c47-bb8d-e9fb38f1ad62",
+      "name": "Filtragem hotel_resort"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "wcKClpCF2nV4wE_TBiT53",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/wcKClpCF2nV4wE_TBiT53",
+          "cachedResultName": "Backend Jul.IA"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $('Wait Msg').item.json.name }}",
+            "contact_id": "={{ $('Wait Msg').item.json.contact_id }}",
+            "lead_id": "={{ $('Wait Msg').item.json.lead_id }}",
+            "message": "={{ $item(\"0\").$node[\"Wait Msg\"].json[\"message\"] }}",
+            "assistant": "={{ $('Wait Msg').item.json.query.assistant }}",
+            "hotel-resort": "={{ $item(\"0\").$node[\"Wait Msg\"].json[\"custom_fields\"][\"hotel_resort\"] }}",
+            "timestamp": "={{ $now }}",
+            "return_url": "={{ $('Wait Msg').item.json.return_url }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "return_url",
+              "displayName": "return_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "contact_id",
+              "displayName": "contact_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "assistant",
+              "displayName": "assistant",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "hotel-resort",
+              "displayName": "hotel-resort",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        3264,
+        336
+      ],
+      "id": "a4f4c30c-51b0-4381-a449-b07003c891df",
+      "name": "Call 'Jul.ia Backend'1"
+    },
+    {
+      "parameters": {
+        "url": "=https://lmresorts.kommo.com/api/v4/leads/{{ $node[\"Melhora payload nativo\"].json.body[\"data[lead_id]\"] }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -560,
+        448
+      ],
+      "id": "076dae87-4f62-4f6f-9cdd-4bb49ab14057",
+      "name": "Get Lead by ID",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1072,
+        384
+      ],
+      "id": "757599b0-e742-4157-b9f7-a6bd48afe940",
+      "name": "Lead + Pipelines Data"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Separa o Lead do Dicionário\nconst items = $input.all();\nconst dicionarioItem = items.find(item => !item.json.lead_id);\nconst dicionario = dicionarioItem ? dicionarioItem.json : {};\nconst leads = items.filter(item => item.json.lead_id);\n\n// 2. Busca os dados originais do Webhook (sempre disponíveis via $node)\nconst webhookBody = $('Webhook lmresortskommo').item.json.body;\nconst webhookQuery = $('Webhook lmresortskommo').item.json.query;\n\n// 3. Resolve hotel_resort: vem do custom_field do Kommo no caminho 2\n// No caminho 1 já vem do code Filtragem hotel_resort\nconst mapeamento = {\n  'central_gravatal': { name_hotel_resort: 'Central Termas de Gravatal', is_central: true },\n  'hotel_internacional': { name_hotel_resort: 'Hotel Internacional Gravatal', is_central: false },\n  'termas_gravatal': { name_hotel_resort: 'Hotel Termas (Gravatal)', is_central: false },\n  'termas_do_lago': { name_hotel_resort: 'Hotel Termas do Lago', is_central: false },\n  'cabanas': { name_hotel_resort: 'Cabanas Termas Hotel', is_central: false },\n  'park_hotel': { name_hotel_resort: 'Termas Park Hotel', is_central: false },\n  'fazzenda': { name_hotel_resort: 'Fazzenda Park Resort', is_central: false },\n  'ita_thermas': { name_hotel_resort: 'Itá Thermas Resort e Spa', is_central: false },\n  'machadinho_thermas': { name_hotel_resort: 'Machadinho Thermas Resort SPA', is_central: false },\n  'central_jurema': { name_hotel_resort: 'Central Jurema Águas Quentes', is_central: true },\n  'lagos_de_jurema': { name_hotel_resort: 'Lagos de Jurema', is_central: false },\n  'jardins_de_jurema': { name_hotel_resort: 'Jardins de Jurema', is_central: false },\n  'central_piratuba': { name_hotel_resort: 'Central Piratuba', is_central: true },\n  'tirolesa': { name_hotel_resort: 'Hotel Tirolesa', is_central: false },\n  'aguas_de_palmas': { name_hotel_resort: 'Águas de Palmas', is_central: false },\n  'dona_francisca': { name_hotel_resort: 'Dona Francisca', is_central: false },\n  'recanto_cataratas_resort': { name_hotel_resort: 'Recanto Cataratas Resort', is_central: false },\n  'central_resorts': { name_hotel_resort: 'Central Resorts', is_central: true },\n  'mabu_thermas': { name_hotel_resort: 'Mabu Thermas Grand Resort', is_central: false },\n  'vivaz_cataratas': { name_hotel_resort: 'Vivaz Cataratas Resort', is_central: false },\n  'central_gramado': { name_hotel_resort: 'Central Gramado', is_central: true }\n};\n\nconst leadsTratados = leads.map(item => {\n    const lead = item.json;\n\n    const pid = lead.pipeline_id.toString();\n    const sid = lead.status_id.toString();\n    const dadosPipeline = dicionario[pid];\n\n    let nomePipelineTexto = \"Não identificado\";\n    let nomeStatusTexto = \"Não identificado\";\n\n    if (dadosPipeline) {\n        if (dadosPipeline.name) nomePipelineTexto = dadosPipeline.name;\n        if (dadosPipeline.statuses && dadosPipeline.statuses[sid]) {\n            nomeStatusTexto = dadosPipeline.statuses[sid];\n        }\n    }\n\n    // Resolve hotel_resort: tenta do custom_field, fallback para query\n    const hotelResortKey = lead.custom_fields?.HOTEL_RESORT || webhookQuery?.hotel_resort || '';\n    const infoHotel = mapeamento[hotelResortKey] || {};\n    // Se tem buffer usa ele, senão usa a mensagem normal\n    const msgBuffer = lead.custom_fields?.MSG_BUFFER || '';\n    const msgSingle = webhookBody['data[message]'] || '';\n    \n    return {\n        json: {\n            // === DADOS DO HOTEL (padronizado com caminho 1) ===\n            hotel_resort: hotelResortKey,\n            name_hotel_resort: infoHotel.name_hotel_resort || lead.custom_fields?.['Hotel ou Resort'] || '',\n            is_central: infoHotel.is_central ?? false,\n\n            // === QUERY (padronizado com caminho 1) ===\n            query: webhookQuery,\n\n            // === DADOS DO WEBHOOK (ausentes no caminho 2) ===\n            message: msgBuffer ? msgBuffer : msgSingle,\n            lead_id: lead.lead_id?.toString(),\n            contact_id: webhookBody['data[contact_id]'],\n            name: webhookBody['data[name]'],\n            return_url: webhookBody.return_url,\n\n            // === DADOS DO LEAD/CRM ===\n            pipeline_id: lead.pipeline_id,\n            status_id: lead.status_id,\n            price: lead.price,\n            responsible_user_id: lead.responsible_user_id,\n            created_at_unix: lead.created_at_unix,\n            updated_at_unix: lead.updated_at_unix,\n            custom_fields: lead.custom_fields,\n            pipeline_jname: nomePipelineTexto,\n            status_jname: nomeStatusTexto,\n\n            // === METADATA ===\n            origem: 'retorno'\n        }\n    };\n});\n\nreturn leadsTratados;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        368
+      ],
+      "id": "7fcaa9fd-0a7b-4501-9c27-644b600060c2",
+      "name": "Tratamento Lead + Pipelines Data"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "pipelines_data",
+        "key": "pipelines",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        512,
+        512
+      ],
+      "id": "bbd2eb4a-42c5-49e4-b38b-8df2bcf75d5a",
+      "name": "Buscar dados Pipelines",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "lead_data",
+        "key": "={{ $json.body[\"data[lead_id]\"].toString() }}",
+        "options": {}
+      },
+      "id": "7d84632f-8529-4d17-9a68-fc83c1bc806a",
+      "name": "Redis: Buscar Cache Lead",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -1056,
+        256
+      ],
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.lead_data }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "fd5cca6f-60ac-4e49-8bae-f05d44bccd05",
+      "name": "IF: Achou no Cache?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -848,
+        256
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        304,
+        352
+      ],
+      "id": "15424e69-dc02-4370-b3f3-5844e6fb71c7",
+      "name": "Dados Lead"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Quando vem do Redis, já vem tratado - só precisa parsear\n\nconst item = $input.item.json;\nlet pipelinesData = item.pipelines_data;\n\n// Se veio como string, parseia\nif (typeof pipelinesData === 'string') {\n  pipelinesData = JSON.parse(pipelinesData);\n}\n\n// Retorna direto (já está no formato correto)\nreturn { json: pipelinesData };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        752,
+        512
+      ],
+      "id": "940b3fa4-cf5b-4437-b245-4e880acb3162",
+      "name": "Parse Cache - Pipelines"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $item(\"0\").$node[\"Webhook lmresortskommo\"].json[\"body\"][\"return_url\"] }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"data\": {\n    \"message\": \"✉ ✔ ✅ ✖ ✗ ✘ ☀ ☁ ☂ ☃ ☄ ★ ☆ ☇ ☈ ☉ ☊ ☋ ☌ ☍ ☎ ☏ ☐ ☑ ☒ ☓ ☔ ☕ ☖ ☗ ☘ ☙ ☚ ☛ ☜ ☝ ☞ ☟ ☠ ☡ ☢ ☣ ☤ ☥ ☦ ☧ ☨ ☩ ☪ ☫ ☬ ☭ ☮ ☯ ☰ ☱ ☲ ☳ ☴ ☵ ☶ ☷ ☸ ☹ ☺ ☻ ☼ ☽ ☾ ☿ ♀ ♁ ♂ ♃ ♄ ♅ ♆ ♇ ♈ ♉ ♊ ♋ ♌ ♍ ♎ ♏ ♐ ♑ ♒ ♓ ♔ ♕ ♖ ♗ ♘ ♙ ♚ ♛ ♜ ♝ ♞ ♟ ♠ ♡ ♢ ♣ ♤ ♥ ♦ ♧ ♨ ♩ ♪ ♫ ♬ ♭ ♮ ♯ ♰ ♱ ♲ ♳ ♴ ♵ ♶ ♷ ♸ ♹ ♺ ♻ ♼ ♽ ♾ ♿ ⚀ ⚁ ⚂ ⚃ ⚄ ⚅ ⚆ ⚇ ⚈ ⚉ ⚊ ⚋ ⚌ ⚍ ⚎ ⚏ ⚐ ⚑ ⚒ ⚓ ⚔ ⚕ ⚖ ⚗ ⚘ ⚙ ⚚ ⚛ ⚜ ⚝ ⚞ ⚟ ⚠ ⚡ ⚢ ⚣ ⚤ ⚥ ⚦ ⚧ ⚨ ⚩ ⚪ ⚫ ⚬ ⚭ ⚮ ⚯ ⚰ ⚱ ⚲ ⚳ ⚴ ⚵ ⚶ ⚷ ⚸ ⚹ ⚺ ⚻ ⚼ ⚽ ⚾ ⚿ ⛀ ⛁ ⛂ ⛃ ⛄ ⛅ ⛆ ⛇ ⛈ ⛉ ⛊ ⛋ ⛌ ⛍ ⛎ ⛏ ⛐ ⛑ ⛒ ⛓ ⛔ ⛕ ⛖ ⛗ ⛘ ⛙ ⛚ ⛛ ⛜ ⛝ ⛞ ⛟ ⛠ ⛡ ⛢ ⛣ ⛤ ⛥ ⛦ ⛧ ⛨ ⛩ ⛪ ⛫ ⛬ ⛭ ⛮ ⛯ ⛰ ⛱ ⛲ ⛳ ⛴ ⛵ ⛶ ⛷ ⛸ ⛹ ⛺ ⛻ ⛼ ⛽ ⛾ ⛿\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1968,
+        1552
+      ],
+      "id": "0f402a6b-e0e0-4749-830e-747f9702a2d8",
+      "name": "HTTP Request1",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawString = $input.item.json.data;\n\nlet raw;\ntry {\n  raw = JSON.parse(rawString);\n} catch (e) {\n  return { json: { error: \"Erro ao ler JSON do Kommo\" } };\n}\n\nconst leadOrganizado = {\n  lead_id: raw.id,\n  lead_name: raw.name,\n  pipeline_id: raw.pipeline_id,\n  status_id: raw.status_id,\n  price: raw.price,\n  responsible_user_id: raw.responsible_user_id,\n  group_id: raw.group_id,\n  created_by: raw.created_by,\n  updated_by: raw.updated_by,\n  created_at_unix: raw.created_at,\n  updated_at_unix: raw.updated_at,\n  closed_at: raw.closed_at,\n  loss_reason_id: raw.loss_reason_id,\n  account_id: raw.account_id,\n  score: raw.score,\n  is_deleted: raw.is_deleted,\n  tags: raw._embedded?.tags || [],\n  companies: raw._embedded?.companies || [],\n  custom_fields: {}\n};\n\nif (raw.custom_fields_values && Array.isArray(raw.custom_fields_values)) {\n  raw.custom_fields_values.forEach(field => {\n    // Mantém o field_code original, senão usa field_name original, senão field_id\n    const key = field.field_code || field.field_name || field.field_id;\n    const val = field.values[0] ? field.values[0].value : null;\n    leadOrganizado.custom_fields[key] = val;\n  });\n}\n\nreturn { json: leadOrganizado };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        464
+      ],
+      "id": "766b4f35-74df-4293-958f-3acaa5f2f46f",
+      "name": "Tratar Dados Lead"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a9bbd5ec-e340-4c98-a740-9b2e01cdf264",
+              "leftValue": "true",
+              "rightValue": "={{ $item(\"0\").$node[\"Webhook lmresortskommo\"].json[\"query\"][\"buffer\"] }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1744,
+        352
+      ],
+      "id": "7dda9e20-cf5f-4498-b070-68f5b8d7619a",
+      "name": "Tem buffer?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "41a6b115-3456-401e-ba66-d36e1a763f61",
+              "leftValue": "false",
+              "rightValue": "={{ $item(\"0\").$node[\"Webhook lmresortskommo\"].json[\"query\"][\"buffer\"] }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1328,
+        400
+      ],
+      "id": "f37dc27d-fd57-4ed7-9111-6044c406002c",
+      "name": "Mensagem sem buffer?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item.json;\n\n// Pega o buffer e limpa os separadores\nconst bufferRaw = item.custom_fields['msg_buffer'] || '';\nconst mensagemFinal = bufferRaw.split('§|§').join('\\n').trim();\n\n// Retorna tudo igual, só atualiza a mensagem\nreturn {\n  json: {\n    ...item,\n    message: mensagemFinal\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2064,
+        224
+      ],
+      "id": "33582ebd-79c7-436b-a055-3f2fbabd2d28",
+      "name": "Colocar buffer na mensagem"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item.json;\nlet leadData = item.lead_data;\n\nif (typeof leadData === 'string') {\n  leadData = JSON.parse(leadData);\n}\n\nconst mensagemOriginal = $('Webhook lmresortskommo').item.json.body['data[message]'];\nleadData.custom_fields['msg_buffer'] = mensagemOriginal;\n\nreturn { json: leadData };"
+      },
+      "id": "facb5fba-a2e0-4d6f-b749-37dc7d67d558",
+      "name": "Parse Cache + Colocar mensagem no buffer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -256,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Para testes rapidos",
+        "height": 416,
+        "width": 752
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1904,
+        1296
+      ],
+      "typeVersion": 1,
+      "id": "60ec1eba-8d16-428d-adbb-daf934c6b3b4",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "amount": "={{ $item(\"0\").$node[\"Wait Msg\"].json[\"waitSeconds\"] }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2576,
+        368
+      ],
+      "id": "45ac52b2-39ba-4226-8462-975f457e94f2",
+      "name": "Wait Msg Normal",
+      "webhookId": "41a106b3-81a0-4ad0-a7ff-d31b88e81abd",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "={{ $item(\"0\").$node[\"Tratar Dados Lead\"].json[\"lead_id\"].toString() }}",
+        "value": "={{ JSON.stringify($json) }}",
+        "expire": true,
+        "ttl": 129600
+      },
+      "id": "8dd247a7-1f86-4402-83eb-bb182283f0bb",
+      "name": "Redis: Salvar Cache (TTL 36h)",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        32,
+        464
+      ],
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const min = 0;\nconst max = 1;\nconst waitSeconds = Math.floor(Math.random() * (max - min + 1)) + min;\n\nreturn {\n  json: {\n    ...$input.item.json,\n    waitSeconds\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        368
+      ],
+      "id": "27aa97af-6306-4617-ac74-d61b4f5c069a",
+      "name": "Wait Msg",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a9bbd5ec-e340-4c98-a740-9b2e01cdf264",
+              "leftValue": "={{ $item(\"0\").$node[\"Webhook lmresortskommo\"].json[\"query\"][\"follow_up\"] }}",
+              "rightValue": "=",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2256,
+        1376
+      ],
+      "id": "bfa1e417-c73c-4d1b-b18a-b861c220058c",
+      "name": "É follow up?"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "sQhD2JjA7bE3UpFMM0s5A",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/sQhD2JjA7bE3UpFMM0s5A",
+          "cachedResultName": "Handoff Jul.IA"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "lead_id": "={{ $item(\"0\").$node[\"Fazer hand-off emergencial\"].json[\"lead_id\"] }}"
+          },
+          "matchingColumns": [
+            "lead_id"
+          ],
+          "schema": [
+            {
+              "id": "lead_id",
+              "displayName": "lead_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        2992,
+        160
+      ],
+      "id": "f15565e6-6ed0-45a3-ae34-688b0cdca457",
+      "name": "Call 'Handoff Jul.IA'"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://lmresorts.kommo.com/api/v4/leads/{{ $item(\"0\").$node[\"Fazer hand-off emergencial\"].json[\"lead_id\"] }}/notes",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "[\n  {\n    \"note_type\": \"common\",\n    \"params\": {\n      \"text\": \"HANDOFF EMERGENCIAL ATIVADO\"\n    }\n  }\n]",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1968,
+        1392
+      ],
+      "id": "ca4c5e4f-7c90-457f-8c0d-fe02ec0f3808",
+      "name": "Nota de Encerramento",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "41a6b115-3456-401e-ba66-d36e1a763f61",
+              "leftValue": "={{ $item(\"0\").$node[\"Wait Msg Normal\"].json[\"message\"] }}",
+              "rightValue": "🔊",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "8936b438-5ec9-4fb3-8a3d-f3959fb0d18b",
+              "leftValue": "={{ $item(\"0\").$node[\"Wait Msg Normal\"].json[\"message\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "bade9b86-a6db-46e7-b3d4-d9c116672bed",
+              "leftValue": "={{ $item(\"0\").$node[\"Wait Msg Normal\"].json[\"message\"] }}",
+              "rightValue": "Imagem",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "faecb674-b8c0-4cc9-aa85-43e69fccd679",
+              "leftValue": "={{ $item(\"0\").$node[\"Wait Msg Normal\"].json[\"message\"] }}",
+              "rightValue": "Mensagem de voz",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2752,
+        368
+      ],
+      "id": "d4d56235-b011-4aac-b0d7-49593289c1b8",
+      "name": "Fazer hand-off emergencial"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst body = input.body;\nconst first_contact = input.query?.first_contact === \"true\";\nconst isNativeWebhook = 'leads[add][0][id]' in body;\n\nif (first_contact && isNativeWebhook) {\n  return [{\n    json: {\n      ...input,\n      body: {\n        \"data[lead_id]\": body[\"leads[add][0][id]\"],\n        \"data[pipeline_id]\": body[\"leads[add][0][pipeline_id]\"],\n        \"data[message]\": null,\n        \"data[contact_id]\": null,\n        \"data[name]\": null,\n        \"return_url\": null\n      }\n    }\n  }];\n}\n\n// Qualquer outro caso — repassa sem alteração\nreturn [$input.first()];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1552,
+        400
+      ],
+      "id": "10010dbb-c499-4913-a134-ab9095ef9ec7",
+      "name": "Melhora payload nativo"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lmresortskommo",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1808,
+        400
+      ],
+      "id": "d4e04882-2ac1-47e6-942d-891ef063242e",
+      "name": "Webhook lmresortskommo",
+      "webhookId": "3b9f66a1-cc49-46b1-9afc-31ab260d2465",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        3264,
+        624
+      ],
+      "id": "0f52c5ee-2096-4ea1-a89e-1653a8ad85d7",
+      "name": "CHAMAR GUSTAVO AQUI"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "=julia",
+                    "rightValue": "={{ $item(\"0\").$node[\"Webhook lmresortskommo\"].json[\"query\"][\"assistant\"] }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "cc2017f9-27b2-4d54-8691-8ea532d44e2a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Jul.IA"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "5ed73e7c-06e6-4e03-85ce-8d0d21048ea9",
+                    "leftValue": "gustavo",
+                    "rightValue": "={{ $item(\"0\").$node[\"Webhook lmresortskommo\"].json[\"query\"][\"assistant\"] }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Gustavo.IA"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        3040,
+        480
+      ],
+      "id": "28803bbb-9853-4ff6-b987-50b33861aa09",
+      "name": "Switch Agente IA"
+    }
+  ],
+  "pinData": {
+    "HTTP Request1": [
+      {
+        "json": {},
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Nota de Encerramento": [
+      {
+        "json": {
+          "data": "{\"_links\":{\"self\":{\"href\":\"https://lmresorts.kommo.com/api/v4/leads/24642846/notes\"}},\"_embedded\":{\"notes\":[{\"id\":11562784,\"entity_id\":24642846,\"request_id\":\"0\",\"_links\":{\"self\":{\"href\":\"https://lmresorts.kommo.com/api/v4/leads/24642846/notes/11562784\"}}}]}}"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Webhook jul.iateste": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "jeab-n8n.theworkpc.com",
+            "x-real-ip": "142.0.207.172",
+            "x-forwarded-for": "142.0.207.172",
+            "x-forwarded-proto": "https",
+            "content-length": "189",
+            "user-agent": "amoCRM-Webhooks/3.0",
+            "content-type": "application/x-www-form-urlencoded",
+            "x-amocrm-requestid": "b588000f-2d97-45f7-abb3-9800c431e193",
+            "accept-encoding": "gzip"
+          },
+          "params": {},
+          "query": {
+            "assistant": "julia",
+            "first_contact": "true",
+            "buffer": "false",
+            "follow_up": "false"
+          },
+          "body": {
+            "leads[add][0][id]": "24712596",
+            "leads[add][0][status_id]": "72702259",
+            "leads[add][0][pipeline_id]": "9392163",
+            "account[id]": "33299435",
+            "account[subdomain]": "lmresorts"
+          },
+          "webhookUrl": "https://jeab-n8n.theworkpc.com/webhook/lmresortskommo",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Call 'Jul.ia Backend'1": [
+      {
+        "json": {
+          "handoff": "none",
+          "confidence": 0.9,
+          "reason": "Resposta informativa conforme interesse do cliente, convite para cotação com dados de entrada e saída.",
+          "notify_text": null,
+          "etapa": "informativo",
+          "dados_coletados": {
+            "data_entrada": null,
+            "data_saida": null,
+            "adultos": 0,
+            "criancas": 0,
+            "idades_criancas": [],
+            "email": null
+          },
+          "pronto_para_cotacao": false,
+          "message": "O Termas Park Hotel é um lugar encantador em Gravatal/SC, perfeito para relaxar no final de semana! Temos piscinas aquecidas, cobertas e ao ar livre, uma pensão completa que inclui café da manhã, petiscos na piscina, almoço e jantar, além de uma recreação super animada com hidroginástica, bailes, trilhas e muito mais. Se quiser, posso montar um orçamento ☺ Já tem alguma ideia de datas?"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Webhook lmresortskommo": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "jeab-n8n.theworkpc.com",
+            "x-real-ip": "142.0.207.172",
+            "x-forwarded-for": "142.0.207.172",
+            "x-forwarded-proto": "https",
+            "content-length": "191",
+            "user-agent": "amoCRM-Webhooks/3.0",
+            "content-type": "application/x-www-form-urlencoded",
+            "x-amocrm-requestid": "8d36f02e-d6ee-4096-b740-b4657a802079",
+            "accept-encoding": "gzip"
+          },
+          "params": {},
+          "query": {
+            "assistant": "julia",
+            "first_contact": "true",
+            "buffer": "true",
+            "follow_up": "false"
+          },
+          "body": {
+            "leads[add][0][id]": "24875372",
+            "leads[add][0][status_id]": "101800475",
+            "leads[add][0][pipeline_id]": "11631008",
+            "account[id]": "33299435",
+            "account[subdomain]": "lmresorts"
+          },
+          "webhookUrl": "https://jeab-n8n.theworkpc.com/webhook/lmresortskommo",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Definir Agente": {
+      "main": [
+        [
+          {
+            "node": "Tem buffer?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tem buffer?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se primeiro contato": {
+      "main": [
+        [
+          {
+            "node": "Filtragem hotel_resort",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Filtragem hotel_resort": {
+      "main": [
+        []
+      ]
+    },
+    "Get Lead by ID": {
+      "main": [
+        [
+          {
+            "node": "Tratar Dados Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lead + Pipelines Data": {
+      "main": [
+        [
+          {
+            "node": "Tratamento Lead + Pipelines Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tratamento Lead + Pipelines Data": {
+      "main": [
+        [
+          {
+            "node": "Definir Agente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar dados Pipelines": {
+      "main": [
+        [
+          {
+            "node": "Parse Cache - Pipelines",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis: Buscar Cache Lead": {
+      "main": [
+        [
+          {
+            "node": "IF: Achou no Cache?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Achou no Cache?": {
+      "main": [
+        [
+          {
+            "node": "Parse Cache + Colocar mensagem no buffer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Lead by ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados Lead": {
+      "main": [
+        [
+          {
+            "node": "Lead + Pipelines Data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Buscar dados Pipelines",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Cache - Pipelines": {
+      "main": [
+        [
+          {
+            "node": "Lead + Pipelines Data",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Tratar Dados Lead": {
+      "main": [
+        [
+          {
+            "node": "Redis: Salvar Cache (TTL 36h)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tem buffer?": {
+      "main": [
+        [
+          {
+            "node": "Colocar buffer na mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait Msg",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem sem buffer?": {
+      "main": [
+        [
+          {
+            "node": "Redis: Buscar Cache Lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Lead by ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Colocar buffer na mensagem": {
+      "main": [
+        [
+          {
+            "node": "Wait Msg",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Cache + Colocar mensagem no buffer": {
+      "main": [
+        [
+          {
+            "node": "Dados Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Msg Normal": {
+      "main": [
+        [
+          {
+            "node": "Fazer hand-off emergencial",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis: Salvar Cache (TTL 36h)": {
+      "main": [
+        [
+          {
+            "node": "Dados Lead",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Wait Msg": {
+      "main": [
+        [
+          {
+            "node": "Wait Msg Normal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "É follow up?": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "Fazer hand-off emergencial": {
+      "main": [
+        [
+          {
+            "node": "Call 'Handoff Jul.IA'",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Switch Agente IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Melhora payload nativo": {
+      "main": [
+        [
+          {
+            "node": "Mensagem sem buffer?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook lmresortskommo": {
+      "main": [
+        [
+          {
+            "node": "Melhora payload nativo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Agente IA": {
+      "main": [
+        [
+          {
+            "node": "Call 'Jul.ia Backend'1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CHAMAR GUSTAVO AQUI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "adc8917d-decb-40fb-92c3-638f9757422f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e60b74ab053ed0d2b808977bf7f742d40a11fa4d10865b3095732a10341c3c2f"
+  },
+  "id": "rvArjMdcoI1cHg-xhvGoO",
+  "tags": []
+}

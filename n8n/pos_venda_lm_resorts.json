@@ -1,0 +1,439 @@
+{
+  "name": "Pós-venda LM Resorts",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lmresortskommo_posvenda",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -928,
+        48
+      ],
+      "id": "dc3357c4-59ee-41a7-9f35-05d4a878ca49",
+      "name": "Webhook Pós-venda",
+      "webhookId": "posvenda-lmresorts-001"
+    },
+    {
+      "parameters": {
+        "url": "=https://lmresorts.kommo.com/api/v4/leads/{{ $('Webhook Pós-venda').item.json.body['leads[add][0][id]'] }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -672,
+        48
+      ],
+      "id": "e01b7f97-80a7-41b1-bacc-b82a36651555",
+      "name": "GET Lead",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.item.json;\nconst raw = typeof input.data === 'string' ? JSON.parse(input.data) : input;\n\nconst leadOrganizado = {\n  lead_id: raw.id,\n  lead_name: raw.name,\n  pipeline_id: raw.pipeline_id,\n  status_id: raw.status_id,\n  price: raw.price,\n  responsible_user_id: raw.responsible_user_id,\n  group_id: raw.group_id,\n  created_by: raw.created_by,\n  updated_by: raw.updated_by,\n  created_at_unix: raw.created_at,\n  updated_at_unix: raw.updated_at,\n  closed_at: raw.closed_at,\n  loss_reason_id: raw.loss_reason_id,\n  account_id: raw.account_id,\n  score: raw.score,\n  is_deleted: raw.is_deleted,\n  tags: raw._embedded?.tags || [],\n  companies: raw._embedded?.companies || [],\n  contacts: raw._embedded?.contacts || [],\n  custom_fields_values_raw: raw.custom_fields_values || [],\n  custom_fields: {}\n};\n\nif (raw.custom_fields_values && Array.isArray(raw.custom_fields_values)) {\n  raw.custom_fields_values.forEach(field => {\n    const key = field.field_code || field.field_name || field.field_id;\n    const val = field.values[0] ? field.values[0].value : null;\n    leadOrganizado.custom_fields[key] = val;\n  });\n}\n\nreturn { json: leadOrganizado };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -432,
+        48
+      ],
+      "id": "6a1e98dc-05ea-4e73-87a3-0dea84c6550c",
+      "name": "Parser Lead"
+    },
+    {
+      "parameters": {
+        "jsCode": "// =============================================\n// NORMALIZAÇÃO\n// =============================================\nconst normalize = s => s\n  .toLowerCase()\n  .normalize('NFD')\n  .replace(/[\\u0300-\\u036f]/g, '')\n  .replace(/\\s+/g, '');\n\n// =============================================\n// MAPEAMENTO: pipeline venda → pipeline pós-venda\n// =============================================\nconst pipelineMap = {\n  9361827:  9439751,  // Hotel Termas → Pós-vendas Termas\n  9377539:  9439759,  // Internacional → Pós-vendas Inter\n  9377947:  9439771,  // Termas do Lago → Pós-vendas Lago\n  9379711:  9439779,  // Cabanas Termas Hotel → Pós-vendas Cabanas\n  9391183:  9439799,  // Fazzenda → Pós-vendas Fazzenda\n  9392163:  9439803,  // Itá Thermas → Pós-vendas Itá\n  9418391:  9439819,  // Mabu Thermas Foz → Pós-vendas Mabu\n  9515771:  9515763,  // Recanto Cataratas → Pós-vendas Recanto Cataratas\n  10211815: 10211923, // Costao do Santinho → Pós-vendas Costao\n  10637211: 10661643, // Lagos de Jurema → Pós-vendas Lagos de Jurema\n  10637219: 10661655, // Jardins de Jurema → Pós-vendas Jardins de Jurema\n  10835031: 10835051, // Machadinho Thermas → Pós-vendas Machadinho\n  11631008: 11633660, // Termas Park Hotel → Pós-vendas Termas Park\n  12074732: 12074796, // Hotel Tirolesa → Pós-vendas Hotel Tirolesa\n  12621844: 12622004, // Águas de Palmas → Pós-vendas Águas de Palmas\n  12736543: 13010155, // Vivaz Cataratas → Pós-vendas Vivaz Cataratas\n  13142691: 13142711, // Dona Francisca → Pós-vendas Dona Francisca\n  12736635: 13232387, // Laghetto Resort Golden → Pós-vendas Laghetto Resort Golden\n};\n\n// =============================================\n// PROCESSAR LEAD\n// =============================================\nconst inputs = $input.all();\nconst lead = inputs[0].json;\nconst pipelinesData = inputs[1].json;\n\nconst customFields = lead.custom_fields || {};\n\n// Mês da Reserva pelo field_id\nconst mesReservaRaw = (lead.custom_fields_values_raw || [])\n  .find(f => f.field_id === 1033084)\n  ?.values?.[0]?.value || '';\nconst mesReservaNorm = normalize(mesReservaRaw);\n\n// Dados do lead\nconst pipelineId = lead.pipeline_id;\nconst posVendaPipelineId = pipelineMap[pipelineId];\nconst leadName = lead.lead_name || 'Lead';\nconst price = lead.price || 0;\nconst responsibleUserId = lead.responsible_user_id;\nconst contacts = lead.contacts || [];\nconst contactId = contacts[0]?.id || null;\n\n// =============================================\n// VALIDAÇÃO: pipeline mapeado?\n// =============================================\nif (!posVendaPipelineId) {\n  return [{ json: {\n    ok: false,\n    erro: `Pipeline ${pipelineId} não mapeado para pós-venda`,\n    pipeline_id: pipelineId,\n    lead_id: lead.lead_id,\n    lead_name: leadName\n  }}];\n}\n\n// =============================================\n// LER PIPELINE PÓS-VENDA DO CACHE\n// =============================================\nconst pvPipeline = pipelinesData[String(posVendaPipelineId)];\n\nif (!pvPipeline) {\n  return [{ json: {\n    ok: false,\n    erro: `Pipeline pós-venda ${posVendaPipelineId} não encontrado no cache`,\n    pipeline_id: pipelineId,\n    lead_id: lead.lead_id,\n    lead_name: leadName\n  }}];\n}\n\n// =============================================\n// MONTAR MAPA DE MESES E FALLBACK DINAMICAMENTE\n// =============================================\nconst mesRegex = /^[a-záàãâéêíóôõúç]+ \\d{4}$/i;\nconst fallbackRegex = /^vendas$/i;\nconst mesesMap = {};\nlet fallbackId = null;\n\nfor (const [statusId, statusName] of Object.entries(pvPipeline.statuses)) {\n  const id = Number(statusId);\n  const nome = statusName.trim();\n  if (mesRegex.test(nome)) {\n    mesesMap[normalize(nome)] = id;\n  }\n  if (!fallbackId && fallbackRegex.test(nome)) {\n    fallbackId = id;\n  }\n}\n\nif (!fallbackId) {\n  return [{ json: {\n    ok: false,\n    erro: `Nenhum status de fallback (Venda Ganha/Realizada) encontrado no pipeline ${posVendaPipelineId}`,\n    lead_id: lead.lead_id,\n    lead_name: leadName\n  }}];\n}\n\n// =============================================\n// RESOLVER STATUS_ID\n// =============================================\nlet statusId = fallbackId;\nlet statusResolucao = 'fallback';\n\nif (mesReservaNorm) {\n  const statusIdEncontrado = mesesMap[mesReservaNorm];\n  if (statusIdEncontrado) {\n    statusId = statusIdEncontrado;\n    statusResolucao = 'mes_encontrado';\n  } else {\n    statusResolucao = 'mes_nao_encontrado_usando_fallback';\n  }\n} else {\n  statusResolucao = 'mes_vazio_usando_fallback';\n}\n\n// =============================================\n// MONTAR PAYLOAD DE CRIAÇÃO DO LEAD\n// =============================================\nconst camposReplicar = [];\nfor (const cf of (lead.custom_fields_values_raw || [])) {\n  const val = cf.values?.[0]?.value;\n  if (val === null || val === undefined) continue;\n  if (typeof val === 'object') continue;\n  if (cf.field_id === 1055196) continue; // jul.ia_ativa — não replicar\n  camposReplicar.push({ field_id: cf.field_id, values: [{ value: val }] });\n}\n\nconst novoLead = {\n  name: `Pós-venda: ${leadName}`,\n  price: price,\n  pipeline_id: posVendaPipelineId,\n  status_id: statusId,\n  responsible_user_id: responsibleUserId,\n  custom_fields_values: camposReplicar,\n  _embedded: {\n    contacts: contactId ? [{ id: contactId }] : []\n  }\n};\n\nreturn [{ json: {\n  ok: true,\n  lead_id_original: lead.lead_id,\n  lead_name: leadName,\n  pipeline_id_origem: pipelineId,\n  pos_venda_pipeline_id: posVendaPipelineId,\n  status_id: statusId,\n  status_resolucao: statusResolucao,\n  mes_reserva_raw: mesReservaRaw,\n  mes_reserva_norm: mesReservaNorm,\n  meses_disponiveis: Object.keys(mesesMap), // útil pra debug\n  payload_novo_lead: novoLead\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        64
+      ],
+      "id": "7415f8b8-fab0-4727-afd1-35fa8bf964e0",
+      "name": "Resolver Pipeline + Etapa"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "check-ok",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        912,
+        64
+      ],
+      "id": "40db9809-759b-4dda-9662-9aba27ee17df",
+      "name": "IF: Pipeline mapeado?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://lmresorts.kommo.com/api/v4/leads",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify([$('Resolver Pipeline + Etapa').item.json.payload_novo_lead]) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1232,
+        -48
+      ],
+      "id": "ad508963-fad5-48f4-b8dc-9fa5207eb2b3",
+      "name": "POST Criar Lead Pós-venda",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst raw = typeof input.data === 'string' ? JSON.parse(input.data) : input;\nconst novoLeadId = raw._embedded?.leads?.[0]?.id;\n\nif (!novoLeadId) {\n  throw new Error('Falha ao criar lead pós-venda: ' + JSON.stringify(raw));\n}\n\nreturn [{ json: { novo_lead_id: novoLeadId, sucesso: true } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1472,
+        -48
+      ],
+      "id": "b248d221-e48a-42d2-9301-5d57fd8b5d97",
+      "name": "Verificar Criação"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Log do erro para auditoria — pipeline não mapeado\nconst d = $input.first().json;\nconsole.log('PÓS-VENDA: pipeline não mapeado', JSON.stringify(d));\nreturn [{ json: d }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1232,
+        192
+      ],
+      "id": "8bf2033c-ce55-44b4-9cba-0d21b860b672",
+      "name": "Log Erro Pipeline"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://lmresorts.kommo.com/api/v4/tasks",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify([{ \"task_type_id\": 1, \"text\": \"ATENCAO - PIPELINE NAO MAPEADO NO N8N! Lead: \" + $('Resolver Pipeline + Etapa').first().json.lead_name + \" (ID: \" + $('Webhook Pós-venda').first().json.body['leads[add][0][id]'] + \") - Pipeline origem: \" + $('Webhook Pós-venda').first().json.body['leads[add][0][pipeline_id]'], \"complete_till\": Math.floor(Date.now() / 1000) + 4 * 60 * 60, \"entity_id\": parseInt($('Webhook Pós-venda').first().json.body['leads[add][0][id]']), \"entity_type\": \"leads\", \"responsible_user_id\": 12696675 }]) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1472,
+        192
+      ],
+      "id": "22b1fa24-eace-4f78-8562-f36c4aa0a90f",
+      "name": "Criar task de erro - Igor",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://lmresorts.kommo.com/api/v4/leads/{{ $item(\"0\").$node[\"Verificar Criação\"].json[\"novo_lead_id\"] }}/notes",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=[\n  {\n    \"note_type\": \"common\",\n    \"params\": {\n      \"text\": \"🔗 LEAD DE VENDA ORIGINAL: https://lmresorts.kommo.com/leads/detail/{{ $('Resolver Pipeline + Etapa').item.json.lead_id_original }}\\nArquivos anexados (voucher, comprovante) estão no lead original.\"\n    }\n  }\n]",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1680,
+        -48
+      ],
+      "id": "01724802-74a3-45bf-9c2c-1a2f78768860",
+      "name": "Nota de Encerramento",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "pipelines_data",
+        "key": "pipelines",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        208
+      ],
+      "id": "ccc2af8a-65d4-4600-95bd-af2a9784ad69",
+      "name": "Get Pipelines Data",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Quando vem do Redis, já vem tratado - só precisa parsear\n\nconst item = $input.item.json;\nlet pipelinesData = item.pipelines_data;\n\n// Se veio como string, parseia\nif (typeof pipelinesData === 'string') {\n  pipelinesData = JSON.parse(pipelinesData);\n}\n\n// Retorna direto (já está no formato correto)\nreturn { json: pipelinesData };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        112,
+        208
+      ],
+      "id": "d3948205-e7dd-450d-a3ce-3f95902e0f8e",
+      "name": "Parse Pipelines Data"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        432,
+        64
+      ],
+      "id": "c7e3e75c-a53d-4df8-8ecc-b99f8e1e7245",
+      "name": "Merge"
+    }
+  ],
+  "pinData": {
+    "Webhook Pós-venda": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "jeab-n8n.theworkpc.com",
+            "x-real-ip": "142.0.207.172",
+            "x-forwarded-for": "142.0.207.172",
+            "x-forwarded-proto": "https",
+            "content-length": "185",
+            "user-agent": "amoCRM-Webhooks/3.0",
+            "content-type": "application/x-www-form-urlencoded",
+            "x-amocrm-requestid": "590589b7-7ae3-49a9-962b-1f5275227f33",
+            "accept-encoding": "gzip"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "leads[add][0][id]": "24708922",
+            "leads[add][0][status_id]": "142",
+            "leads[add][0][pipeline_id]": "12736627",
+            "account[id]": "33299435",
+            "account[subdomain]": "lmresorts"
+          },
+          "webhookUrl": "https://jeab-n8n.theworkpc.com/webhook/lmresortskommo_posvenda",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook Pós-venda": {
+      "main": [
+        [
+          {
+            "node": "GET Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Lead": {
+      "main": [
+        [
+          {
+            "node": "Parser Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resolver Pipeline + Etapa": {
+      "main": [
+        [
+          {
+            "node": "IF: Pipeline mapeado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Pipeline mapeado?": {
+      "main": [
+        [
+          {
+            "node": "POST Criar Lead Pós-venda",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Erro Pipeline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST Criar Lead Pós-venda": {
+      "main": [
+        [
+          {
+            "node": "Verificar Criação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser Lead": {
+      "main": [
+        [
+          {
+            "node": "Get Pipelines Data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Erro Pipeline": {
+      "main": [
+        [
+          {
+            "node": "Criar task de erro - Igor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nota de Encerramento": {
+      "main": [
+        []
+      ]
+    },
+    "Verificar Criação": {
+      "main": [
+        [
+          {
+            "node": "Nota de Encerramento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Pipelines Data": {
+      "main": [
+        [
+          {
+            "node": "Parse Pipelines Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Pipelines Data": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Resolver Pipeline + Etapa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "baae0be5-67c3-4116-82b5-67f10b11846f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e60b74ab053ed0d2b808977bf7f742d40a11fa4d10865b3095732a10341c3c2f"
+  },
+  "id": "bWMBk9B2G9t2soO5AqXRb",
+  "tags": []
+}

@@ -1,0 +1,662 @@
+{
+  "name": "Handoff Jul.IA",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "lead_data",
+        "key": "={{ $item(\"0\").$node[\"When Executed by Another Workflow\"].json[\"lead_id\"] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        272,
+        -272
+      ],
+      "id": "6fa4b75f-c769-42fb-9b56-758c8534ba8a",
+      "name": "Get Lead Data",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "pipelines_data",
+        "key": "pipelines",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        272,
+        -64
+      ],
+      "id": "cba65086-71ab-41c7-ad8d-4cfd1095386d",
+      "name": "Get Pipelines Data",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item.json;\nlet leadData = item.lead_data;\n\nif (typeof leadData === 'string') {\n  leadData = JSON.parse(leadData);\n}\n\nreturn { json: leadData };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        -272
+      ],
+      "id": "92f7f5f0-0dcc-4195-b39f-104c28145d23",
+      "name": "Parse Lead Data"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Quando vem do Redis, já vem tratado - só precisa parsear\n\nconst item = $input.item.json;\nlet pipelinesData = item.pipelines_data;\n\n// Se veio como string, parseia\nif (typeof pipelinesData === 'string') {\n  pipelinesData = JSON.parse(pipelinesData);\n}\n\n// Retorna direto (já está no formato correto)\nreturn { json: pipelinesData };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        -64
+      ],
+      "id": "80f07bca-8d7d-476a-9220-90c9e74611fd",
+      "name": "Parse Pipelines Data"
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        864,
+        16
+      ],
+      "id": "0c77a098-edf4-412e-a579-82cd27e6d015",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst lead = items[0].json;\nconst pipelines = items.slice(1).map(i => i.json);\n\nconst pipeline = pipelines.find(p => p[lead.pipeline_id]);\nconst pipelineData = pipeline?.[lead.pipeline_id];\n\nlet juliaDesativadaStatusId = null;\nif (pipelineData?.statuses) {\n  for (const [statusId, statusName] of Object.entries(pipelineData.statuses)) {\n    if (statusName === \"JUL.IA DESATIVADA\") {\n      juliaDesativadaStatusId = statusId;\n      break;\n    }\n  }\n}\n\nreturn [{\n  json: {\n    ...lead,\n    julia_desativada_status_id: juliaDesativadaStatusId\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        48
+      ],
+      "id": "0bfc93da-8b76-4e69-9ecc-266bfcad8fda",
+      "name": "Find New Lead Status"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "lead_id"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -128,
+        32
+      ],
+      "id": "8d4ff482-1110-46e5-a05e-63107f4b3d0f",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cdc46f09-0763-44d1-bc86-5b99706b7e29",
+              "name": "etapa alterada",
+              "value": "etapa do lead alterada com sucesso!",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2784,
+        48
+      ],
+      "id": "9d66f636-23d0-405e-8d71-44fbe61585e8",
+      "name": "Confirmação de Alteração"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "custom_fields_data",
+        "key": "custom_fields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        272,
+        144
+      ],
+      "id": "e408bee1-0d94-49ad-b413-313209a13ee1",
+      "name": "Get custom_fields",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item.json;\nlet custom_fields_data = item.custom_fields_data;\n\nif (typeof custom_fields_data === 'string') {\n  custom_fields_data = JSON.parse(custom_fields_data);\n}\n\nreturn { json: custom_fields_data };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        144
+      ],
+      "id": "bc41764a-368e-4d3a-bf2e-c46db1daa3d3",
+      "name": "Parse custom_fields Data"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://lmresorts.kommo.com/api/v4/leads/{{ $item(\"0\").$node[\"Merge\"].json[\"lead_id\"] }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"custom_fields_values\": [\n    {\n      \"field_id\": {{ parseInt($item(\"2\").$node[\"Merge\"].json[\"by_name\"][\"jul.ia_ativa\"][\"id\"]) }},\n      \"values\": [\n        { \"value\": false }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1840,
+        48
+      ],
+      "id": "e7b51419-0d0d-4900-a963-57cd3ce386c4",
+      "name": "Desativar 'jul.ia_ativa'",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://lmresorts.kommo.com/api/v4/leads/{{ $item(\"0\").$node[\"Find New Lead Status\"].json[\"lead_id\"] }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "status_id",
+              "value": "={{ parseInt($item(\"0\").$node[\"Find New Lead Status\"].json[\"julia_desativada_status_id\"]) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2400,
+        48
+      ],
+      "id": "02bdb777-f053-4b56-809d-a5b322852745",
+      "name": "Mover para Etapa JUL.IA DESATIVADA",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://lmresorts.kommo.com/api/v4/leads/{{ $item(\"0\").$node[\"Merge\"].json[\"lead_id\"] }}/notes",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "[\n  {\n    \"note_type\": \"common\",\n    \"params\": {\n      \"text\": \"⚠️✅ ATENDIMENTO IA ENCERRADO — JUL.IA DESATIVADA ✅⚠️\\n━━━━━━━━━━━━━━━━━━━━━━\\n✅✅✅ A IA finalizou o atendimento deste lead. ✅✅✅\\n❗ A partir de agora e RESPONSABILIDADE DA EQUIPE.\"\n    }\n  }\n]",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2032,
+        48
+      ],
+      "id": "6119ac15-f83b-433a-91e4-54ccd6c150e9",
+      "name": "Nota de Encerramento",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "users_data",
+        "key": "users",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        272,
+        336
+      ],
+      "id": "b406904a-80f0-4b43-b89e-acb5b0e2d533",
+      "name": "Get users",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item.json;\nlet users_data = item.users_data;\n\nif (typeof users_data === 'string') {\n  users_data = JSON.parse(users_data);\n}\n\nreturn { json: users_data };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        336
+      ],
+      "id": "317132c1-a6e1-4b9a-b9b9-c0b0a7b7c8fa",
+      "name": "Parse Users Data"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://lmresorts.kommo.com/api/v4/tasks",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('Code de Turnos').first().json.task_payload) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2592,
+        48
+      ],
+      "id": "3db88d4a-1b60-4f0c-991a-f423b9fed436",
+      "name": "Criar task do Lead",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ─── CONFIGURAÇÃO DE TURNOS ───────────────────────────────────────────────\nconst USERS = {\n  lucas:   { id: 11736555, name: \"Lucas\" },\n  gabriel: { id: 13003284, name: \"Gabriel Ferreira\" },\n  leonard: { id: 13496772, name: \"Leonardo Santos\" },\n  jamaira: { id: 14163776, name: \"Jamaira Hermesmeyer\" },\n  ana:     { id: 13003304, name: \"Ana Silva\" },\n  davi:    { id: 14820999, name: \"Davi Mendonça\" },\n};\n\n// ─── OVERRIDE TEMPORÁRIO ──────────────────────────────────────────────────\n// Remover quando voltar ao sistema normal de turnos\nconst OVERRIDE_USER = { id: 14847779, name: \"Resorts Admin\" };\n\nconst TURNOS = {\n  madrugada: {\n    starts: 7, ends: 8,\n    rr_key: \"rr_madrugada\",\n    pool: () => [USERS.jamaira, USERS.davi, USERS.ana],\n  },\n  manha: {\n    starts: 8, ends: 15,\n    rr_key: \"rr_manha\",\n    pool: (isWeekend) => isWeekend ? [USERS.gabriel] : [USERS.lucas, USERS.gabriel],\n  },\n  tarde: {\n    starts: 15, ends: 18,\n    rr_key: \"rr_tarde\",\n    pool: (isWeekend) => isWeekend ? [USERS.gabriel, USERS.leonard] : [USERS.lucas, USERS.gabriel, USERS.leonard],\n  },\n  noite: {\n    starts: 18, ends: 23,\n    rr_key: \"rr_noite\",\n    pool: () => [USERS.gabriel, USERS.leonard],\n  },\n  noturno: {\n    starts: 23, ends: 8,\n    rr_key: \"rr_noturno\",\n    pool: (isWeekend) => isWeekend\n      ? [USERS.jamaira, USERS.davi, USERS.ana, USERS.gabriel]\n      : [USERS.jamaira, USERS.davi, USERS.ana, USERS.gabriel, USERS.lucas],\n  },\n};\n\n// ─── HELPERS ─────────────────────────────────────────────────────────────\nfunction getTurnoAtual(hour) {\n  if (hour >= 7  && hour < 8)  return TURNOS.madrugada;\n  if (hour >= 8  && hour < 15) return TURNOS.manha;\n  if (hour >= 15 && hour < 18) return TURNOS.tarde;\n  if (hour >= 18 && hour < 23) return TURNOS.noite;\n  return TURNOS.noturno;\n}\n\nfunction getCompleteTill() {\n  return Math.floor(Date.now() / 1000) + (4 * 60 * 60);\n}\n\n// ─── LÓGICA PRINCIPAL ─────────────────────────────────────────────────────\nconst now = new Date();\nconst brasiliaOffset = -3 * 60;\nconst utcMinutes = now.getTime() / 60000 + now.getTimezoneOffset();\nconst brasiliaTime = new Date((utcMinutes + brasiliaOffset) * 60000);\n\nconst hour = brasiliaTime.getHours();\nconst isWeekend = brasiliaTime.getDay() === 0 || brasiliaTime.getDay() === 6;\n\nconst turno = getTurnoAtual(hour);\nconst pool = turno.pool(isWeekend);\n\nconst rrData = JSON.parse($input.first().json?.rr_cache_data || '{}');\nlet currentIdx = rrData?.[turno.rr_key] ?? 0;\nconst responsavelReal = pool[currentIdx % pool.length];\nconst nextIdx = (currentIdx + 1) % pool.length;\n\n// OVERRIDE ATIVO: ignora responsavelReal, força Resorts Admin\n// Para reverter: trocar `OVERRIDE_USER` por `responsavelReal` nas duas linhas abaixo\nconst responsavel = OVERRIDE_USER;\nconst completeTill = getCompleteTill();\n\nreturn [{\n  json: {\n    responsavel_id: responsavel.id,\n    responsavel_name: responsavel.name,\n    turno_key: turno.rr_key,\n    next_idx: nextIdx,\n    complete_till: completeTill,\n    turno_debug: {\n      hour,\n      isWeekend,\n      turno: turno.rr_key,\n      pool: pool.map(u => u.name),\n      idx_usado: currentIdx % pool.length,\n      override_ativo: true,\n      responsavel_real: responsavelReal.name, // quem seria sem o override\n    },\n    task_payload: [\n      {\n        task_type_id: 1,\n        text: \"ACOMPANHAR CLIENTE - JUL.IA DESATIVADA\",\n        complete_till: completeTill,\n        entity_id: parseInt($('Find New Lead Status').first().json.lead_id),\n        entity_type: \"leads\",\n        responsible_user_id: responsavel.id\n      }\n    ]\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1472,
+        48
+      ],
+      "id": "ca5dbd91-fa69-41ad-aa7d-715082d1d8af",
+      "name": "Code de Turnos"
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "rr_cache",
+        "value": "={{ JSON.stringify({ ...JSON.parse($('Get rr_cache').first().json?.rr_cache_name || '{}'), [$('Code de Turnos').first().json.turno_key]: $('Code de Turnos').first().json.next_idx }) }}\n"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        1648,
+        48
+      ],
+      "id": "0716f065-2999-4440-8871-65a83b7202bf",
+      "name": "Set rr_cache",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "rr_cache_data",
+        "key": "rr_cache",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        48
+      ],
+      "id": "0ab86e37-97a1-4bea-9f3b-0a53ba696779",
+      "name": "Get rr_cache",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://lmresorts.kommo.com/api/v4/leads/{{ $item(\"0\").$node[\"Find New Lead Status\"].json[\"lead_id\"] }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "responsible_user_id",
+              "value": "={{ parseInt($item(\"0\").$node[\"Code de Turnos\"].json[\"task_payload\"][\"0\"][\"responsible_user_id\"]) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2208,
+        48
+      ],
+      "id": "abb68c6e-28d4-4526-94cb-f8dc0a875951",
+      "name": "Mudar responsável do Lead",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "lead_id": "24651004"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Get Lead Data": {
+      "main": [
+        [
+          {
+            "node": "Parse Lead Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Pipelines Data": {
+      "main": [
+        [
+          {
+            "node": "Parse Pipelines Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Lead Data": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Pipelines Data": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Find New Lead Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find New Lead Status": {
+      "main": [
+        [
+          {
+            "node": "Get rr_cache",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get Lead Data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Pipelines Data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get custom_fields",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get users",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get custom_fields": {
+      "main": [
+        [
+          {
+            "node": "Parse custom_fields Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse custom_fields Data": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Desativar 'jul.ia_ativa'": {
+      "main": [
+        [
+          {
+            "node": "Nota de Encerramento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mover para Etapa JUL.IA DESATIVADA": {
+      "main": [
+        [
+          {
+            "node": "Criar task do Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nota de Encerramento": {
+      "main": [
+        [
+          {
+            "node": "Mudar responsável do Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get users": {
+      "main": [
+        [
+          {
+            "node": "Parse Users Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Users Data": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Criar task do Lead": {
+      "main": [
+        [
+          {
+            "node": "Confirmação de Alteração",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get rr_cache": {
+      "main": [
+        [
+          {
+            "node": "Code de Turnos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code de Turnos": {
+      "main": [
+        [
+          {
+            "node": "Set rr_cache",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set rr_cache": {
+      "main": [
+        [
+          {
+            "node": "Desativar 'jul.ia_ativa'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mudar responsável do Lead": {
+      "main": [
+        [
+          {
+            "node": "Mover para Etapa JUL.IA DESATIVADA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "05fbcfd4-10c7-49be-be58-65712c8a73a3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e60b74ab053ed0d2b808977bf7f742d40a11fa4d10865b3095732a10341c3c2f"
+  },
+  "id": "sQhD2JjA7bE3UpFMM0s5A",
+  "tags": []
+}

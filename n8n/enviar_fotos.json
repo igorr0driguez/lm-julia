@@ -1,0 +1,168 @@
+{
+  "name": "Enviar fotos",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "lead_id"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        32,
+        0
+      ],
+      "id": "4651e9f7-73c9-4c9f-b6f6-4ac1d7aac26b",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead_id = $input.first().json.lead_id;\nconst pipeline_id = $input.first().json.pipeline_id?.toString();\n\nconst salesbotMap = {\n  \"12621844\": 59742, // Águas de Palmas\n  \"12736543\": 59740, // Vivaz\n  \"9418391\":  59738, // Mabu\n  \"9515771\":  59736, // Recanto\n  \"12074732\": 59734, // Tirolesa\n  \"10637219\": 59732, // Jardins de Jurema\n  \"10637211\": 59730, // Lagos de Jurema\n  \"10835031\": 59728, // Machadinho\n  \"9391183\":  59726, // Fazzenda\n  \"9377947\":  59724, // Termas do Lago\n  \"9361827\":  59722, // Termas\n  \"9379711\":  59720, // Cabanas\n  \"9377539\":  59718, // Inter\n  \"11631008\": 59716, // Termas Park Hotel\n  \"\"\n};\n\nconst salesbot_id = salesbotMap[pipeline_id] ?? null;\n\nif (!salesbot_id) {\n  throw new Error(`Pipeline ${pipeline_id} não mapeado`);\n}\n\nreturn [{ json: { lead_id, salesbot_id } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        736,
+        0
+      ],
+      "id": "5de09bfc-e174-4b43-9582-50afa28056c6",
+      "name": "Selecionar Fotos Salesbot por Pipeline"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://lmresorts.kommo.com/api/v2/salesbot/run",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=[\n  {\n    \"bot_id\": {{ $item(\"0\").$node[\"Selecionar Fotos Salesbot por Pipeline\"].json[\"salesbot_id\"] }},\n    \"entity_id\": {{ $item(\"0\").$node[\"Selecionar Fotos Salesbot por Pipeline\"].json[\"lead_id\"] }},\n    \"entity_type\": 2\n  }\n]",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        976,
+        0
+      ],
+      "id": "5bde4f52-69bb-453a-9a83-1ef626a31cab",
+      "name": "Disparar Fotos Salesbot",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "eZVQ7laj4JrDEXMc",
+          "name": "Kommo Credencial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "lead_data",
+        "key": "={{ $item(\"0\").$node[\"When Executed by Another Workflow\"].json[\"lead_id\"] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        288,
+        0
+      ],
+      "id": "efae6f68-756b-4821-b5c2-87b70c79d16f",
+      "name": "Get Lead Data",
+      "credentials": {
+        "redis": {
+          "id": "8Se0NGzzsCQTEBkC",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item.json;\nlet leadData = item.lead_data;\n\nif (typeof leadData === 'string') {\n  leadData = JSON.parse(leadData);\n}\n\nreturn { json: leadData };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        0
+      ],
+      "id": "21e66dd7-932a-4e44-a16a-17f115715ac9",
+      "name": "Parse Lead Data"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "lead_id": "24654134"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Selecionar Fotos Salesbot por Pipeline": {
+      "main": [
+        [
+          {
+            "node": "Disparar Fotos Salesbot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get Lead Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Lead Data": {
+      "main": [
+        [
+          {
+            "node": "Parse Lead Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Lead Data": {
+      "main": [
+        [
+          {
+            "node": "Selecionar Fotos Salesbot por Pipeline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e1389398-ac15-41aa-a738-eb164f11f1ae",
+  "meta": {
+    "instanceId": "e60b74ab053ed0d2b808977bf7f742d40a11fa4d10865b3095732a10341c3c2f"
+  },
+  "id": "0QnLBOgNlyPK78q-CxqEf",
+  "tags": []
+}
