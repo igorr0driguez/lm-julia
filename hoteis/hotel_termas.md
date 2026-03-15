@@ -6,16 +6,16 @@
 - Nome do pipeline no Kommo: Hotel Termas
 
 ## Status de implementação
-- [ ] Etapas JUL.IA ATIVADA e JUL.IA DESATIVADA criadas no pipeline
-- [ ] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
-- [ ] Robô de Entrada configurado (campos, etapa, condicionais)
-- [ ] Salesbot Enviar Fotos configurado
-- [ ] Atualizar Dicionário Pipeline:Salesbot ID no Workflow Enviar Fotos
-- [ ] hotel_resort configurado corretamente no Robô de Entrada
+- [x] Etapas JUL.IA ATIVADA e JUL.IA DESATIVADA criadas no pipeline
+- [x] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
+- [x] Robô de Entrada configurado (campos, etapa, condicionais)
+- [x] Salesbot Enviar Fotos configurado
+- [x] Atualizar Dicionário Pipeline:Salesbot ID no Workflow Enviar Fotos
+- [x] hotel_resort configurado corretamente no Robô de Entrada
 - [x] Material do hotel coletado
-- [ ] Ficha preenchida (ver seção abaixo)
-- [ ] Prompt criado e publicado no n8n
-- [ ] Code de cotação atualizado no n8n
+- [x] Ficha preenchida (ver seção abaixo)
+- [x] Prompt criado e publicado no n8n
+- [x] Codes de cotação atualizado no n8n (Code in JavaScript, Code Hotel, Monta mensagem Multipla e Monta mensagem Orcamento1)
 - [ ] Validação interna (chat de testes)
 - [ ] Validação com o cliente
 - [ ] Validação de cotação (caso extremo)

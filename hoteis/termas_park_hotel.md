@@ -15,7 +15,7 @@
 - [x] Material do hotel coletado
 - [x] Ficha preenchida (ver seção abaixo)
 - [x] Prompt criado e publicado no n8n
-- [x] Code de cotação atualizado no n8n
+- [x] Codes de cotação atualizado no n8n (Code in JavaScript, Code Hotel, Monta mensagem Multipla e Monta mensagem Orcamento1)
 - [x] Validação interna (chat de testes)
 - [x] Validação com o cliente
 - [x] Validação de cotação (caso extremo)
