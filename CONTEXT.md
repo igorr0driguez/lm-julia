@@ -32,6 +32,9 @@ Atualizado em: março/2026
 - **Hotel inicia conversa via WABA → Jul.IA ativa indevidamente**: equipe do Termas Park usa WhatsApp fora do Kommo (WABA beta). Não há solução técnica viável — o sistema não consegue distinguir quem iniciou a conversa de forma confiável. **Solução: processo operacional** — equipe deve acionar o robô [MANUAL] Desativar Jul.IA assim que o lead aparecer. Ver `bugs-e-melhorias/001-hotel-iniciou-conversa.md`.
 
 ## Últimas alterações
+- 2026-03-14 | prompts/julia/termas_park_hotel.js | prompt atualizado: bug de idades de crianças corrigido; agência/operadora; transfer; Regra #7 (respostas curtas); bebê universal (0–2); bebes no schema; notify_text no schema; tipo "combinado"; "tudo incluso" proibido; revelar categorias proibido; enquadramento positivo; exemplos atualizados
+- 2026-03-14 | hoteis/termas_park_hotel.md | particularidades do prompt documentadas (possessivos permitidos, opção econômica, faixas etárias)
+- 2026-03-14 | kommo/CLAUDE.md | exceção de possessivos do Termas Park documentada
 - 2026-03-14 | bugs-e-melhorias/001-hotel-iniciou-conversa.md | criado — limitação conhecida documentada com decisão de processo
 - 2026-03-14 | ARQUITETURA.md | criado — fluxo completo do sistema documentado
 - 2026-03-14 | kommo/robos.md | criado — todos os robôs documentados com fluxos

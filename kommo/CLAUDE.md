@@ -42,6 +42,9 @@ Ver `robos.md` para documentação completa de cada robô.
 - Mensagem livre → envia Salesbot de Recepção + webhook first_contact ao n8n
 - Detecção via condição "contém" no Kommo (não existe operador "não contém")
 
+## Exceção — Termas Park Hotel e possessivos
+O Termas Park Hotel (`termas_park_hotel`) é de propriedade da família do cliente da L&M. Por isso, a Jul.IA pode usar possessivos referentes ao hotel ("nossa piscina", "nosso hotel") neste pipeline. Em todos os outros hotéis/resorts (parceiros comerciais), possessivos do hotel são **proibidos** — risco de conflito grave com os parceiros.
+
 ## Limitação conhecida — WABA fora do Kommo
 - O Kommo permite uso do WhatsApp via app/web conectado à conta WABA (funcionalidade beta)
 - Se um atendente inicia conversa pelo WhatsApp fora do Kommo, o lead entra no pipeline e a Jul.IA ativa normalmente — sem como distinguir tecnicamente se foi o hotel ou o cliente quem iniciou

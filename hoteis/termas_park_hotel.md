@@ -215,7 +215,10 @@ Condicoes de pagamento (day use):
 ---
 
 ## Prompt Julia — particularidades
-(preencher — o que muda em relacao ao prompt base)
+- **Possessivos do hotel permitidos**: diferente de todos os outros hotéis (parceiros comerciais), o Termas Park é de propriedade da família do cliente. A Jul.IA pode usar "nossa piscina", "nosso hotel" etc. — a proibição padrão de possessivos NÃO se aplica aqui.
+- **Opção Econômica (colchão ao chão)**: funcionalidade ativa — crianças 0–8 anos + mínimo 3 diárias. Aceite → handoff_only.
+- Faixas etárias hospedagem: bebê 0–2 (não conta cotação/físico), cortesia 3–8, pagante 9–12, adulto 13+
+- Faixas etárias day use: bebê 0–2, cortesia 3–7, meia 8–12, adulto 13+
 
 ## Observacoes operacionais
 - Valores sujeitos a disponibilidade e alteracao sem aviso previo
