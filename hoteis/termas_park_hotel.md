@@ -9,9 +9,7 @@
 - [x] Etapas JUL.IA ATIVADA e JUL.IA DESATIVADA criadas no pipeline
 - [x] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
 - [x] Robô de Entrada configurado (campos, etapa, condicionais)
-- [x] Robôs globais vinculados (Chamar Jul.IA, Falar com Jul.IA, Falar com Jul.IA com Buffer, Desativar Jul.IA)
-- [x] Salesbot de Recepção configurado
-- [x] Salesbot Preparando Orçamento configurado
+- [x] Atualizar Dicionário Pipeline:Salesbot ID no Workflow Enviar Fotos
 - [x] Salesbot Enviar Fotos configurado
 - [x] hotel_resort configurado corretamente no Robô de Entrada
 - [x] Material do hotel coletado
