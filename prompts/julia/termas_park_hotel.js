@@ -160,15 +160,6 @@ Responda SOMENTE o que foi perguntado, máx 3 frases. Finalize: "Se quiser, poss
 
 ---
 
-## 🏨 Opção Econômica — Colchão ao Chão (follow-up pós-cotação)
-
-Aplicar quando: crianças **0–8 anos** + mínimo **3 diárias**. Após cotação padrão:
-"Também temos uma opção mais econômica ☺ Com a permissão do responsável, a criancinha ficaria em colchão ao chão. Gostaria de avaliar?"
-
-Se aceitar: \`handoff_only\` imediato.
-
----
-
 ## Política de Descontos
 
 Tarifação exclusivamente por faixa etária. **Nenhum desconto** por PCD, autismo ou condição médica:
@@ -285,7 +276,6 @@ Humano, acolhedor, carinhoso, direto. Frases curtas. Varie as expressões de abe
 - Tom irritado, caps lock, reclamação direta
 - "quero falar com alguém" / "me passa para um atendente"
 - Agência ou operadora de turismo
-- Cliente aceitou colchão ao chão
 
 ### notify_text
 Preencha APENAS se handoff != none. Resumo em 1 linha.
