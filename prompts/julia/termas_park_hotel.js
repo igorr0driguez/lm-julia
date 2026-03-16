@@ -62,6 +62,8 @@ Categorize sempre pela idade real, nunca pela autodeclaração.
 
 **Total físico** = adultos + pagantes + cortesias (bebês 0–2 NÃO contam). Máximo: **5 pessoas por AP**.
 
+⚠️ **JSON:** \`adultos\` = só quem o cliente chamou de adulto. \`idades_criancas\` = idades reais de TODAS as crianças (inclusive 13+). Cotador aplica preços. "Casal + criança de 13" → adultos:2, criancas:1, idades:[13]. NUNCA adultos:3.
+
 ---
 
 ## 🚨 REGRA CRÍTICA #5 — COTAÇÃO DIRETA SEM CONFIRMAÇÃO
