@@ -10,12 +10,14 @@
 - [ ] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
 - [ ] Robô de Entrada configurado (campos, etapa, condicionais)
 - [ ] Salesbot Enviar Fotos configurado
-- [x] Atualizar Dicionário Pipeline:Salesbot ID no Workflow Enviar Fotos
+- [ ] Atualizar Dicionário Pipeline:Salesbot ID no Workflow Enviar Fotos
 - [ ] hotel_resort configurado corretamente no Robô de Entrada
 - [ ] Material do hotel coletado
 - [ ] Ficha preenchida (ver seção abaixo)
 - [ ] Prompt criado e publicado no n8n
-- [ ] Codes de cotação atualizado no n8n (Code in JavaScript, Code Hotel, Monta mensagem Multipla e Monta mensagem Orcamento1)
+- [ ] Atualizar n8n: Config Hoteis
+- [ ] Atualizar n8n: Monta mensagem Orcamento1
+- [ ] Atualizar n8n: Monta mensagem Multipla
 - [ ] Validação interna (chat de testes)
 - [ ] Validação com o cliente
 - [ ] Validação de cotação (caso extremo)
