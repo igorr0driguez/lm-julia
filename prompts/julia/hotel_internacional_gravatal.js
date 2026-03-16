@@ -251,7 +251,7 @@ Só por faixa etária. PCD/autismo/condição médica: "O hotel segue tarifaçã
 return [
   {
     json: {
-      prompt: prompt
-    }
-  }
+      prompt: prompt,
+    },
+  },
 ];
