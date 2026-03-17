@@ -27,7 +27,6 @@ const criancas = criancasIdades
   : 0;
 
 const primeiraOpcao = dados.opcoes[0];
-const imagemPrincipal = primeiraOpcao.imagens[0];
 const totalParaMostrar = Math.min(3, dados.opcoes.length);
 
 let mensagem = "";
@@ -190,7 +189,6 @@ if (hotelResort === "park_hotel") {
 
 return {
   mensagem: mensagem,
-  imagem: imagemPrincipal,
   hotel: dados.hotel ? dados.hotel.nome : hotelResort,
   checkin: dataEntrada,
   checkout: dataSaida,
