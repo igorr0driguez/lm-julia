@@ -1,11 +1,13 @@
 # [Nome do Hotel]
 
 ## Identificador
+
 - hotel_resort param:
 - Pipeline ID:
 - Nome do pipeline no Kommo:
 
 ## Status de implementação
+
 - [ ] Etapas JUL.IA ATIVADA e JUL.IA DESATIVADA criadas no pipeline
 - [ ] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
 - [ ] Robô de Entrada configurado (campos, etapa, condicionais)
@@ -26,6 +28,7 @@
 ---
 
 ## Ficha do Hotel
+
 > Baseada no Bloco 1 das diretrizes_gerais_julia_v8.md. Preencher antes de criar o prompt.
 
 ```
@@ -93,7 +96,9 @@ terminologia: |
 ---
 
 ## Prompt Julia — particularidades
+
 (o que muda em relação ao prompt base — preencher após criar o prompt)
 
 ## Observações operacionais
+
 (regras específicas, restrições, histórico de alterações relevantes)
