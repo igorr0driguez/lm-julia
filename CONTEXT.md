@@ -32,6 +32,10 @@ Atualizado em: março/2026
 - **Hotel inicia conversa via WABA → Jul.IA ativa indevidamente**: equipe do Termas Park usa WhatsApp fora do Kommo (WABA beta). Não há solução técnica viável — o sistema não consegue distinguir quem iniciou a conversa de forma confiável. **Solução: processo operacional** — equipe deve acionar o robô [MANUAL] Desativar Jul.IA assim que o lead aparecer. Ver `bugs-e-melhorias/001-hotel-iniciou-conversa.md`.
 
 ## Últimas alterações
+- 2026-03-16 | prompts/julia/fazzenda_park_resort.js | prompt criado e validado contra gold standard (hotel_internacional_gravatal.js) e diretrizes_gerais_julia_v8.md — pronto para testes
+- 2026-03-16 | n8n/codes_cotacao/config_hoteis.js | config do Fazzenda adicionada (titulo, obs_pix, pagamento, checkin, checkout, atividades, servicos, allinclusive, bebidas, obs); MAP atualizado com código "fazzenda"
+- 2026-03-16 | n8n/codes_cotacao/monta_mensagem_orcamento1.js | bloco Fazzenda adicionado — ordem: orçamento → atividades → all inclusive
+- 2026-03-16 | n8n/codes_cotacao/monta_mensagem_multipla.js | bloco Fazzenda adicionado (cabeçalho + rodapé) — mesma ordem
 - 2026-03-14 | prompts/julia/termas_park_hotel.js | prompt atualizado: bug de idades de crianças corrigido; agência/operadora; transfer; Regra #7 (respostas curtas); bebê universal (0–2); bebes no schema; notify_text no schema; tipo "combinado"; "tudo incluso" proibido; revelar categorias proibido; enquadramento positivo; exemplos atualizados
 - 2026-03-14 | hoteis/termas_park_hotel.md | particularidades do prompt documentadas (possessivos permitidos, opção econômica, faixas etárias)
 - 2026-03-14 | kommo/CLAUDE.md | exceção de possessivos do Termas Park documentada

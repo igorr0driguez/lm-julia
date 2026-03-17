@@ -6,6 +6,7 @@ const MAP = {
   ita_thermas: "park_hotel",
   termas_gravatal: "termas_gravatal",
   termas_do_lago: "termas_do_lago",
+  fazzenda: "fazzenda",
 };
 
 const hotel = MAP[raw] ?? "hotel_internacional";
@@ -47,6 +48,20 @@ const CONFIG = {
     estrutura: `Estrutura e lazer a disposição sem custo adicional:\n• Piscina externa com água termal à 36º C\n• Sala de TV\n• Sala de jogos\n• Parque aquático incluso (todas as segundas feira fechado)\n• Cancha de bocha\n• Lago para pesca (não fornece material de pesca)\n• Internet wi-fi\n• Equipe de recreação`,
     obs: `Obs: valores e disponibilidade cotados nada reservado sujeito a alteração`,
     aviso: `AVISO:\nPARQUE AQUÁTICO ESTARÁ FECHADO PARA FÉRIAS COLETIVAS DO DIA 08/06/2026 A 08/07/2026, REABRINDO DIA 09/07/2026.`,
+  },
+
+  fazzenda: {
+    titulo: `*Orçamento:*\n☘ *Fazzenda Park Resort*`,
+    obs_pix: `OBS: valor enviado acima com desconto via pix aplicado (3% para pagamento à vista)`,
+    pagamento: `★ *Formas de pagamento:*\n\nPagamento TOTAL no ato da reserva para garantia da reserva e valores.\n\n◆ PIX à vista com 3% de desconto\n◆ Cartão de crédito em até 12x sem juros (parcelas mínimas de R$200,00, via link)`,
+    checkin: `⏰ Check-in: entrada na estrutura e acomodação a partir das 15h`,
+    checkout: `⏰ Check-out: liberação do quarto até 12h — permanência na estrutura, atrações e refeições até 15h`,
+    atividades: `★ *ATIVIDADES:*\n♨ Piscina interna (09h às 21h) e externa (09h às 20h)\n✦ Complexo de piscinas aquecidas (interna e externa)\n♨ +17 Jacuzzis (internas e externas)\n♞ Passeio de charrete\n♞ Passeio a cavalo\n♞ Passeio de pôneis\n✦ Passeio de bicicleta\n✦ Passeio de pedalinho\n✦ Stand up paddle\n⚓ Pescaria\n♫ Bailes\n✦ Ordenha\n♨ Sauna\n☘ Trilhas ecológicas\n⚽ Campo de futebol\n✦ Quadras de esporte\n✦ Playground aquático\n✦ Playground\n✦ Clube do Gasparinho Kids\n⚃ Sala de jogos\n✦ Interação com os animais\n✦ Academia\n✦ Recreação para crianças, adultos e melhor idade (09h30 às 00h)`,
+    servicos: `✦ *Cobrados à parte:*\n◆ Arvorismo — R$ 80,00 (a partir de 5 anos, mín 1,50m)\n◆ Quadriciclo — R$ 350,00 em dupla (necessário CNH)\n◆ Massagem/SPA — R$ 150,00 a R$ 230,00\n◆ Mini Fusca — R$ 120,00 a R$ 270,00 (seg–sáb 09h30–12h e 14h–18h)\n◆ Roupão — R$ 50,00/diária`,
+    allinclusive: `★ *ALL INCLUSIVE COMPLETO — 7 refeições diárias + bebidas liberadas o dia inteiro*\n\n☕ Café da manhã — 07h30 às 10h\n◆ Petiscos na piscina — 11h às 19h\n✦ Almoço — 12h às 14h\n☕ Café Colonial — 16h às 18h\n✦ Pizzaria — 16h30 às 21h\n✦ Jantar — 20h às 22h\n✦ Lanche da madrugada — 00h às 02h`,
+    bebidas: `★ *Bebidas incluídas o dia inteiro:*\n♦ Vinhos e espumantes (tintos nacionais/importados, rosé, branco, espumantes)\n♦ Coquetéis (Margarita, Mojito, Piña Colada, Sex on the Beach, Tequila Sunrise, Gin Tropical, batidas e mais)\n♦ Doses (Campari, Red Label, White Horse, Martini, Smirnoff)\n♦ Cervejas (Heineken, Corona, Budweiser, Original, Amstel, Chopp Pilsen Brahma, Heineken Zero)\n♦ Caipirinhas ao vivo (cachaça, Smirnoff, Bacardi, vinho, sakê, tropicais)\n♦ Sem álcool (águas, refrigerantes, sucos naturais, batidas sem álcool)`,
+    obs: `⚠ *Observação:* Tarifas flutuantes, sujeito a alterações sem aviso prévio.`,
+    aviso: null,
   },
 
   hotel_internacional: {

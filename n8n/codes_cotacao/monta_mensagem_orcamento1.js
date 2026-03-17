@@ -100,6 +100,44 @@ if (hotelResort === "park_hotel") {
   // ============================================================
   // HOTEL TERMAS DO LAGO
   // ============================================================
+  // ============================================================
+  // FAZZENDA PARK RESORT
+  // ============================================================
+} else if (hotelResort === "fazzenda") {
+  const totalPessoas = adultos + criancas;
+  let totalPessoasTexto = `${adultos} adulto${adultos > 1 ? "s" : ""}`;
+  if (criancas > 0)
+    totalPessoasTexto += ` + ${criancas} criança${criancas > 1 ? "s" : ""}`;
+
+  // --- ORÇAMENTO ---
+  mensagem += config.titulo + `\n\n`;
+  mensagem += `☉ *Período:* ${dataEntrada} a ${dataSaida} (${diarias} diária${diarias > 1 ? "s" : ""})\n`;
+  mensagem += `☺ *Hospedagem para:* ${totalPessoasTexto} (${totalPessoas} pessoa${totalPessoas > 1 ? "s" : ""})\n\n`;
+  mensagem += `*${primeiraOpcao.apartamento}*\n`;
+  mensagem += `▶ *${primeiraOpcao.preco_total}*\n`;
+  for (let i = 1; i < totalParaMostrar; i++) {
+    mensagem += `*${dados.opcoes[i].apartamento.toUpperCase()}* - consultar\n`;
+  }
+  mensagem += "\n";
+  mensagem += config.obs_pix + `\n\n`;
+  mensagem += config.pagamento + `\n\n`;
+  mensagem += config.checkin + `\n`;
+  mensagem += config.checkout + `\n\n`;
+
+  // --- ATIVIDADES ---
+  mensagem += config.atividades + `\n\n`;
+  mensagem += config.servicos + `\n\n`;
+
+  // --- ALL INCLUSIVE ---
+  mensagem += config.allinclusive + `\n\n`;
+  mensagem += config.bebidas + `\n\n`;
+
+  mensagem += config.obs;
+  if (config.aviso) mensagem += `\n\n` + config.aviso;
+
+  // ============================================================
+  // HOTEL TERMAS DO LAGO
+  // ============================================================
 } else if (hotelResort === "termas_do_lago") {
   mensagem += config.titulo + `\n\n`;
   mensagem += `Data: ${dataEntrada} a ${dataSaida}\n\n`;

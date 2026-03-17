@@ -68,6 +68,9 @@ if (hotelResort === "park_hotel") {
   mensagem += config.pensao + `\n\n`;
   mensagem += config.estrutura + `\n\n`;
   mensagem += `✦ *Valores Da Hospedagem:*\n\n`;
+} else if (hotelResort === "fazzenda") {
+  mensagem += config.titulo + `\n\n`;
+  mensagem += `✦ *Valores da hospedagem:*\n\n`;
 } else if (hotelResort === "termas_do_lago") {
   mensagem += config.titulo + `\n\n`;
 } else {
@@ -154,6 +157,17 @@ if (hotelResort === "park_hotel") {
   mensagem += config.horarios_banheiras + `\n\n`;
   mensagem += config.checkin + `\n`;
   mensagem += config.checkout + `\n\n`;
+  mensagem += config.obs;
+  if (config.aviso) mensagem += `\n\n` + config.aviso;
+} else if (hotelResort === "fazzenda") {
+  mensagem += config.obs_pix + `\n\n`;
+  mensagem += config.pagamento + `\n\n`;
+  mensagem += config.checkin + `\n`;
+  mensagem += config.checkout + `\n\n`;
+  mensagem += config.atividades + `\n\n`;
+  mensagem += config.servicos + `\n\n`;
+  mensagem += config.allinclusive + `\n\n`;
+  mensagem += config.bebidas + `\n\n`;
   mensagem += config.obs;
   if (config.aviso) mensagem += `\n\n` + config.aviso;
 } else if (hotelResort === "termas_do_lago") {
