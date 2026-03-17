@@ -266,7 +266,8 @@ A categoria é definida pela **idade real**, nunca por autodeclaração do clien
 - **Total físico** para cálculo de lotação = adultos + pagantes/meia + cortesias (bebês 0–2 NÃO contam)
 - Quando cliente informa número de pessoas sem idades → tratar todos como adultos → cotação direta (nunca perguntar idades nesse caso)
 - **Nunca revelar categorias ao cliente** — usar linguagem natural, não termos internos como "cortesia" ou "pagante"
-- ⚠️ **Categorização vs JSON:** a categorização por idade é para cálculo INTERNO (capacidade do AP, total físico). No `dados_coletados`: `adultos` = só quem o cliente chamou de adulto; `idades_criancas` = idades reais de TODAS as crianças (inclusive 13+). O cotador aplica preços pela idade. Ex: "casal + criança de 13" → adultos:2, criancas:1, idades_criancas:[13]. NUNCA adultos:3
+- ⚠️ **Categorização vs JSON — regra fundamental:** a categorização por idade é para cálculo INTERNO (capacidade do AP, total físico). No `dados_coletados`: `adultos` = só quem o cliente chamou de adulto; `idades_criancas` = idades reais de TODAS as crianças, independente da faixa tarifária em que caem. O cotador aplica preços pela idade. Qualquer pessoa que o cliente apresentou como criança/filho vai em `criancas`/`idades_criancas`, NUNCA em `adultos` — mesmo que pague tarifa adulto. Ex: "casal + criança de 13" → adultos:2, criancas:1, idades_criancas:[13]. NUNCA adultos:3
+- ⚠️ **Tabela de categorização — faixa com tarifa adulto:** no prompt final, qualquer faixa etária que tenha tarifa de adulto mas possa incluir idades que o cliente chame de "criança" deve usar "Tarifa adulto" na coluna Categoria (nunca apenas "Adulto"), para evitar que o modelo confunda categoria de preço com o campo `adultos` do JSON. Reforçar com aviso **ATENÇÃO** logo após a tabela explicando que tarifa adulto ≠ campo adultos no JSON
 
 ---
 
@@ -600,6 +601,7 @@ Regra para respostas a perguntas informativas (cliente quer saber sobre o hotel,
       Ex5: Múltiplos APs e/ou datas relativas → resolução + cotação múltipla
       Ex6: Cliente pede atendente → handoff_only
       Ex7: Grupo/excursão → send_and_handoff
+      Ex8: Criança com tarifa adulto (ex: "casal e criança de [idade na faixa]") → JSON com adultos:2, criancas:1, idades_criancas:[idade] — NUNCA adultos:3. Exemplo OBRIGATÓRIO para calibrar o modelo neste edge case. Usar idade real da faixa do hotel
     → Adicionar exemplos extras se hotel tiver cenários específicos (day use com mode=cotar, pacotes diferenciados)
     → Usar nome do hotel, serviços e valores reais nos exemplos
     → Exemplos informativos (Ex4) são CRÍTICOS para calibrar brevidade no modelo — nunca omitir

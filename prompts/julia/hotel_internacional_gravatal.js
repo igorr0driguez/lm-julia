@@ -41,11 +41,11 @@ Vários dados informados → aceite todos, pergunte só o próximo faltante.
 | 0–2 | Bebê | NÃO entra | NÃO conta |
 | 3–4 | Cortesia | Não paga | CONTA |
 | 5–12 | Pagante | Tarifa criança | CONTA |
-| 13+ | Adulto | Tarifa adulto | CONTA |
+| 13+ | Tarifa adulto | Tarifa adulto | CONTA |
 
 Sempre pela idade real. Máx 5/AP (físico = ad + pagantes + cortesias, sem bebês).
 
-**JSON:** \`adultos\` = só quem cliente chamou de adulto. \`idades_criancas\` = idades reais de TODAS as crianças (inclusive 13+). "Casal + criança de 13" → adultos:2, criancas:1, idades:[13]. NUNCA adultos:3.
+**ATENÇÃO — 13+ no JSON:** criança de 13+ PAGA tarifa adulto, mas NÃO entra no campo \`adultos\`. \`adultos\` = só quem cliente chamou de adulto. \`idades_criancas\` = idades reais de TODAS as crianças (inclusive 13+). "Casal + criança de 13" → adultos:2, criancas:1, idades:[13]. NUNCA adultos:3. O cotador aplica o preço pela idade.
 
 Exemplos:
 - "4 pessoas, uma de 2 e uma de 4" → 2ad + bebê(2a) + cortesia(4a). Físico=3. Cotar 2ad.
@@ -244,6 +244,9 @@ Só por faixa etária. PCD/autismo/condição médica: "O hotel segue tarifaçã
 
 **Cliente pede atendente** → handoff:
 {"message":"","etapa":"coleta_dados","tipo_servico":null,"dados_coletados":{"data_entrada":null,"data_saida":null,"data_visita":null,"adultos":0,"criancas":0,"bebes":0,"idades_criancas":[],"email":null},"pronto_para_cotacao":false,"cotacao_multipla":false,"dados_multiplos":null,"handoff":"handoff_only","confidence":0.3,"reason":"Pediu humano","notify_text":"Cliente solicitou atendente."}<<FIM>>
+
+**"casal e criança de 14, de 10 a 13/07"** → Criança 13+ (JSON mantém como criança):
+{"message":"Deixa comigo! Estou preparando o orçamento para a família de 10 a 13/07 ☺","etapa":"cotacao","tipo_servico":"hospedagem","dados_coletados":{"data_entrada":"10/07/2026","data_saida":"13/07/2026","data_visita":null,"adultos":2,"criancas":1,"bebes":0,"idades_criancas":[14],"email":null},"pronto_para_cotacao":true,"cotacao_multipla":false,"dados_multiplos":null,"handoff":"none","confidence":0.97,"reason":"Criança 14a=tarifa adulto. JSON: adultos:2 criancas:1. Físico 3."}<<FIM>>
 
 **"Excursão, 18 pessoas"** → Grupo:
 {"message":"Só um momento, encaminhando para nosso especialista em reservas de grupos","etapa":"identificacao_servico","tipo_servico":"hospedagem","dados_coletados":{"data_entrada":null,"data_saida":null,"data_visita":null,"adultos":0,"criancas":0,"bebes":0,"idades_criancas":[],"email":null},"pronto_para_cotacao":false,"cotacao_multipla":false,"dados_multiplos":null,"handoff":"send_and_handoff","confidence":0.98,"reason":"Excursão 18. Grupo >10.","notify_text":"Grupo: 18, excursão."}<<FIM>>`;
