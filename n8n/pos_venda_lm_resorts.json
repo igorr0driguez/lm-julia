@@ -19,7 +19,7 @@
     },
     {
       "parameters": {
-        "url": "=https://lmresorts.kommo.com/api/v4/leads/{{ $('Webhook Pós-venda').item.json.body['leads[add][0][id]'] }}",
+        "url": "=https://lmresorts.kommo.com/api/v4/leads/{{ $('Webhook Pós-venda').item.json.body['leads[add][0][id]'] }}?with=contacts",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpBearerAuth",
         "options": {}
@@ -249,40 +249,7 @@
       "name": "Merge"
     }
   ],
-  "pinData": {
-    "Webhook Pós-venda": [
-      {
-        "json": {
-          "headers": {
-            "connection": "upgrade",
-            "host": "jeab-n8n.theworkpc.com",
-            "x-real-ip": "142.0.207.172",
-            "x-forwarded-for": "142.0.207.172",
-            "x-forwarded-proto": "https",
-            "content-length": "185",
-            "user-agent": "amoCRM-Webhooks/3.0",
-            "content-type": "application/x-www-form-urlencoded",
-            "x-amocrm-requestid": "590589b7-7ae3-49a9-962b-1f5275227f33",
-            "accept-encoding": "gzip"
-          },
-          "params": {},
-          "query": {},
-          "body": {
-            "leads[add][0][id]": "24708922",
-            "leads[add][0][status_id]": "142",
-            "leads[add][0][pipeline_id]": "12736627",
-            "account[id]": "33299435",
-            "account[subdomain]": "lmresorts"
-          },
-          "webhookUrl": "https://jeab-n8n.theworkpc.com/webhook/lmresortskommo_posvenda",
-          "executionMode": "production"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "connections": {
     "Webhook Pós-venda": {
       "main": [
@@ -429,7 +396,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "baae0be5-67c3-4116-82b5-67f10b11846f",
+  "versionId": "fd89a59a-faf8-4754-b713-4853c02b4405",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "e60b74ab053ed0d2b808977bf7f742d40a11fa4d10865b3095732a10341c3c2f"
