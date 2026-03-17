@@ -1,10 +1,10 @@
-# [Nome do Hotel]
+# Machadinho Thermas Resort
 
 ## Identificador
 
-- hotel_resort param:
+- hotel_resort param: machadinho_thermas
 - Pipeline ID:
-- Nome do pipeline no Kommo:
+- Nome do pipeline no Kommo: Machadinho Thermas
 
 ## Status de implementação
 
@@ -34,15 +34,15 @@
 
 ```
 === IDENTIFICAÇÃO ===
-nome_hotel: ""
+nome_hotel: "Machadinho Thermas Resort SPA"
 localizacao: ""
-escopo: "SOMENTE [nome_hotel]"
+escopo: "SOMENTE Machadinho Thermas Resort SPA"
 
 === REGIME E ESTRUTURA ===
 regime_hospedagem: ""
 regime_bebidas: ""
 tipos_quarto: ""
-lotacao_maxima_ap: 0
+lotacao_maxima_ap: 5
 checkin: ""
 checkout: ""
 refeicoes_detalhadas: ""

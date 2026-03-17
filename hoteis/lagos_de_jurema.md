@@ -1,10 +1,10 @@
-# [Nome do Hotel]
+# Lagos de Jurema
 
 ## Identificador
 
-- hotel_resort param:
+- hotel_resort param: lagos_de_jurema
 - Pipeline ID:
-- Nome do pipeline no Kommo:
+- Nome do pipeline no Kommo: Lagos de Jurema
 
 ## Status de implementação
 
@@ -34,15 +34,15 @@
 
 ```
 === IDENTIFICAÇÃO ===
-nome_hotel: ""
+nome_hotel: "Lagos de Jurema"
 localizacao: ""
-escopo: "SOMENTE [nome_hotel]"
+escopo: "SOMENTE Lagos de Jurema"
 
 === REGIME E ESTRUTURA ===
 regime_hospedagem: ""
 regime_bebidas: ""
 tipos_quarto: ""
-lotacao_maxima_ap: 0
+lotacao_maxima_ap: 5
 checkin: ""
 checkout: ""
 refeicoes_detalhadas: ""

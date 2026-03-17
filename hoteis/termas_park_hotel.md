@@ -15,6 +15,7 @@
 - [x] Material do hotel coletado
 - [x] Ficha preenchida (ver seção abaixo)
 - [x] Prompt criado e publicado no n8n
+- [ ] Revisar Prompt
 - [x] Atualizar n8n: Config Hoteis
 - [x] Atualizar n8n: Monta mensagem Orcamento1
 - [x] Atualizar n8n: Monta mensagem Multipla

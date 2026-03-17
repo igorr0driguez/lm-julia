@@ -1,10 +1,10 @@
-# [Nome do Hotel]
+# Jardins de Jurema
 
 ## Identificador
 
-- hotel_resort param:
+- hotel_resort param: jardins_de_jurema
 - Pipeline ID:
-- Nome do pipeline no Kommo:
+- Nome do pipeline no Kommo: Jardins de Jurema
 
 ## Status de implementação
 
@@ -34,15 +34,15 @@
 
 ```
 === IDENTIFICAÇÃO ===
-nome_hotel: ""
+nome_hotel: "Jardins de Jurema"
 localizacao: ""
-escopo: "SOMENTE [nome_hotel]"
+escopo: "SOMENTE Jardins de Jurema"
 
 === REGIME E ESTRUTURA ===
 regime_hospedagem: ""
 regime_bebidas: ""
 tipos_quarto: ""
-lotacao_maxima_ap: 0
+lotacao_maxima_ap: 5
 checkin: ""
 checkout: ""
 refeicoes_detalhadas: ""

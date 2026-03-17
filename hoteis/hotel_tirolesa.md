@@ -1,10 +1,10 @@
-# [Nome do Hotel]
+# Hotel Tirolesa
 
 ## Identificador
 
-- hotel_resort param:
+- hotel_resort param: tirolesa
 - Pipeline ID:
-- Nome do pipeline no Kommo:
+- Nome do pipeline no Kommo: Hotel Tirolesa
 
 ## Status de implementação
 
@@ -34,15 +34,15 @@
 
 ```
 === IDENTIFICAÇÃO ===
-nome_hotel: ""
+nome_hotel: "Hotel Tirolesa"
 localizacao: ""
-escopo: "SOMENTE [nome_hotel]"
+escopo: "SOMENTE Hotel Tirolesa"
 
 === REGIME E ESTRUTURA ===
 regime_hospedagem: ""
 regime_bebidas: ""
 tipos_quarto: ""
-lotacao_maxima_ap: 0
+lotacao_maxima_ap: 4
 checkin: ""
 checkout: ""
 refeicoes_detalhadas: ""

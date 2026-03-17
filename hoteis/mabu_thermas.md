@@ -1,10 +1,10 @@
-# [Nome do Hotel]
+# Mabu Thermas Grand Resort
 
 ## Identificador
 
-- hotel_resort param:
+- hotel_resort param: mabu_thermas
 - Pipeline ID:
-- Nome do pipeline no Kommo:
+- Nome do pipeline no Kommo: Mabu Thermas Foz
 
 ## Status de implementação
 
@@ -34,15 +34,15 @@
 
 ```
 === IDENTIFICAÇÃO ===
-nome_hotel: ""
+nome_hotel: "Mabu Thermas Grand Resort"
 localizacao: ""
-escopo: "SOMENTE [nome_hotel]"
+escopo: "SOMENTE Mabu Thermas Grand Resort"
 
 === REGIME E ESTRUTURA ===
 regime_hospedagem: ""
 regime_bebidas: ""
 tipos_quarto: ""
-lotacao_maxima_ap: 0
+lotacao_maxima_ap: 4
 checkin: ""
 checkout: ""
 refeicoes_detalhadas: ""

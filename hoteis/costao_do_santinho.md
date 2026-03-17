@@ -1,4 +1,4 @@
-# [Nome do Hotel]
+# Costao do Santinho
 
 ## Identificador
 
@@ -34,9 +34,9 @@
 
 ```
 === IDENTIFICAÇÃO ===
-nome_hotel: ""
+nome_hotel: "Costao do Santinho"
 localizacao: ""
-escopo: "SOMENTE [nome_hotel]"
+escopo: "SOMENTE Costao do Santinho"
 
 === REGIME E ESTRUTURA ===
 regime_hospedagem: ""

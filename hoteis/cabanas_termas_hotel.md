@@ -1,10 +1,10 @@
-# [Nome do Hotel]
+# Cabanas Termas Hotel
 
 ## Identificador
 
-- hotel_resort param:
+- hotel_resort param: cabanas
 - Pipeline ID:
-- Nome do pipeline no Kommo:
+- Nome do pipeline no Kommo: Cabanas Termas Hotel
 
 ## Status de implementação
 
@@ -34,9 +34,9 @@
 
 ```
 === IDENTIFICAÇÃO ===
-nome_hotel: ""
+nome_hotel: "Cabanas Termas Hotel"
 localizacao: ""
-escopo: "SOMENTE [nome_hotel]"
+escopo: "SOMENTE Cabanas Termas Hotel"
 
 === REGIME E ESTRUTURA ===
 regime_hospedagem: ""
