@@ -32,6 +32,9 @@ Atualizado em: março/2026
 - **Hotel inicia conversa via WABA → Jul.IA ativa indevidamente**: equipe do Termas Park usa WhatsApp fora do Kommo (WABA beta). Não há solução técnica viável — o sistema não consegue distinguir quem iniciou a conversa de forma confiável. **Solução: processo operacional** — equipe deve acionar o robô [MANUAL] Desativar Jul.IA assim que o lead aparecer. Ver `bugs-e-melhorias/001-hotel-iniciou-conversa.md`.
 
 ## Últimas alterações
+- 2026-03-16 | n8n/codes_cotacao/monta_mensagem_orcamento1.js | removida linha obs_pix da mensagem do Fazzenda — valor exibido é de cartão, obs era enganosa; vendedor negocia PIX
+- 2026-03-16 | prompts/julia/fazzenda_park_resort.js, hotel_internacional_gravatal.js, hotel_termas.js | fix: criança com tarifa adulto era contada como adulto no JSON (ex: "casal + criança de 14" → adultos:3 errado). Correção em 3 camadas: tabela "Adulto"→"Tarifa adulto", aviso ATENÇÃO após tabela, exemplo JSON completo para 13+
+- 2026-03-16 | prompts/julia/diretrizes_gerais_julia_v8.md | regra de "Tarifa adulto" na tabela generalizada para qualquer faixa etária (não só 13+); Ex8 obrigatório nos exemplos de todo prompt novo
 - 2026-03-16 | prompts/julia/fazzenda_park_resort.js | prompt criado e validado contra gold standard (hotel_internacional_gravatal.js) e diretrizes_gerais_julia_v8.md — pronto para testes
 - 2026-03-16 | n8n/codes_cotacao/config_hoteis.js | config do Fazzenda adicionada (titulo, obs_pix, pagamento, checkin, checkout, atividades, servicos, allinclusive, bebidas, obs); MAP atualizado com código "fazzenda"
 - 2026-03-16 | n8n/codes_cotacao/monta_mensagem_orcamento1.js | bloco Fazzenda adicionado — ordem: orçamento → atividades → all inclusive

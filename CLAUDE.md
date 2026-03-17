@@ -31,6 +31,7 @@ Status: 1 hotel implementado (Termas Park Hotel). Expansão em andamento.
 - Emojis: apenas Unicode básico — testar antes de usar na API Kommo
 - Widget: incrementar version no manifest.json a cada update; desinstalar e reinstalar após deploy
 - bind_actions com salesbot:callback não funciona em integrações privadas
+- Prompts: campo `adultos` no JSON = só quem o cliente chamou de adulto. Crianças com tarifa adulto vão em `idades_criancas`, NUNCA em `adultos`. Tabela de categorização deve usar "Tarifa adulto" (nunca só "Adulto") para evitar confusão do modelo
 
 ## Atenção ao escopo
 - Mudanças nos robôs globais afetam TODOS os pipelines — sempre sinalizar

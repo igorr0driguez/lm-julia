@@ -118,7 +118,6 @@ if (hotelResort === "park_hotel") {
     mensagem += `*${dados.opcoes[i].apartamento.toUpperCase()}* - consultar\n`;
   }
   mensagem += "\n";
-  mensagem += config.obs_pix + `\n\n`;
   mensagem += config.pagamento + `\n\n`;
   mensagem += config.checkin + `\n`;
   mensagem += config.checkout + `\n\n`;
