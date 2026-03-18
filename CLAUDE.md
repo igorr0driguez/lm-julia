@@ -3,10 +3,10 @@
 ## O que é esse projeto
 Sistema de atendimento via IA no WhatsApp integrado ao Kommo CRM via n8n.
 Dois agentes:
-- Jul.IA: atende leads de hotéis/resorts específicos (19 no total)
-- Gust.IA: triagem nas centrais (Gravatal, Piratuba, Foz do Iguaçu, Resorts)
+- Jul.IA: atende leads de hotéis/resorts individuais
+- Gust.IA: triagem nas centrais (Gravatal, Jurema, Piratuba, Foz do Iguaçu, Resorts, Gramado)
 
-Status: 1 hotel implementado (Termas Park Hotel). Expansão em andamento.
+Status: 1 hotel em produção (Termas Park Hotel), 5 prompts adicionais criados, expansão em andamento.
 
 ## Stack
 - Kommo CRM (salesbots, pipelines, custom fields, widget privado)
@@ -14,15 +14,18 @@ Status: 1 hotel implementado (Termas Park Hotel). Expansão em andamento.
 - Redis (cache de leads, pipelines, custom fields)
 - Postgres (crm.leads, crm.interacoes)
 - WhatsApp WABA via integração oficial Kommo
+- Cotador HAI+ (API REST de cotação — scraping de sistemas de reserva)
 
 ## Arquivos do projeto
 - CONTEXT.md → estado atual, em andamento, decisões recentes — LER SEMPRE PRIMEIRO
-- kommo/ → salesbots, widget, campos e pipelines
-- n8n/ → todos os workflows em JSON
+- ARQUITETURA.md → fluxo técnico completo do sistema
+- kommo/ → salesbots, widget, campos, pipelines e usuários
+- n8n/ → workflows em JSON + scripts de cotação (codes_cotacao/)
 - prompts/ → prompts por agente (julia/ e gustavo/)
-- hoteis/ → contexto e configurações por hotel
-- centrais/ → contexto e configurações por central
-- bugs-e-melhorias/ → backlog ativo e changelog
+- hoteis/ → contexto e configurações por hotel (15 fichas + template)
+- centrais/ → contexto e configurações por central (template apenas)
+- cotador/ → documentação da API de cotação HAI+
+- bugs_e_melhorias/ → backlog ativo e changelog
 
 ## Regras críticas
 - Webhook n8n SEMPRE com Respond Immediately (sem isso Kommo retorna 404)
@@ -38,3 +41,4 @@ Status: 1 hotel implementado (Termas Park Hotel). Expansão em andamento.
 - Sempre confirmar qual hotel/central está em escopo antes de alterar pipelines
 - Ao expandir para novo hotel: usar hoteis/_template.md
 - Ao expandir para nova central: usar centrais/_template.md
+- Ao criar prompt de novo hotel: seguir prompts/julia/modelo_prompt_hotel.md

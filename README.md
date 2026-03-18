@@ -26,7 +26,7 @@ n8n (webhook)
       ↓
 OpenAI (Jul.IA ou Gust.IA)
       ↓
-n8n (processa resposta)
+n8n (processa resposta + Cotador HAI+ se cotação)
       ↓
 Kommo API → Cliente (WhatsApp)
 ```
@@ -42,6 +42,7 @@ Fluxo detalhado em [ARQUITETURA.md](./ARQUITETURA.md).
 - **Redis** — cache de leads, pipelines e custom fields
 - **Postgres** — tabelas `crm.leads` e `crm.interacoes`
 - **WhatsApp WABA** — via integração oficial Kommo
+- **Cotador HAI+** — API REST de cotação (scraping de sistemas de reserva)
 
 ---
 
@@ -53,32 +54,55 @@ Fluxo detalhado em [ARQUITETURA.md](./ARQUITETURA.md).
 ├── CONTEXT.md             # Estado atual, em andamento, decisões recentes — ler primeiro
 ├── ARQUITETURA.md         # Fluxo completo do sistema
 ├── kommo/
+│   ├── CLAUDE.md          # Regras específicas do Kommo
 │   ├── pipelines.md       # Pipelines com IDs e etapas
 │   ├── robos.md           # Todos os salesbots documentados
 │   ├── custom-fields.md   # Campos personalizados e IDs
-│   ├── codigo_hoteis.md   # Parâmetro hotel_resort por hotel
-│   └── users.md           # Usuários e IDs
-├── n8n/                   # Workflows exportados em JSON
+│   ├── codigo_hoteis.md   # Mapeamento hotel_resort ↔ pipeline
+│   ├── users.md           # Usuários e IDs
+│   └── widget/            # Widget privado (manifest, script, i18n)
+├── n8n/
+│   ├── CLAUDE.md          # Regras específicas do n8n
+│   ├── *.json             # Workflows exportados (14 ativos + 1 legacy)
+│   └── codes_cotacao/     # Scripts JS para montar mensagens de orçamento
 ├── prompts/
-│   ├── julia/             # Prompts da Jul.IA (diretrizes gerais + por hotel)
-│   └── gustavo/           # Prompts do Gust.IA
+│   ├── julia/             # Prompts da Jul.IA (diretrizes v8 + 6 prompts de hotel)
+│   │   ├── diretrizes_gerais_julia_v8.md
+│   │   ├── modelo_prompt_hotel.md
+│   │   └── {hotel}.js     # 6 prompts: termas_park, hotel_internacional, hotel_termas,
+│   │                      #   termas_do_lago, fazzenda_park, machadinho_thermas
+│   └── gustavo/           # Prompts do Gust.IA (vazio — ainda não implementado)
 ├── hoteis/
 │   ├── _template.md       # Template + checklist de setup por hotel
-│   └── termas_park_hotel.md
+│   └── *.md               # 15 fichas de hotel preenchidas
 ├── centrais/
 │   └── _template.md       # Template para centrais regionais
-└── bugs-e-melhorias/      # Backlog ativo e changelog
+├── cotador/
+│   ├── CLAUDE.md          # Instruções do cotador
+│   └── doc_api_cotador.md # Documentação da API HAI+
+└── bugs_e_melhorias/      # Backlog ativo e changelog
 ```
 
 ---
 
-## Hotéis em produção
+## Status dos hotéis
 
-| Hotel | Pipeline ID | Status |
-|-------|-------------|--------|
-| Termas Park Hotel | 11631008 | Em produção |
+### Em produção (1)
+| Hotel | Pipeline ID |
+|-------|-------------|
+| Termas Park Hotel | 11631008 |
 
-Próximos na fila: Hotel Internacional Gravatal, Hotel Termas, Hotel Termas do Lago, Fazzenda Park Resort, Machadinho Thermas Resort SPA, Águas de Palmas Resort.
+### Prompt criado — aguardando deploy (5)
+Hotel Internacional Gravatal, Hotel Termas, Termas do Lago, Fazzenda Park Resort, Machadinho Thermas Resort SPA
+
+### Ficha preenchida — sem prompt (10)
+Águas de Palmas, Cabanas Termas Hotel, Costão do Santinho, Hotel Tirolesa, Jardins de Jurema, Lagos de Jurema, Mabu Thermas, Recanto Cataratas, Vivaz Cataratas
+
+### Pipeline no Kommo — sem ficha (6)
+Dona Francisca, Itá Thermas, Grand Suites Family Resort, Laghetto Resort Golden, Laghetto Gramado, Laghetto Stilo Borges
+
+### Centrais (6)
+Central Gravatal, Central Jurema, Central Piratuba, Central Foz do Iguaçu, Central Resorts, Central Gramado
 
 ---
 
@@ -86,8 +110,9 @@ Próximos na fila: Hotel Internacional Gravatal, Hotel Termas, Hotel Termas do L
 
 1. Copiar `hoteis/_template.md` e preencher a ficha
 2. Seguir o checklist de setup do arquivo
-3. Criar prompt em `prompts/julia/` baseado nas diretrizes gerais
+3. Criar prompt em `prompts/julia/` usando `prompts/julia/modelo_prompt_hotel.md`
 4. Atualizar `kommo/codigo_hoteis.md` com o novo parâmetro `hotel_resort`
+5. Configurar `n8n/codes_cotacao/config_hoteis.js` com dados do hotel
 
 ---
 
@@ -108,3 +133,5 @@ Próximos na fila: Hotel Internacional Gravatal, Hotel Termas, Hotel Termas do L
 - [ARQUITETURA.md](./ARQUITETURA.md) — fluxo técnico completo
 - [kommo/robos.md](./kommo/robos.md) — salesbots e fluxos
 - [kommo/custom-fields.md](./kommo/custom-fields.md) — campos e IDs
+- [kommo/codigo_hoteis.md](./kommo/codigo_hoteis.md) — mapeamento hotéis ↔ pipelines
+- [cotador/doc_api_cotador.md](./cotador/doc_api_cotador.md) — API de cotação
