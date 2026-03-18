@@ -156,6 +156,45 @@ if (hotelResort === "park_hotel") {
   if (config.aviso) mensagem += `\n\n` + config.aviso;
 
   // ============================================================
+  // MACHADINHO THERMAS RESORT SPA
+  // ============================================================
+} else if (hotelResort === "machadinho_thermas") {
+  const totalPessoas = adultos + criancas;
+  let totalPessoasTexto = `${adultos} adulto${adultos > 1 ? "s" : ""}`;
+  if (criancas > 0)
+    totalPessoasTexto += ` + ${criancas} criança${criancas > 1 ? "s" : ""}`;
+
+  mensagem += config.titulo + `\n\n`;
+  mensagem += `☉ *Período:* ${dataEntrada} a ${dataSaida} (${diarias} diária${diarias > 1 ? "s" : ""})\n`;
+  mensagem += `☺ *Hospedagem para:* ${totalPessoasTexto} (${totalPessoas} pessoa${totalPessoas > 1 ? "s" : ""})\n\n`;
+
+  mensagem += `✦ *Valor total do pacote:*\n\n`;
+  mensagem += `▶ *${primeiraOpcao.preco_total}*\n`;
+  for (let i = 1; i < totalParaMostrar; i++) {
+    mensagem += `*${dados.opcoes[i].apartamento.toUpperCase()}* - consultar\n`;
+  }
+  mensagem += "\n";
+
+  mensagem += config.pensao + `\n\n`;
+  mensagem += config.bebidas + `\n\n`;
+  mensagem += config.piscinas + `\n\n`;
+  mensagem += config.pagamento + `\n\n`;
+  mensagem += config.recreacao + `\n\n`;
+  mensagem += config.costelao + `\n\n`;
+  mensagem += config.ovelha + `\n\n`;
+  mensagem += config.lama + `\n\n`;
+  mensagem += config.chardonnay + `\n\n`;
+  mensagem += config.estrutura + `\n\n`;
+  mensagem += config.apartamentos + `\n\n`;
+  mensagem += config.obs_bebidas + `\n\n`;
+  mensagem += config.opcionais + `\n\n`;
+  mensagem += config.spa + `\n\n`;
+  mensagem += config.checkin + `\n`;
+  mensagem += config.checkout + `\n\n`;
+  mensagem += config.horarios_refeicoes;
+  if (config.aviso) mensagem += `\n\n` + config.aviso;
+
+  // ============================================================
   // HOTEL INTERNACIONAL GRAVATAL
   // ============================================================
 } else {

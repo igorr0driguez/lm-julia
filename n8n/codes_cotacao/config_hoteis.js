@@ -7,6 +7,7 @@ const MAP = {
   termas_gravatal: "termas_gravatal",
   termas_do_lago: "termas_do_lago",
   fazzenda: "fazzenda",
+  machadinho_thermas: "machadinho_thermas",
 };
 
 const hotel = MAP[raw] ?? "hotel_internacional";
@@ -61,6 +62,28 @@ const CONFIG = {
     allinclusive: `★ *ALL INCLUSIVE COMPLETO — 7 refeições diárias + bebidas liberadas o dia inteiro*\n\n☕ Café da manhã — 07h30 às 10h\n◆ Petiscos na piscina — 11h às 19h\n✦ Almoço — 12h às 14h\n☕ Café Colonial — 16h às 18h\n✦ Pizzaria — 16h30 às 21h\n✦ Jantar — 20h às 22h\n✦ Lanche da madrugada — 00h às 02h`,
     bebidas: `★ *Bebidas incluídas o dia inteiro:*\n♦ Vinhos e espumantes (tintos nacionais/importados, rosé, branco, espumantes)\n♦ Coquetéis (Margarita, Mojito, Piña Colada, Sex on the Beach, Tequila Sunrise, Gin Tropical, batidas e mais)\n♦ Doses (Campari, Red Label, White Horse, Martini, Smirnoff)\n♦ Cervejas (Heineken, Corona, Budweiser, Original, Amstel, Chopp Pilsen Brahma, Heineken Zero)\n♦ Caipirinhas ao vivo (cachaça, Smirnoff, Bacardi, vinho, sakê, tropicais)\n♦ Sem álcool (águas, refrigerantes, sucos naturais, batidas sem álcool)`,
     obs: `⚠ *Observação:* Tarifas flutuantes, sujeito a alterações sem aviso prévio.`,
+    aviso: null,
+  },
+
+  machadinho_thermas: {
+    titulo: `*Orçamento:*\n♨ *Machadinho Thermas Resort*`,
+    pensao: `✅ No valor da diária está incluso pensão completa café da manhã, almoço, café colonial à tarde e jantar.\n\n✅ É cobrado taxa de ISS (2,5% - dois e meio por cento - o valor estará incluso na confirmação de sua reserva)`,
+    bebidas: `✅ Durante almoço e jantar (dentro do restaurante), algumas bebidas estarão inclusas no valor da diária.\n\n✅ *Descrição de bebidas:*\nRefrigerante - Marcas de refrigerante a serem servidos: (O hóspede irá se servir na mesa no buffet)\nCoca-Cola, Coca-Cola Zero, Sprite e Guaraná\n- Sucos\nSucos do dia (O hóspede irá se servir na máquina no buffet)\n* 04 sabores de sucos alternados por dia\n- Vinho tinto seco\nVinho colonial\n- Chopp\nChopp da casa\n- Água\nGarrafa de água com e sem gás`,
+    piscinas: `✅ *Acesso livre a todas as piscinas!*\nSão 10 piscinas, todas com água termal a 45,5° direto da fonte, sendo elas:\n07 piscinas externas e 03 piscinas internas.\nDentre elas Piscina com tobogã, piscina com bar molhado e ofurôs, piscina infantil, complexo de inverno e muito mais!`,
+    pagamento: `✅ O Resort trabalha com a antecipação de 30% do valor para confirmação da reserva e 50% para feriados. O restante pode ser pago no check-in em até 10 vezes sem juros no cartão com parcela mínima de R$ 300,00`,
+    recreacao: `✅ *Atividades de lazer:*\nConta com *Recreação* para adultos e crianças a partir de 03 anos de idade das 09h às 23h _(em grupos)_, caso preferir exclusividade para seu filho (a) temos o serviço de babá (R$ 60,00 a hora com o mínimo de 02 horas), a solicitação deste serviço precisa ser feita 07 dias antes da vinda.\nExemplos de atividades: Música ao vivo, Caminhadas, Hidroginástica, Bingos, Torneio de Carteado e muito mais...`,
+    costelao: `✅ *Costelão fogo de Chão:*\nCultivando a cultura gaúcha todas quartas, sextas e domingos no galpão José Mendes tem o Costelão fogo de chão com gaiteiro e música ao vivo.`,
+    ovelha: `✅ *Ovelha fogo de chão:*\nTodas as terças e sábados no Galpão José Mendes tem ovelha fogo de chão com gaiteiro e música ao vivo.`,
+    lama: `✅ *Banho de Lama Negra:*\nTodos os dias das 13h30min às 14h30min.\nBenefícios: Ajuda no relaxamento, acalma a pele, dores reumáticas, ajuda no combate das impurezas (acne e oleosidade, por exemplo). Cicatrizante, analgésico e tonificante.`,
+    chardonnay: `✅ *Hora do Chardonnay ao pôr do sol (todas as quartas-feiras e sábados):*\nMomento com degustação do vinho especial da casa Chardonnay Tochetto, com acompanhamento de queijos franceses, tudo isso ao som de violão clássico e nosso lindo pôr do sol.`,
+    estrutura: `✅ *Estrutura:*\nCancha de Bocha, Sala de Jogos (Carteado, Sinuca, Pingue-Pongue, X-box), Cantinho do Chimarrão, Sala de TV, 02 Restaurantes, Salas para Reuniões, Anfiteatro, 04 Pistas de Boliche Eletrônico, Lojas, Artesanato, Academia, Espaço Baby, Bosque, Ampla Área Verde para Caminhada, Casa do coelho, SPA com Salas para Massagens, Terapias, e Salão de beleza, Elevadores com Vista Panorâmica, Bar Alexander e Daiquiri, Calefação, Campo de Vôlei e Futebol de areia, Quadra de Tênis de Saibro, Campo de Futebol 7, Galpão José Mendes e Curicaca's Pub e Bistrô.`,
+    apartamentos: `✅ *Apartamentos possuem:*\nTelevisor Led 32", Frigobar, Telefone, Ar condicionado, Calefação, Secador de cabelo, Internet Wi-Fi, Cofre Digital.\nTodos os aptos possuem água termal a 45,5° graus direto da fonte.`,
+    obs_bebidas: `⚠ Apenas as bebidas (fora dos horários e do restaurante), SPA e boliche são à parte.`,
+    opcionais: `❎ *Atividades opcionais:*\nBoliche, SPA, passeios de jardineira com destino ao Museu Alma Campeira, Museu Mirante Torres, Cascata do Tigre, Pesque & Pague Bosque Tranquilitate, Cachaçaria Acanhadinha, Passeio de Trator e Ervateira. (Serviços à parte, não inclusos na diária).`,
+    spa: `❎ *Spa Ilex:*\nÉ oferecido terapias diferenciadas, massagens, banhos e uma linha completa de cosméticos elaborados com os ativos poderosos da erva-mate.\nTambém tem a opção de salão de beleza, com serviços de escova, de manicure e pedicure. (Serviços à parte).`,
+    checkin: `→ *Check-in a partir das 16h00min*`,
+    checkout: `→ *Check-out até as 12h00min*`,
+    horarios_refeicoes: `☕ Café da manhã: 07h00min às 10h00min\n✦ Almoço: 12h00min às 14h00min\n☕ Café colonial: 16h00min às 17h30min\n✦ Jantar: 19h30min às 22h00min`,
     aviso: null,
   },
 

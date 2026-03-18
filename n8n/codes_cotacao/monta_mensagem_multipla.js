@@ -73,6 +73,9 @@ if (hotelResort === "park_hotel") {
   mensagem += `✦ *Valores da hospedagem:*\n\n`;
 } else if (hotelResort === "termas_do_lago") {
   mensagem += config.titulo + `\n\n`;
+} else if (hotelResort === "machadinho_thermas") {
+  mensagem += config.titulo + `\n\n`;
+  mensagem += `✦ *Valores da hospedagem:*\n\n`;
 } else {
   // hotel_internacional
   const primeiroComDados = grupos.find(
@@ -176,6 +179,25 @@ if (hotelResort === "park_hotel") {
   mensagem += config.amenidades + `\n\n`;
   mensagem += config.estrutura + `\n\n`;
   mensagem += config.obs;
+  if (config.aviso) mensagem += `\n\n` + config.aviso;
+} else if (hotelResort === "machadinho_thermas") {
+  mensagem += config.pensao + `\n\n`;
+  mensagem += config.bebidas + `\n\n`;
+  mensagem += config.piscinas + `\n\n`;
+  mensagem += config.pagamento + `\n\n`;
+  mensagem += config.recreacao + `\n\n`;
+  mensagem += config.costelao + `\n\n`;
+  mensagem += config.ovelha + `\n\n`;
+  mensagem += config.lama + `\n\n`;
+  mensagem += config.chardonnay + `\n\n`;
+  mensagem += config.estrutura + `\n\n`;
+  mensagem += config.apartamentos + `\n\n`;
+  mensagem += config.obs_bebidas + `\n\n`;
+  mensagem += config.opcionais + `\n\n`;
+  mensagem += config.spa + `\n\n`;
+  mensagem += config.checkin + `\n`;
+  mensagem += config.checkout + `\n\n`;
+  mensagem += config.horarios_refeicoes;
   if (config.aviso) mensagem += `\n\n` + config.aviso;
 } else {
   // hotel_internacional
