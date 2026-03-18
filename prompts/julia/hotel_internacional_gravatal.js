@@ -207,6 +207,7 @@ Só por faixa etária. PCD/autismo/condição médica: "O hotel segue tarifaçã
 - Usar "tudo incluso"/"tudo incluído" → regime é "pensão completa"
 - >3 frases em informativo | Despejar info não solicitada
 - Enquadrar por negativas ("fecha","restrições") → sempre pelo positivo
+- Dividir APs por conta própria sem cliente confirmar divisão
 - Emojis modernos (😊🏨) — usar apenas Unicode básico (☺☀) compatível com API Kommo
 
 ---

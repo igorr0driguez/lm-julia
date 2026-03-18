@@ -1,11 +1,13 @@
 # Termas Park Hotel
 
 ## Identificador
+
 - hotel_resort param: termas_park_hotel
 - Pipeline ID: 11631008
 - Nome do pipeline no Kommo: Termas Park Hotel - termaspark.com.br
 
 ## Status de implementação
+
 - [x] Etapas JUL.IA ATIVADA e JUL.IA DESATIVADA criadas no pipeline
 - [x] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
 - [x] Robô de Entrada configurado (campos, etapa, condicionais)
@@ -15,7 +17,7 @@
 - [x] Material do hotel coletado
 - [x] Ficha preenchida (ver seção abaixo)
 - [x] Prompt criado e publicado no n8n
-- [ ] Revisar Prompt
+- [x] Revisar Prompt
 - [x] Atualizar n8n: Config Hoteis
 - [x] Atualizar n8n: Monta mensagem Orcamento1
 - [x] Atualizar n8n: Monta mensagem Multipla
@@ -99,23 +101,27 @@ terminologia: |
 ## Estrutura de Produtos
 
 ### Hospedagem (Pacotes)
+
 Pensão completa inclusa em todos os pacotes:
+
 - Cafe da manha
 - Petiscos na piscina (11h as 13h30)
 - Almoco
 - Jantar
 
 Condicoes de pagamento (hospedagem):
+
 - Entrada: 30% via PIX ou deposito
 - Saldo: pagamento no hotel ou parcelamento em ate 10x (Visa e Mastercard)
 - Check-in: a partir das 14h
 - Check-out: ate as 12h (almoco incluso)
 
 ### Day Use
-| Modalidade | Valor por pessoa |
-|---|---|
-| Somente piscina | R$ 65,00 |
-| Piscina + almoco | R$ 135,00 |
+
+| Modalidade                                       | Valor por pessoa               |
+| ------------------------------------------------ | ------------------------------ |
+| Somente piscina                                  | R$ 65,00                       |
+| Piscina + almoco                                 | R$ 135,00                      |
 | Cafe da manha + almoco + cafe da tarde + piscina | R$ 160,00 (minimo 15 pagantes) |
 
 - Horario day use: 10h as 18h
@@ -123,11 +129,13 @@ Condicoes de pagamento (hospedagem):
 - Criancas 8 a 12 anos: meia entrada
 
 Condicoes de pagamento (day use):
+
 - Entrada: 50% via PIX ou deposito
 
 ---
 
 ## Estrutura e Lazer
+
 - Piscinas térmicas/aquecidas coberta e ao ar livre (8h as 20h)
 - Banheiras de hidromassagem (7h30-9h30 e 16h-18h)
 - Sala de TV
@@ -136,6 +144,7 @@ Condicoes de pagamento (day use):
 - Restaurante com buffet completo
 
 ## Recreacao e Atividades (inclusas)
+
 - Bailes e eventos tematicos
 - Bingo
 - Hidroginastica
@@ -145,6 +154,7 @@ Condicoes de pagamento (day use):
 - Trilhas e brincadeiras diversas
 
 ## Servicos Terceirizados (pagos a parte)
+
 - Passeio de charrete
 - Passeio a cavalo
 - Parque Aquatico Termal
@@ -154,74 +164,83 @@ Condicoes de pagamento (day use):
 ## Cardapio Bar/Piscina
 
 ### Porcoes
-| Item | Valor |
-|---|---|
-| Fritas | R$ 32,00 |
-| Peixe | R$ 38,00 |
+
+| Item            | Valor    |
+| --------------- | -------- |
+| Fritas          | R$ 32,00 |
+| Peixe           | R$ 38,00 |
 | File de Alcatra | R$ 47,00 |
-| Frango | R$ 35,00 |
-| Frios | R$ 34,00 |
+| Frango          | R$ 35,00 |
+| Frios           | R$ 34,00 |
 
 ### Bebidas
-| Item | Valor |
-|---|---|
-| Agua | R$ 5,00 |
-| Agua Tonica | R$ 6,00 |
-| Sucos | R$ 7,00 |
+
+| Item         | Valor   |
+| ------------ | ------- |
+| Agua         | R$ 5,00 |
+| Agua Tonica  | R$ 6,00 |
+| Sucos        | R$ 7,00 |
 | Refrigerante | R$ 7,00 |
 
 ### Doses
-| Item | Valor |
-|---|---|
-| Martini | R$ 12,00 |
-| Bacardi | R$ 15,00 |
-| Campari | R$ 15,00 |
-| Gin | R$ 15,00 |
-| Conhaque | R$ 10,00 |
-| Cachaca | R$ 14,00 |
-| Smirnoff | R$ 15,00 |
-| Natu | R$ 15,00 |
-| Old Eight | R$ 12,00 |
-| Passport | R$ 14,00 |
+
+| Item        | Valor    |
+| ----------- | -------- |
+| Martini     | R$ 12,00 |
+| Bacardi     | R$ 15,00 |
+| Campari     | R$ 15,00 |
+| Gin         | R$ 15,00 |
+| Conhaque    | R$ 10,00 |
+| Cachaca     | R$ 14,00 |
+| Smirnoff    | R$ 15,00 |
+| Natu        | R$ 15,00 |
+| Old Eight   | R$ 12,00 |
+| Passport    | R$ 14,00 |
 | Steinhaeger | R$ 12,00 |
-| Underberg | R$ 12,00 |
+| Underberg   | R$ 12,00 |
 
 ### Cervejas
-| Item | Valor |
-|---|---|
-| Brahma / Skol (Garrafa) | R$ 15,00 |
-| Malzbier (355ml) | R$ 15,00 |
+
+| Item                          | Valor    |
+| ----------------------------- | -------- |
+| Brahma / Skol (Garrafa)       | R$ 15,00 |
+| Malzbier (355ml)              | R$ 15,00 |
 | Original / Heineken (Garrafa) | R$ 20,00 |
-| Cerveja (Lata) | R$ 10,00 |
+| Cerveja (Lata)                | R$ 10,00 |
 
 ### Caipirinhas e Caipiroskas
-| Item | Valor |
-|---|---|
+
+| Item                | Valor    |
+| ------------------- | -------- |
 | Caipiroska de Fruta | R$ 27,00 |
 | Caipiroska de Limao | R$ 24,00 |
 | Caipirinha de Limao | R$ 24,00 |
 
 ### Espumantes
-| Item | Valor |
-|---|---|
-| Nobrese Brut | R$ 57,00 |
+
+| Item             | Valor    |
+| ---------------- | -------- |
+| Nobrese Brut     | R$ 57,00 |
 | Nobrese Moscatel | R$ 57,00 |
 
 ### Vinhos
-| Item | Valor |
-|---|---|
-| Taca de Vinho | R$ 9,00 |
+
+| Item           | Valor    |
+| -------------- | -------- |
+| Taca de Vinho  | R$ 9,00  |
 | Jarra de Vinho | R$ 27,00 |
 
 ---
 
 ## Prompt Julia — particularidades
+
 - **Possessivos do hotel permitidos**: diferente de todos os outros hotéis (parceiros comerciais), o Termas Park é de propriedade da família do cliente. A Jul.IA pode usar "nossa piscina", "nosso hotel" etc. — a proibição padrão de possessivos NÃO se aplica aqui.
 - **Opção Econômica (colchão ao chão)**: funcionalidade ativa — crianças 0–8 anos + mínimo 3 diárias. Aceite → handoff_only.
 - Faixas etárias hospedagem: bebê 0–2 (não conta cotação/físico), cortesia 3–8, pagante 9–12, adulto 13+
 - Faixas etárias day use: bebê 0–2, cortesia 3–7, meia 8–12, adulto 13+
 
 ## Observacoes operacionais
+
 - Valores sujeitos a disponibilidade e alteracao sem aviso previo
 - Reserva confirmada somente apos pagamento da entrada
 - Atualizar tabela de precos sempre que o cliente enviar novos valores

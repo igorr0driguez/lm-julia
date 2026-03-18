@@ -76,6 +76,11 @@ if (hotelResort === "park_hotel") {
 } else if (hotelResort === "machadinho_thermas") {
   mensagem += config.titulo + `\n\n`;
   mensagem += `✦ *Valores da hospedagem:*\n\n`;
+} else if (hotelResort === "aguas_de_palmas") {
+  mensagem += config.titulo + `\n`;
+  mensagem += config.subtitulo + `\n\n`;
+  mensagem += config.pensao + `\n\n`;
+  mensagem += `✦ *Orçamento da Hospedagem*\n\n`;
 } else {
   // hotel_internacional
   const primeiroComDados = grupos.find(
@@ -198,6 +203,15 @@ if (hotelResort === "park_hotel") {
   mensagem += config.checkin + `\n`;
   mensagem += config.checkout + `\n\n`;
   mensagem += config.horarios_refeicoes;
+  if (config.aviso) mensagem += `\n\n` + config.aviso;
+} else if (hotelResort === "aguas_de_palmas") {
+  mensagem += config.recreacao + `\n\n`;
+  mensagem += config.parque + `\n\n`;
+  mensagem += config.praia + `\n\n`;
+  mensagem += config.pagamento + `\n\n`;
+  mensagem += config.checkin + `\n`;
+  mensagem += config.checkout + `\n\n`;
+  mensagem += config.obs;
   if (config.aviso) mensagem += `\n\n` + config.aviso;
 } else {
   // hotel_internacional

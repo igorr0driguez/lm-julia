@@ -1,7 +1,7 @@
 
 # Context — Estado atual do projeto
 
-Atualizado em: 17/03/2026
+Atualizado em: 18/03/2026
 
 ## Agentes
 - Jul.IA → atende hotéis/resorts individuais
@@ -16,9 +16,9 @@ Atualizado em: 17/03/2026
 - Termas do Lago
 - Fazzenda Park Resort
 - Machadinho Thermas Resort SPA
+- Águas de Palmas Resort
 
 ## Hotéis com ficha preenchida (sem prompt ainda)
-- Águas de Palmas Resort
 - Cabanas Termas Hotel
 - Costão do Santinho
 - Hotel Tirolesa
@@ -50,12 +50,16 @@ Nenhuma central tem documentação .md ainda — apenas o template existe.
 - Timer humanizado: 65-95s de wait (custo fixo: ~55s, total percebido: 2min-2min30s)
 - Possessivos do hotel permitidos SOMENTE no Termas Park Hotel (propriedade da família do cliente)
 - Crianças com tarifa adulto → campo `idades_criancas`, tabela usa "Tarifa adulto" (nunca "Adulto")
-- Day use → handoff imediato (sem cotação pela IA)
+- Day use → handoff imediato (sem cotação pela IA) — exceto Águas de Palmas e Hotel Internacional (day_use_mode = "cotar")
 
 ## Problemas conhecidos
 - **Hotel inicia conversa via WABA → Jul.IA ativa indevidamente**: equipe usa WhatsApp fora do Kommo (WABA beta). Sem solução técnica — equipe deve acionar [MANUAL] Desativar Jul.IA. Ver `bugs_e_melhorias/001-hotel-iniciou-conversa.md`.
 
 ## Últimas alterações
+- 2026-03-18 | hoteis/aguas_de_palmas.md | ficha preenchida (5 faixas etárias hospedagem, day_use_mode=cotar)
+- 2026-03-18 | prompts/julia/aguas_de_palmas.js | prompt criado
+- 2026-03-18 | n8n/codes_cotacao/ | config, orcamento1 e multipla do Águas de Palmas adicionados
+- 2026-03-18 | prompts/julia/hotel_internacional_gravatal.js | adicionada proibição "dividir APs sem confirmar"
 - 2026-03-17 | hoteis/machadinho_thermas_resort.md | ficha preenchida
 - 2026-03-17 | prompts/julia/machadinho_thermas_resort.js | prompt criado e validado
 - 2026-03-17 | prompts/julia/modelo_prompt_hotel.md | criado — instrução para gerar prompts de novos hotéis

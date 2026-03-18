@@ -1,24 +1,26 @@
 # Hotel Termas do Lago
 
 ## Identificador
+
 - hotel_resort param: termas_do_lago
 - Pipeline ID: 9377947
 - Nome do pipeline no Kommo: Termas do Lago
 
 ## Status de implementação
+
 - [x] Etapas JUL.IA ATIVADA e JUL.IA DESATIVADA criadas no pipeline
-- [ ] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
-- [ ] Robô de Entrada configurado (campos, etapa, condicionais)
-- [ ] Salesbot Enviar Fotos configurado
-- [ ] Atualizar Dicionário Pipeline:Salesbot ID no Workflow Enviar Fotos
-- [ ] hotel_resort configurado corretamente no Robô de Entrada
+- [x] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
+- [x] Robô de Entrada configurado (campos, etapa, condicionais)
+- [x] Atualizar Dicionário Pipeline:Salesbot ID no Workflow Enviar Fotos
+- [x] Salesbot Enviar Fotos configurado
+- [x] hotel_resort configurado corretamente no Robô de Entrada
 - [x] Material do hotel coletado
 - [x] Ficha preenchida (ver seção abaixo)
-- [ ] Prompt criado e publicado no n8n
+- [x] Prompt criado e publicado no n8n
 - [ ] Revisar Prompt
-- [ ] Atualizar n8n: Config Hoteis
-- [ ] Atualizar n8n: Monta mensagem Orcamento1
-- [ ] Atualizar n8n: Monta mensagem Multipla
+- [x] Atualizar n8n: Config Hoteis
+- [x] Atualizar n8n: Monta mensagem Orcamento1
+- [x] Atualizar n8n: Monta mensagem Multipla
 - [ ] Validação interna (chat de testes)
 - [ ] Validação com o cliente
 - [ ] Validação de cotação (caso extremo)
@@ -112,9 +114,11 @@ terminologia: |
 ---
 
 ## Prompt Julia — particularidades
+
 (o que muda em relação ao prompt base — preencher após criar o prompt)
 
 ## Observações operacionais
+
 - Valores sujeitos a disponibilidade e alteração sem aviso prévio
 - Reserva confirmada somente após pagamento da entrada
 - Park Termal: fecha segundas-feiras; verificar período de fechamento anual antes de informar

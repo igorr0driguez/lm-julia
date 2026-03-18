@@ -37,6 +37,15 @@
 - cache_custom_fields.json → atualiza cache a cada 3 dias
 - cache_pipelines.json → atualiza cache diário, madrugada
 
+## Hotéis com mensagem de orçamento configurada (config_hoteis + monta_mensagem)
+- park_hotel (Termas Park Hotel)
+- termas_gravatal (Hotel Termas)
+- termas_do_lago (Hotel Termas do Lago)
+- fazzenda (Fazzenda Park Resort)
+- machadinho_thermas (Machadinho Thermas Resort)
+- aguas_de_palmas (Águas de Palmas Resort)
+- hotel_internacional (Hotel Internacional Gravatal) — fallback no else
+
 ## Handoff
 Recebe lead_id e lead_name → busca JUL.IA DESATIVADA no pipeline via Redis
 → PATCH jul.ia_ativa=false → cria tarefa para responsável do plantão

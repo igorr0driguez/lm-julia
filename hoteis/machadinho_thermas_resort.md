@@ -8,19 +8,19 @@
 
 ## Status de implementação
 
-- [ ] Etapas JUL.IA ATIVADA e JUL.IA DESATIVADA criadas no pipeline
-- [ ] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
-- [ ] Robô de Entrada configurado (campos, etapa, condicionais)
-- [ ] Salesbot Enviar Fotos configurado
-- [ ] Atualizar Dicionário Pipeline:Salesbot ID no Workflow Enviar Fotos
-- [ ] hotel_resort configurado corretamente no Robô de Entrada
+- [x] Etapas JUL.IA ATIVADA e JUL.IA DESATIVADA criadas no pipeline
+- [x] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
+- [x] Robô de Entrada configurado (campos, etapa, condicionais)
+- [x] Atualizar Dicionário Pipeline:Salesbot ID no Workflow Enviar Fotos
+- [x] Salesbot Enviar Fotos configurado
+- [x] hotel_resort configurado corretamente no Robô de Entrada
 - [x] Material do hotel coletado
 - [x] Ficha preenchida (ver seção abaixo)
 - [x] Prompt criado e publicado no n8n
 - [ ] Revisar Prompt
-- [ ] Atualizar n8n: Config Hoteis
-- [ ] Atualizar n8n: Monta mensagem Orcamento1
-- [ ] Atualizar n8n: Monta mensagem Multipla
+- [x] Atualizar n8n: Config Hoteis
+- [x] Atualizar n8n: Monta mensagem Orcamento1
+- [x] Atualizar n8n: Monta mensagem Multipla
 - [ ] Validação interna (chat de testes)
 - [ ] Validação com o cliente
 - [ ] Validação de cotação (caso extremo)
@@ -116,6 +116,7 @@ terminologia: |
 ---
 
 ## Prompt Julia — particularidades
+
 - **Possessivos proibidos**: parceiro comercial. Usar "o Machadinho Thermas" — nunca "nosso resort", "nossa piscina" etc. OK para empresa/atendimento ("nosso especialista", "nossa equipe").
 - **Regime**: pensão completa (4 refeições). Nunca usar "tudo incluso".
 - **Águas termais**: usar sempre "águas termais" — nunca "águas quentes" ou "piscinas aquecidas". São termais a 45,5°C direto da fonte.
@@ -128,6 +129,7 @@ terminologia: |
 - **Bebidas inclusas**: apenas no restaurante durante almoço e jantar. Fora disso, pagas à parte.
 
 ## Observações operacionais
+
 - Valores sujeitos a disponibilidade e alteração sem aviso prévio
 - Reserva confirmada somente após pagamento da entrada
 - Parque Aquático: verificar funcionamento antes de informar

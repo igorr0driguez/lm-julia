@@ -8,6 +8,7 @@ const MAP = {
   termas_do_lago: "termas_do_lago",
   fazzenda: "fazzenda",
   machadinho_thermas: "machadinho_thermas",
+  aguas_de_palmas: "aguas_de_palmas",
 };
 
 const hotel = MAP[raw] ?? "hotel_internacional";
@@ -84,6 +85,20 @@ const CONFIG = {
     checkin: `→ *Check-in a partir das 16h00min*`,
     checkout: `→ *Check-out até as 12h00min*`,
     horarios_refeicoes: `☕ Café da manhã: 07h00min às 10h00min\n✦ Almoço: 12h00min às 14h00min\n☕ Café colonial: 16h00min às 17h30min\n✦ Jantar: 19h30min às 22h00min`,
+    aviso: null,
+  },
+
+  aguas_de_palmas: {
+    titulo: `*Orçamento:*\n♨ *Águas de Palmas Resort*`,
+    subtitulo: `Um resort completo, perfeito para casais e famílias que buscam lazer, piscinas, boa gastronomia, recreação e conforto em meio à natureza — tudo isso a poucos minutos da praia.`,
+    pensao: `✦ *Pensão Completa Inclusa*\n\n✦ Nesse período com pensão completa — ou seja: café da manhã, almoço, café da tarde e jantar! ☺\n\n◆ Além disso, as bebidas não alcoólicas estão inclusas durante as principais refeições.\n\n✦ E não podemos esquecer do delicioso buffet de sorvetes, disponível para todos os hóspedes!`,
+    recreacao: `★ *Recreação – das 9h às 22h*\n\nAtividades para adultos e crianças a partir dos 6 anos, com equipe especializada e programação completa o dia todo.`,
+    parque: `♨ *Parque Aquático Exclusivo*\n\n◆ 13 piscinas\n◆ Toboáguas adulto e infantil\n◆ Bar molhado\n♨ Piscina térmica coberta e hidromassagem\n◆ Piscinas de jogos`,
+    praia: `⛱ *Praia Próxima + Transfer Incluso*\n\nA praia fica a aproximadamente 10 minutos a pé.\n➤ Trenzinho sai a cada 30 minutos levando ao quiosque exclusivo do resort, com cadeiras e guarda-sol.`,
+    pagamento: `◆ *Formas de Pagamento*\n\n◆ 20% de sinal + saldo em até 6x sem juros no ato da reserva\n◆ 50% de sinal + saldo em 5x sem juros diretamente no resort\n❌ O Resort Não aceita cheque`,
+    checkin: `→ Check-in: 15h30`,
+    checkout: `→ Check-out: até 12h (almoço incluso)`,
+    obs: `⚠ *Observação:* Valores apenas orçados, sujeitos à disponibilidade e alteração sem aviso prévio. A reserva será confirmada somente após o pagamento da entrada.`,
     aviso: null,
   },
 
