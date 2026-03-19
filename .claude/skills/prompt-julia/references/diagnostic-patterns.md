@@ -185,3 +185,30 @@ Catálogo de padrões para diagnosticar e corrigir comportamentos errados da Jul
 2. Wording incondicional: "SEMPRE transferir" (não "encaminhar se necessário")
 3. Se é um caso frequente, adicionar exemplo mostrando o handoff
 4. Reforçar nas Limitações: listar explicitamente o que está fora do escopo
+
+---
+
+## Padrão 9: Julia ignora divisão de APs pedida pelo cliente
+
+**Sintoma:** Cliente pede "4 pessoas, 2 em cada quarto" e Julia cota 4 pessoas em AP único, ignorando a divisão.
+
+**Causa comum:**
+- Step de "cliente especificou divisão" vem DEPOIS de otimizações ou regras de capacidade no fluxo
+- Regra de divisão fraca (uma linha sem destaque, sem exemplo)
+- Otimização comercial (ex: físico=4) dispara antes e sobrepõe a divisão
+- Único exemplo multi-AP tem total que não conflita com otimizações
+- Modelo interpreta multi-AP como algo que só existe para resolver limite de capacidade, não como respeito à preferência do cliente
+
+**Onde procurar:**
+- Fluxo de coleta (Condução da Conversa): posição do step "divisão do cliente" em relação a otimizações
+- Regras de otimização comercial: verificar se têm ressalva "em AP único" / "não aplica se cliente dividiu"
+- Exemplos: verificar se existe exemplo multi-AP com total que conflita com otimização (ex: 4 pessoas em 2 APs)
+- NÃO FAZER: verificar se proíbe ignorar divisão do cliente
+
+**Fix pattern:**
+1. Mover step "cliente especificou divisão" para ANTES de qualquer otimização/capacidade no fluxo
+2. Destacar com ⚠️ e wording forte: "SEMPRE respeitar", "tem PRIORIDADE"
+3. Adicionar ressalva "em AP único" / "não aplica se cliente dividiu em APs" em toda otimização
+4. Adicionar exemplo multi-AP com total que conflita com otimização, mostrando Think com raciocínio de prioridade
+5. Adicionar ao NÃO FAZER: "Ignorar divisão de APs que o cliente especificou"
+6. Adicionar regra REATIVO: "só quando cliente mencionar — NUNCA sugerir divisão proativamente"

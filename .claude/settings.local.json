@@ -20,7 +20,8 @@
       "mcp__linear-server__list_teams",
       "Bash(wc -l /c/Projects/lm-julia/hoteis/*.md)",
       "Bash(grep -r \"físico\" /c/Projects/lm-julia/prompts/julia/*.js)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(find /c/Projects/lm-julia/.claude -type f -name *prompt*)"
     ]
   }
 }

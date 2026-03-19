@@ -53,6 +53,8 @@ Run every item against the prompt being reviewed. Report severity and specific f
 | 5.3 | Group rule (>10) before AP limit rule | HIGH | Check for >10 people BEFORE checking AP capacity. >10 = immediate handoff, no AP splitting |
 | 5.4 | Email: register if offered, never ask | MEDIUM | Must be explicit that email never blocks quotation |
 | 5.5 | Multiple APs/dates handled | MEDIUM | `cotacao_multipla`, `dados_multiplos` with correct key `datas_alternativas` (never `datas`) |
+| 5.6 | Client-specified AP division step exists | HIGH | Must have explicit step "client specified division → cotacao_multipla direto" in hospedagem flow, BEFORE any optimization or capacity step |
+| 5.7 | NÃO FAZER prohibits ignoring client division | HIGH | Must prohibit both: (1) ignoring client-specified AP division, (2) suggesting AP division proactively when client didn't mention it |
 
 ## 6. Output Schema
 

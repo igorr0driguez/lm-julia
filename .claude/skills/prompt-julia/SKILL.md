@@ -147,3 +147,4 @@ These are the most common failure modes discovered in production:
 4. **Examples with Think**: The "N pessoas sem idades" example MUST include explicit Think showing "Crianças NÃO mencionadas → NÃO perguntar".
 5. **Visual hierarchy**: All 7 critical rules must have visual markers for the model to parse importance.
 6. **Compression safety**: When reducing tokens, never lose conditional words, Think/Armazena in examples, visual markers, or standalone rules about children.
+7. **Client AP division priority**: When the client specifies AP division (e.g., "2 in each room"), this MUST take priority over any optimization or capacity logic. The flow step for client division must come BEFORE optimization steps. Examples must demonstrate this priority with Think reasoning.
