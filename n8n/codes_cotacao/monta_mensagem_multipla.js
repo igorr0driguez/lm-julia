@@ -136,7 +136,7 @@ for (const grupo of grupos) {
     mensagem += `*${opcao.apartamento}*\n`;
 
     if (hotelResort === "hotel_internacional") {
-      mensagem += `Adulto(s): ${adultos}\n`;
+      mensagem += (adultos === 4 && criancas === 0) ? `Hóspede(s): ${adultos}\n` : `Adulto(s): ${adultos}\n`;
       if (criancas > 0) mensagem += `Crianças: ${criancas}\n`;
       mensagem += `Pensão: ${opcao.pensao}\n`;
       mensagem += `Tarifa: ${opcao.tarifa}\n`;

@@ -257,7 +257,7 @@ if (hotelResort === "park_hotel") {
   mensagem += `✦ *Valores da hospedagem:*\n\n`;
   mensagem += `${dataEntrada} - ${dataSaida}\n`;
   mensagem += `*${primeiraOpcao.apartamento}*\n`;
-  mensagem += `Adulto(s): ${adultos}\n`;
+  mensagem += (adultos === 4 && criancas === 0) ? `Hóspede(s): ${adultos}\n` : `Adulto(s): ${adultos}\n`;
   if (criancas > 0) mensagem += `Crianças: ${criancas}\n`;
   mensagem += `Pensão: ${primeiraOpcao.pensao}\n`;
   mensagem += `Tarifa: ${primeiraOpcao.tarifa}\n`;
