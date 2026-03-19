@@ -9,6 +9,7 @@ const MAP = {
   fazzenda: "fazzenda",
   machadinho_thermas: "machadinho_thermas",
   aguas_de_palmas: "aguas_de_palmas",
+  recanto_cataratas_resort: "recanto_cataratas_resort",
 };
 
 const hotel = MAP[raw] ?? "hotel_internacional";
@@ -99,6 +100,15 @@ const CONFIG = {
     checkin: `→ Check-in: 15h30`,
     checkout: `→ Check-out: até 12h (almoço incluso)`,
     obs: `⚠ *Observação:* Valores apenas orçados, sujeitos à disponibilidade e alteração sem aviso prévio. A reserva será confirmada somente após o pagamento da entrada.`,
+    aviso: null,
+  },
+
+  recanto_cataratas_resort: {
+    titulo: `♨ *Recanto Cataratas – Thermas, Resort & Convention*`,
+    link_orcamento: `*Orçamento completo clicando no link:*`,
+    estrutura: `☘ *Estrutura & Lazer*\n•♨ Parque aquático com piscinas termais\n•⚃ Pista de boliche\n•⚃ Salão de jogos\n•⚽ Quadras de esportes\n•☺ Equipe de entretenimento para todas as idades\n•✦ 2 restaurantes com especialidades regionais e internacionais\n•✦ Bar aconchegante\n•✦ Academia\n•✦ Spa / Centro de bem-estar\n•✔ Estacionamento gratuito\n•✔ Wi-Fi gratuito em todas as áreas`,
+    pagamento: `*Formas de pagamento:*\n\n◆ Á vista via pix\n\n◆ Via link em até 10x sem juros com parcelas mínimas de R$ 250,00`,
+    checkin_checkout: `☉ *Check-in & Check-out*\n\n→ Check-in: a partir das 14h00\n→ Check-out: até as 12h00`,
     aviso: null,
   },
 

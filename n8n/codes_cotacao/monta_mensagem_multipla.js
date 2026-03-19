@@ -81,6 +81,9 @@ if (hotelResort === "park_hotel") {
   mensagem += config.subtitulo + `\n\n`;
   mensagem += config.pensao + `\n\n`;
   mensagem += `✦ *Orçamento da Hospedagem*\n\n`;
+} else if (hotelResort === "recanto_cataratas_resort") {
+  mensagem += config.titulo + `\n\n`;
+  mensagem += config.link_orcamento + `\n\n`;
 } else {
   // hotel_internacional
   const primeiroComDados = grupos.find(
@@ -212,6 +215,11 @@ if (hotelResort === "park_hotel") {
   mensagem += config.checkin + `\n`;
   mensagem += config.checkout + `\n\n`;
   mensagem += config.obs;
+  if (config.aviso) mensagem += `\n\n` + config.aviso;
+} else if (hotelResort === "recanto_cataratas_resort") {
+  mensagem += config.estrutura + `\n\n`;
+  mensagem += config.pagamento + `\n\n`;
+  mensagem += config.checkin_checkout;
   if (config.aviso) mensagem += `\n\n` + config.aviso;
 } else {
   // hotel_internacional

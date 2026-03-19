@@ -17,7 +17,8 @@
       "WebFetch(domain:developers.openai.com)",
       "WebFetch(domain:www.prompthub.us)",
       "mcp__linear-server__list_users",
-      "mcp__linear-server__list_teams"
+      "mcp__linear-server__list_teams",
+      "Bash(wc -l /c/Projects/lm-julia/hoteis/*.md)"
     ]
   }
 }

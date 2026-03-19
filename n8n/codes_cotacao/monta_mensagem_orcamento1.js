@@ -225,6 +225,26 @@ if (hotelResort === "park_hotel") {
   if (config.aviso) mensagem += `\n\n` + config.aviso;
 
   // ============================================================
+  // RECANTO CATARATAS THERMAS RESORT
+  // ============================================================
+} else if (hotelResort === "recanto_cataratas_resort") {
+  mensagem += config.titulo + `\n\n`;
+  mensagem += config.link_orcamento + `\n\n`;
+
+  mensagem += `▶ *${primeiraOpcao.preco_total}*\n\n`;
+
+  mensagem += config.estrutura + `\n\n`;
+
+  for (let i = 1; i < totalParaMostrar; i++) {
+    mensagem += `*${dados.opcoes[i].apartamento.toUpperCase()}* - consultar\n`;
+  }
+  if (totalParaMostrar > 1) mensagem += "\n";
+
+  mensagem += config.pagamento + `\n\n`;
+  mensagem += config.checkin_checkout;
+  if (config.aviso) mensagem += `\n\n` + config.aviso;
+
+  // ============================================================
   // HOTEL INTERNACIONAL GRAVATAL
   // ============================================================
 } else {
