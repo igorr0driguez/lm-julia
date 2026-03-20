@@ -62,7 +62,7 @@ Nenhuma central tem documentação .md ainda — apenas o template existe.
 - 2026-03-18 | prompts/julia/hotel_internacional_gravatal.js | adicionada proibição "dividir APs sem confirmar"
 - 2026-03-17 | hoteis/machadinho_thermas_resort.md | ficha preenchida
 - 2026-03-17 | prompts/julia/machadinho_thermas_resort.js | prompt criado e validado
-- 2026-03-17 | prompts/julia/modelo_prompt_hotel.md | criado — instrução para gerar prompts de novos hotéis
+- 2026-03-17 | prompts/julia/modelo_prompt_hotel.md | criado e depois removido — funcionalidade absorvida pela skill prompt-julia
 - 2026-03-16 | prompts/julia/fazzenda_park_resort.js | prompt criado e validado
 - 2026-03-16 | n8n/codes_cotacao/ | config e mensagens do Fazzenda adicionadas
 - 2026-03-16 | Correção geral: "Tarifa adulto" nos prompts (3 hotéis + diretrizes v8)

@@ -41,4 +41,4 @@ Status: 1 hotel em produção (Termas Park Hotel), 5 prompts adicionais criados,
 - Sempre confirmar qual hotel/central está em escopo antes de alterar pipelines
 - Ao expandir para novo hotel: usar hoteis/_template.md
 - Ao expandir para nova central: usar centrais/_template.md
-- Ao criar prompt de novo hotel: seguir prompts/julia/modelo_prompt_hotel.md
+- Ao criar prompt de novo hotel: usar skill prompt-julia (`/prompt-julia create`)

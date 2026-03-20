@@ -10,7 +10,10 @@ Run every item against the prompt being reviewed. Report severity and specific f
 |---|-------|----------|-----------------|
 | 1.1 | JavaScript template literal | CRITICAL | Must be `const prompt = \`...\`` returning `[{ json: { prompt } }]` |
 | 1.2 | `${now}` referenced, not hardcoded | CRITICAL | Variable must be `\${now}` in template literal — n8n injects at runtime |
-| 1.3 | Section order matches Bloco 3 | HIGH | Header → 7 Rules → First Msg → Context → Flow → Discounts → Special Cases → Validations → Tone → Limitations → Schema → Examples |
+| 1.3 | Section order matches Bloco 3 (19 seções) | HIGH | Header → 7 Rules → Idioma → First Msg → Context → Flow → Discounts → Special Cases → Validations → Tone → Limitations → Schema → Examples |
+| 1.7 | Idioma section exists standalone | HIGH | "## 🌐 SEMPRE em português brasileiro." deve existir entre R#7 e Primeira Mensagem |
+| 1.8 | Tom e Estilo (reforço) section exists | HIGH | Seção de reforço de tom entre Validações e NÃO FAZER |
+| 1.9 | Header usa 1 linha para tom/idioma/estilo | MEDIUM | Tom, idioma e estilo devem estar em uma única linha no cabeçalho |
 | 1.4 | 7 critical rules present and numbered | HIGH | All 7 rules from diretrizes must exist: Output Format, Tools, One Question, Age Categorization, Direct Quote, Security, Short Responses |
 | 1.5 | Visual markers on critical rules | MEDIUM | Headers should use visual markers (e.g., emoji) to signal hierarchy to the model |
 | 1.6 | Token count ~5000 or under | MEDIUM | Count approximate tokens. Over 5700 degrades 4.1 mini performance |
@@ -65,6 +68,7 @@ Run every item against the prompt being reviewed. Report severity and specific f
 | 6.2 | `<<FIM>>` terminator | HIGH | Must instruct to write `<<FIM>>` after closing `}` and STOP |
 | 6.3 | Handoff values documented | MEDIUM | none, handoff_only, send_and_handoff with clear triggers |
 | 6.4 | `dados_multiplos` structures documented | MEDIUM | multiplos_apartamentos, multiplas_datas, combinado — all with correct field names |
+| 6.5 | Schema NÃO contém `opcao_day_use` | HIGH | Campo `opcao_day_use` não faz parte do schema padrão (diretrizes 2.13). Grep pelo campo — deve retornar 0 matches |
 
 ## 7. Examples Section
 
@@ -86,6 +90,8 @@ Run every item against the prompt being reviewed. Report severity and specific f
 | 8.3 | "Tudo incluso" rule matches regime | HIGH | Prohibited unless hotel is all-inclusive. Pensão completa = never use "tudo incluso" |
 | 8.4 | Unicode emoji rule | MEDIUM | Only basic Unicode (e.g., ☺☀), no modern emoji (😊🏨) — API Kommo compatibility |
 | 8.5 | NÃO FAZER section organized by category | MEDIUM | Grouped (children, quotation, info/style, technical) rather than flat list — easier for model to parse |
+| 8.6 | NÃO FAZER usa bullets separados | MEDIUM | Cada proibição em bullet individual — sem compressão com `\|` em uma mesma linha |
+| 8.7 | Descontos inclui template completo da resposta | MEDIUM | Resposta padrão PCD entre aspas, não apenas resumo comprimido |
 
 ## 9. Hotel-Specific Content
 

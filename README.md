@@ -68,7 +68,6 @@ Fluxo detalhado em [ARQUITETURA.md](./ARQUITETURA.md).
 ├── prompts/
 │   ├── julia/             # Prompts da Jul.IA (diretrizes v8 + 6 prompts de hotel)
 │   │   ├── diretrizes_gerais_julia_v8.md
-│   │   ├── modelo_prompt_hotel.md
 │   │   └── {hotel}.js     # 6 prompts: termas_park, hotel_internacional, hotel_termas,
 │   │                      #   termas_do_lago, fazzenda_park, machadinho_thermas
 │   └── gustavo/           # Prompts do Gust.IA (vazio — ainda não implementado)
@@ -110,7 +109,7 @@ Central Gravatal, Central Jurema, Central Piratuba, Central Foz do Iguaçu, Cent
 
 1. Copiar `hoteis/_template.md` e preencher a ficha
 2. Seguir o checklist de setup do arquivo
-3. Criar prompt em `prompts/julia/` usando `prompts/julia/modelo_prompt_hotel.md`
+3. Criar prompt em `prompts/julia/` usando a skill prompt-julia (`/prompt-julia create`)
 4. Atualizar `kommo/codigo_hoteis.md` com o novo parâmetro `hotel_resort`
 5. Configurar `n8n/codes_cotacao/config_hoteis.js` com dados do hotel
 

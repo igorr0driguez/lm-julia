@@ -30,8 +30,9 @@ Creates a new hotel prompt from scratch.
 
 **Process:**
 1. Read `prompts/julia/diretrizes_gerais_julia_v8.md` — this is the master guide (Blocos 1-4)
-2. Read `prompts/julia/termas_park_hotel.js` — this is the **gold standard** reference prompt (in production, working well)
-3. Extract hotel data into the Ficha format (Bloco 1 of diretrizes)
+2. Read `prompts/julia/hotel_internacional_gravatal.js` — this is the **gold standard** reference prompt (best structural alignment with diretrizes v8 and GPT-4.1 mini best practices)
+3. Optionally read `prompts/julia/termas_park_hotel.js` as secondary reference (original production prompt)
+4. Extract hotel data into the Ficha format (Bloco 1 of diretrizes)
 4. Present ficha to user for validation
 5. Generate prompt following Bloco 3 structure exactly
 6. Run the Review Checklist (see below) on the generated prompt before delivering
@@ -40,7 +41,9 @@ Creates a new hotel prompt from scratch.
 **Structure rules (from Bloco 3):**
 - Output is a JavaScript template literal: `const prompt = \`...\``
 - Variable `${now}` referenced (not substituted) — n8n injects at runtime
-- Sections in exact order: Header → 7 Critical Rules → First Message → Hotel Context → Conversation Flow → Discounts → Special Cases → Validations → Tone Reinforcement → Limitations → Output Schema → Examples
+- Sections in exact order (19 seções): Header → 7 Critical Rules → Idioma → First Message → Hotel Context → Conversation Flow → Discounts → Special Cases → Validations → Tone Reinforcement → Limitations → Output Schema → Examples
+- Idioma section standalone obrigatória ("## 🌐 SEMPRE em português brasileiro.") entre R#7 e Primeira Mensagem
+- Tom e Estilo reforço obrigatório entre Validações e NÃO FAZER
 - Critical rules numbered #1-#7 with visual markers
 - Examples section: minimum 8 examples covering all key scenarios
 - Target: ~5000 tokens max
@@ -54,7 +57,7 @@ Audits an existing prompt against best practices.
 
 **Process:**
 1. Read the prompt to review
-2. Read `prompts/julia/termas_park_hotel.js` as gold standard reference
+2. Read `prompts/julia/hotel_internacional_gravatal.js` as gold standard reference
 3. Read `references/review-checklist.md` for the full checklist
 4. Run every check item against the prompt
 5. Report findings with severity levels:
@@ -129,10 +132,34 @@ Diagnoses and fixes wrong Julia behavior in production. This is the debugging mo
 - Report: what was the root cause, what was changed, and whether the checklist passes
 - Show diff of all changes made
 
+## Decisões Canônicas (template padrão)
+
+Estas decisões foram padronizadas e devem ser seguidas em qualquer modo (create/review/update):
+
+| Aspecto | Decisão | Justificativa |
+|---------|---------|---------------|
+| Header | Tom/idioma/estilo em 1 linha | Economia de tokens |
+| R#1 | "Resposta COMPLETA = UM bloco JSON..." | Compacta |
+| R#2 Think | Bold numerado + ">10→grupo" | Diretrizes 2.12 |
+| R#5 | 1 frase | Compacta |
+| R#6 | 1 frase | Compacta |
+| R#7 | "Máx 3 frases" + 3 bullets | Compacta |
+| Idioma | Seção standalone obrigatória | Bloco 3 §9 |
+| Descontos | Template completo com resposta entre aspas | Diretrizes 2.10 |
+| Casos Especiais | Bold trigger + ação inline | Compacto |
+| Validações | Tabela com descrições curtas | Compacto |
+| Tom e Estilo | 2-3 linhas reforço | Bloco 3 §16 |
+| NÃO FAZER | 4 categorias, bullets SEPARADOS (nunca `\|`) | Interpretação literal GPT-4.1 mini |
+| Schema de saída | JSON inline (sem indentação) | Economia de tokens |
+| Schema | Sem `opcao_day_use` | Não faz parte do padrão |
+| Handoff/notify | Inline (sem sub-headers ###) | Economia de tokens |
+| Exemplos | Bold título + Think + Armazena + JSON inline | Alinhados |
+
 ## Key References
 
 - `prompts/julia/diretrizes_gerais_julia_v8.md` — Master guide for all prompts (read Bloco 2 for rules, Bloco 3 for structure)
-- `prompts/julia/termas_park_hotel.js` — Gold standard prompt (in production, working well)
+- `prompts/julia/hotel_internacional_gravatal.js` — Gold standard para estrutura (melhor alinhamento com diretrizes v8 + GPT-4.1 mini best practices)
+- `prompts/julia/termas_park_hotel.js` — Referência de hotel simples (produção, sem otimizações). Ambos seguem o template canônico
 - Read `references/review-checklist.md` for the complete audit checklist with all check items
 - Read `references/diagnostic-patterns.md` for known bug patterns and fix recipes (used by correct mode)
 - Read `references/gpt41-mini-best-practices.md` for detailed research findings and sources

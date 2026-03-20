@@ -38,9 +38,9 @@ escopo: "SOMENTE Termas Park Hotel"
 
 === REGIME E ESTRUTURA ===
 regime_hospedagem: "pensão completa"
-regime_bebidas: ""
-tipos_quarto: ""
-lotacao_maxima_ap: 0
+regime_bebidas: "não incluídas — bar/piscina pago à parte"
+tipos_quarto: "Suíte Standard, Suíte com Sacada"
+lotacao_maxima_ap: 5
 checkin: "a partir das 14h"
 checkout: "até às 12h (almoço incluso)"
 refeicoes_detalhadas: "café da manhã, petiscos na piscina (11h–13h30), almoço, jantar"
@@ -53,21 +53,21 @@ outras_estruturas: "sala de TV, sala de jogos (sinuca, pebolim, ping-pong, carte
 atracoes_especificas: ""
 parque_externo: ""
 mascotes: ""
-transfer: ""
+transfer: "NÃO oferece"
 
 === FAIXAS ETÁRIAS — HOSPEDAGEM ===
-cortesia_hospedagem: ""
-pagante_hospedagem: ""
-adulto_hospedagem: ""
+cortesia_hospedagem: "3–8 anos → cortesia"
+pagante_hospedagem: "9–12 anos → pagante"
+adulto_hospedagem: "13+ → tarifa adulto"
 
 === DAY USE ===
 day_use_mode: "cotar"
 
 === FAIXAS ETÁRIAS — DAY USE ===
-cortesia_dayuse: ""
+cortesia_dayuse: "3–7 anos → cortesia"
 meia_dayuse: "8–12 anos → meia entrada"
 pagante_dayuse: ""
-adulto_dayuse: ""
+adulto_dayuse: "13+ → tarifa adulto"
 
 === DAY USE — PACOTES ===
 pacotes_dayuse: |
@@ -94,7 +94,7 @@ terminologia: |
   usar "piscinas térmicas/aquecidas" / nunca usar "piscinas termais"
 ```
 
-> Campos em branco a preencher: regime_bebidas, tipos_quarto, lotacao_maxima_ap, transfer, faixas etárias hospedagem, faixas etárias day use (cortesia/adulto), primeira_mensagem, casos_especiais.
+> Campos em branco restantes: primeira_mensagem, casos_especiais, atracoes_especificas (não se aplicam ou pendentes de definição).
 
 ---
 
@@ -235,7 +235,6 @@ Condicoes de pagamento (day use):
 ## Prompt Julia — particularidades
 
 - **Possessivos do hotel permitidos**: diferente de todos os outros hotéis (parceiros comerciais), o Termas Park é de propriedade da família do cliente. A Jul.IA pode usar "nossa piscina", "nosso hotel" etc. — a proibição padrão de possessivos NÃO se aplica aqui.
-- **Opção Econômica (colchão ao chão)**: funcionalidade ativa — crianças 0–8 anos + mínimo 3 diárias. Aceite → handoff_only.
 - Faixas etárias hospedagem: bebê 0–2 (não conta cotação/físico), cortesia 3–8, pagante 9–12, adulto 13+
 - Faixas etárias day use: bebê 0–2, cortesia 3–7, meia 8–12, adulto 13+
 
