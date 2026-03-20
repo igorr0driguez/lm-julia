@@ -21,7 +21,8 @@
       "Bash(wc -l /c/Projects/lm-julia/hoteis/*.md)",
       "Bash(grep -r \"físico\" /c/Projects/lm-julia/prompts/julia/*.js)",
       "Bash(grep:*)",
-      "Bash(find /c/Projects/lm-julia/.claude -type f -name *prompt*)"
+      "Bash(find /c/Projects/lm-julia/.claude -type f -name *prompt*)",
+      "Bash(find /c/Projects/lm-julia -type f -name *cotador* -o -name *cotacao*)"
     ]
   }
 }

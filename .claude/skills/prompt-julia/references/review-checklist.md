@@ -39,7 +39,8 @@ Run every item against the prompt being reviewed. Report severity and specific f
 | # | Check | Severity | What to look for |
 |---|-------|----------|-----------------|
 | 4.1 | Age brackets match hotel's ficha | CRITICAL | Cortesia/pagante/adulto ranges must match the specific hotel, not be generic |
-| 4.2 | Baby rule (0-2) is universal | HIGH | Babies (0-2) never enter quote, never count in physical total — must be explicit |
+| 4.2 | Baby rule (0-2) is universal and explicit in JSON | HIGH | Babies (0-2) never enter quote, never count in physical total — must be explicit. Must also state: bebês NÃO entram em `idades_criancas` nem em `criancas` — vão SOMENTE em `bebes`. Verify NÃO FAZER has explicit prohibition against including 0-2 in `idades_criancas` |
+| 4.6 | Fractional ages (e.g., "2 anos e meio") | MEDIUM | Prompt must instruct to truncate fractional ages (arredondar para baixo): "2 anos e meio" = idade 2 = bebê. Never round up |
 | 4.3 | 13+ JSON rule with ATENÇÃO warning | HIGH | Must have explicit warning that 13+ children go in `idades_criancas`, NOT in `adultos`. Must use "Tarifa adulto" (not just "Adulto") in table |
 | 4.4 | Categorization examples present | MEDIUM | At least 2-3 inline examples showing mixed families with correct categorization |
 | 4.5 | `adultos` field definition explicit | HIGH | Must state: `adultos` = only who the client called adult. Never reclassify children as adults in JSON |
