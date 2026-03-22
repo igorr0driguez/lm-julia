@@ -1,6 +1,11 @@
 const { hotel: hotelResort, config } = $item(0).$node["Config Hoteis"].json;
 const totalItems = items.length;
 
+function parsePreco(str) {
+  if (!str) return Infinity;
+  return Number(str.replace(/[R$\s.]/g, '').replace(',', '.'));
+}
+
 const primeiroTrata = $item(0).$node["Trata multiplos dados"].json;
 const totalApartamentos = primeiroTrata.total_apartamentos;
 
@@ -10,6 +15,9 @@ for (let i = 0; i < totalItems; i += totalApartamentos) {
   for (let j = 0; j < totalApartamentos && i + j < totalItems; j++) {
     const idx = i + j;
     const orcamento = items[idx].json;
+    if (orcamento.opcoes) {
+      orcamento.opcoes.sort((a, b) => parsePreco(a.preco_total) - parsePreco(b.preco_total));
+    }
     const trataDados = $item(idx).$node["Trata multiplos dados"].json;
 
     grupo.checkin = trataDados.checkin;
@@ -23,35 +31,13 @@ for (let i = 0; i < totalItems; i += totalApartamentos) {
 }
 
 function selecionarOpcoes(apartamentos) {
-  const usados = new Set();
-  const resultado = [];
-
-  for (const ap of apartamentos) {
+  return apartamentos.map((ap) => {
     const dados = ap.dados_api;
     if (!dados || !dados.opcoes || dados.opcoes.length === 0) {
-      resultado.push({ ap_num: ap.ap_num, dados_api: dados, opcao: null });
-      continue;
+      return { ap_num: ap.ap_num, dados_api: dados, opcao: null };
     }
-
-    let opcaoEscolhida = null;
-    for (const opcao of dados.opcoes) {
-      if (!usados.has(opcao.apartamento)) {
-        opcaoEscolhida = opcao;
-        usados.add(opcao.apartamento);
-        break;
-      }
-    }
-    if (!opcaoEscolhida) {
-      opcaoEscolhida =
-        dados.opcoes[Math.min(ap.ap_num - 1, dados.opcoes.length - 1)];
-    }
-    resultado.push({
-      ap_num: ap.ap_num,
-      dados_api: dados,
-      opcao: opcaoEscolhida,
-    });
-  }
-  return resultado;
+    return { ap_num: ap.ap_num, dados_api: dados, opcao: dados.opcoes[0] };
+  });
 }
 
 let mensagem = "";

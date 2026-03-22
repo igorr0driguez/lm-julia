@@ -1,6 +1,14 @@
 const dados = $item(0).$node["Orcamento3"].json;
 const { hotel: hotelResort, config } = $item(0).$node["Config Hoteis"].json;
 
+function parsePreco(str) {
+  if (!str) return Infinity;
+  return Number(str.replace(/[R$\s.]/g, '').replace(',', '.'));
+}
+if (dados && dados.opcoes) {
+  dados.opcoes.sort((a, b) => parsePreco(a.preco_total) - parsePreco(b.preco_total));
+}
+
 if (!dados || !dados.opcoes || dados.opcoes.length === 0) {
   return {
     mensagem:
