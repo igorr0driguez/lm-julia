@@ -1,7 +1,7 @@
 
 # Context — Estado atual do projeto
 
-Atualizado em: 18/03/2026
+Atualizado em: 22/03/2026
 
 ## Agentes
 - Jul.IA → atende hotéis/resorts individuais
@@ -17,6 +17,7 @@ Atualizado em: 18/03/2026
 - Fazzenda Park Resort
 - Machadinho Thermas Resort SPA
 - Águas de Palmas Resort
+- Recanto Cataratas Resort
 
 ## Hotéis com ficha preenchida (sem prompt ainda)
 - Cabanas Termas Hotel
@@ -25,7 +26,6 @@ Atualizado em: 18/03/2026
 - Jardins de Jurema
 - Lagos de Jurema
 - Mabu Thermas
-- Recanto Cataratas
 - Vivaz Cataratas
 
 ## Hotéis sem ficha nem prompt
@@ -56,6 +56,13 @@ Nenhuma central tem documentação .md ainda — apenas o template existe.
 - **Hotel inicia conversa via WABA → Jul.IA ativa indevidamente**: equipe usa WhatsApp fora do Kommo (WABA beta). Sem solução técnica — equipe deve acionar [MANUAL] Desativar Jul.IA. Ver `bugs_e_melhorias/001-hotel-iniciou-conversa.md`.
 
 ## Últimas alterações
+- 2026-03-22 | n8n/codes_cotacao/ | Bug fix: cotação nem sempre retornava a mais barata (multipla e orcamento1)
+- 2026-03-22 | n8n/ | Workflows atualizados (backend_jul.ia, enviar_fotos, pos_venda, legacy_fluxo_zap)
+- 2026-03-20 | prompts/julia/ | 5 prompts revisados e padronizados no gold standard (aguas_de_palmas, hotel_termas, machadinho, recanto_cataratas, termas_do_lago)
+- 2026-03-20 | .claude/skills/prompt-julia/ | Skill upgrade com base nos prompts canônicos gold standard
+- 2026-03-19 | n8n/codes_cotacao/ | trata_dados1.js e trata_multiplos_dados.js criados (tratamento de dados pré-cotação)
+- 2026-03-19 | prompts/julia/ | diretrizes v8 e prompts atualizados
+- 2026-03-19 | hoteis/recanto_cataratas.md | ficha atualizada
 - 2026-03-18 | hoteis/aguas_de_palmas.md | ficha preenchida (5 faixas etárias hospedagem, day_use_mode=cotar)
 - 2026-03-18 | prompts/julia/aguas_de_palmas.js | prompt criado
 - 2026-03-18 | n8n/codes_cotacao/ | config, orcamento1 e multipla do Águas de Palmas adicionados

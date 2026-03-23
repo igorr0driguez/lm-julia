@@ -66,10 +66,11 @@ Fluxo detalhado em [ARQUITETURA.md](./ARQUITETURA.md).
 │   ├── *.json             # Workflows exportados (14 ativos + 1 legacy)
 │   └── codes_cotacao/     # Scripts JS para montar mensagens de orçamento
 ├── prompts/
-│   ├── julia/             # Prompts da Jul.IA (diretrizes v8 + 6 prompts de hotel)
+│   ├── julia/             # Prompts da Jul.IA (diretrizes v8 + 8 prompts de hotel)
 │   │   ├── diretrizes_gerais_julia_v8.md
-│   │   └── {hotel}.js     # 6 prompts: termas_park, hotel_internacional, hotel_termas,
-│   │                      #   termas_do_lago, fazzenda_park, machadinho_thermas
+│   │   └── {hotel}.js     # 8 prompts: termas_park, hotel_internacional, hotel_termas,
+│   │                      #   termas_do_lago, fazzenda_park, machadinho_thermas,
+│   │                      #   aguas_de_palmas, recanto_cataratas
 │   └── gustavo/           # Prompts do Gust.IA (vazio — ainda não implementado)
 ├── hoteis/
 │   ├── _template.md       # Template + checklist de setup por hotel
@@ -91,11 +92,11 @@ Fluxo detalhado em [ARQUITETURA.md](./ARQUITETURA.md).
 |-------|-------------|
 | Termas Park Hotel | 11631008 |
 
-### Prompt criado — aguardando deploy (5)
-Hotel Internacional Gravatal, Hotel Termas, Termas do Lago, Fazzenda Park Resort, Machadinho Thermas Resort SPA
+### Prompt criado — aguardando deploy (7)
+Hotel Internacional Gravatal, Hotel Termas, Termas do Lago, Fazzenda Park Resort, Machadinho Thermas Resort SPA, Águas de Palmas Resort, Recanto Cataratas Resort
 
-### Ficha preenchida — sem prompt (10)
-Águas de Palmas, Cabanas Termas Hotel, Costão do Santinho, Hotel Tirolesa, Jardins de Jurema, Lagos de Jurema, Mabu Thermas, Recanto Cataratas, Vivaz Cataratas
+### Ficha preenchida — sem prompt (7)
+Cabanas Termas Hotel, Costão do Santinho, Hotel Tirolesa, Jardins de Jurema, Lagos de Jurema, Mabu Thermas, Vivaz Cataratas
 
 ### Pipeline no Kommo — sem ficha (6)
 Dona Francisca, Itá Thermas, Grand Suites Family Resort, Laghetto Resort Golden, Laghetto Gramado, Laghetto Stilo Borges

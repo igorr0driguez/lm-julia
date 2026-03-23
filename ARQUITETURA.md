@@ -92,8 +92,9 @@ Kommo API → Cliente    Cotador HAI+ (se cotação)
 | Cache Custom Fields | cache_custom_fields.json | Atualiza cache a cada 3 dias |
 | Cache Pipelines | cache_pipelines.json | Atualiza cache diário (madrugada) |
 | Cache Users | cache_users.json | Atualiza cache de usuários |
+| Legacy Testes | legacy_fluxo_zap_ambiente_testes.json | Workflow de testes (ambiente legacy) |
 
-Scripts auxiliares (codes_cotacao/): `config_hoteis.js`, `monta_mensagem_orcamento1.js`, `monta_mensagem_multipla.js`
+Scripts auxiliares (codes_cotacao/): `config_hoteis.js`, `monta_mensagem_orcamento1.js`, `monta_mensagem_multipla.js`, `trata_dados1.js`, `trata_multiplos_dados.js`, `emojis_kommo.md`
 
 ---
 
