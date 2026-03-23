@@ -69,7 +69,7 @@ if (hotelResort === "park_hotel") {
   mensagem += `✦ *Orçamento da Hospedagem*\n\n`;
 } else if (hotelResort === "recanto_cataratas_resort") {
   mensagem += config.titulo + `\n\n`;
-  mensagem += config.link_orcamento + `\n\n`;
+  mensagem += `✦ *Valores da hospedagem:*\n\n`;
 } else if (hotelResort === "cabanas") {
   mensagem += config.titulo + `\n\n`;
   mensagem += config.pensao + `\n\n`;

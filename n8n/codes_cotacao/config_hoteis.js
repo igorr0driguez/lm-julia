@@ -106,7 +106,6 @@ const CONFIG = {
 
   recanto_cataratas_resort: {
     titulo: `♨ *Recanto Cataratas – Thermas, Resort & Convention*`,
-    link_orcamento: `*Orçamento completo clicando no link:*`,
     estrutura: `☘ *Estrutura & Lazer*\n•♨ Parque aquático com piscinas termais\n•⚃ Pista de boliche\n•⚃ Salão de jogos\n•⚽ Quadras de esportes\n•☺ Equipe de entretenimento para todas as idades\n•✦ 2 restaurantes com especialidades regionais e internacionais\n•✦ Bar aconchegante\n•✦ Academia\n•✦ Spa / Centro de bem-estar\n•✔ Estacionamento gratuito\n•✔ Wi-Fi gratuito em todas as áreas`,
     pagamento: `*Formas de pagamento:*\n\n◆ Á vista via pix\n\n◆ Via link em até 10x sem juros com parcelas mínimas de R$ 250,00`,
     checkin_checkout: `☉ *Check-in & Check-out*\n\n→ Check-in: a partir das 14h00\n→ Check-out: até as 12h00`,
