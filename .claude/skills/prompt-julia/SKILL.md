@@ -152,6 +152,7 @@ Estas decisões foram padronizadas e devem ser seguidas em qualquer modo (create
 | NÃO FAZER | 4 categorias, bullets SEPARADOS (nunca `\|`) | Interpretação literal GPT-4.1 mini |
 | Schema de saída | JSON inline (sem indentação) | Economia de tokens |
 | Schema | Sem `opcao_day_use` | Não faz parte do padrão |
+| Day use | `mensagem_dayuse` → send_and_handoff. Sem coleta | Diretrizes 2.5 |
 | Handoff/notify | Inline (sem sub-headers ###) | Economia de tokens |
 | Exemplos | Bold título + Think + Armazena + JSON inline | Alinhados |
 

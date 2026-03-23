@@ -80,6 +80,7 @@ Run every item against the prompt being reviewed. Report severity and specific f
 | 7.4 | Informative example shows brevity | HIGH | Must demonstrate max 3 sentences + positive framing + offer for quote |
 | 7.5 | Examples use hotel's real data | MEDIUM | Hotel name, services, values must match the hotel being prompted |
 | 7.6 | Think/Armazena pattern visible in examples | MEDIUM | At least the critical examples (greeting, all-adults, mixed family) should show Think reasoning |
+| 7.7 | Day use example present if hotel has mensagem_dayuse | HIGH | Must show: detect day use → message verbatim in JSON → handoff:"send_and_handoff" → notify_text |
 
 ## 8. Tone, Style & Prohibitions
 
@@ -99,7 +100,7 @@ Run every item against the prompt being reviewed. Report severity and specific f
 |---|-------|----------|-----------------|
 | 9.1 | Scope declaration present | HIGH | Must state "SOMENTE [hotel name]" |
 | 9.2 | Transfer rule present | MEDIUM | Most hotels don't offer transfer — must be explicit |
-| 9.3 | Day use mode correct | HIGH | If `day_use_mode = "handoff"`: any day use mention → handoff_only. If "cotar": full flow present |
+| 9.3 | Day use handling correct | HIGH | If hotel has `mensagem_dayuse`: message in Contexto entre aspas com "envie EXATAMENTE" + Condução com regra send_and_handoff + NÃO FAZER proíbe coleta/cotação/parafrasear + exemplo few-shot com mensagem verbatim. Se não tem: handoff_only |
 | 9.4 | Special cases from hotel ficha included | MEDIUM | Terminology, attractions, specific rules |
 | 9.5 | First message matches hotel name | LOW | Greeting must reference the correct hotel |
 | 9.6 | Payment terms correct | MEDIUM | Entry percentage, payment methods must match hotel |

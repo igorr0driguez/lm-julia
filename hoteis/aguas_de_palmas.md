@@ -64,26 +64,10 @@ pagante2_hospedagem: "13–15 anos → tarifa jovem"   # tarifário diferente do
 adulto_hospedagem: "16+ → adulto"
 
 === DAY USE ===
-day_use_mode: "cotar"
-
-=== FAIXAS ETÁRIAS — DAY USE ===
-cortesia_dayuse: "3–5 anos → cortesia"
-meia_dayuse: ""
-pagante_dayuse: "6–12 anos → pagante (R$ 300,00)"
-adulto_dayuse: "13+ → adulto (R$ 450,00)"
-
-=== DAY USE — PACOTES ===
-pacotes_dayuse: |
-  Day Use padrão (jan a out 2026): adulto R$ 450,00 | criança 6–12 R$ 300,00 | até 5 anos cortesia
-  Inclui: café da manhã, almoço (bebidas não alcoólicas inclusas), estacionamento, Wi-Fi, Parque Aquático, Complexo de Inverno, recreação, Espaço Kids
-  NÃO inclui: toalhas. Consumo de bebidas externas não permitido. Taxa de serviço 10% sobre consumos extras
-  Não válido feriados/temáticos — consultar disponibilidade antecipadamente
-horario_dayuse: "09h–17h"
-minimo_pagantes_dayuse: ""
+mensagem_dayuse: "☀ Day Use – Águas de Palmas Resort\n\n☉ Período: JAN a OUT 2026\n\n✦ Valores\n▶ Adulto: R$ 450,00\n▶ Criança (06 a 12 anos): R$ 300,00\n▶ Até 5 anos: cortesia\n\n☀ Serviços inclusos:\n✔ Café da manhã e almoço (bebidas não alcoólicas inclusas durante as refeições)\n✔ Estacionamento e Wi-Fi\n✔ Entrada a partir das 09h00 e saída até às 17h00 (atrasos geram cobrança adicional)\n✔ Parque Aquático com 13 piscinas, toboáguas adulto e infantil, bar molhado e piscinas de jogos\n✔ Complexo de Inverno com piscinas aquecidas, hidromassagem, jacuzzi, sauna panorâmica e sala de descanso\n✔ Recreação para adultos e crianças (a partir de 6 anos) e Espaço Kids para os menores\n✔ Crianças de 0 a 5 anos cortesia (acompanhadas pelos pais)\n\n⚠ Importante:\n→ Não fornecemos toalhas\n→ Consumo de bebidas externas não permitido\n→ Taxa de serviço de 10% sobre consumos extras\n\n✦ Pagamento: 50% de entrada para confirmação e saldo no check-in (até 5x sem juros). Não aceitamos cheques.\n\n⚠ Valores apenas orçados, nada reservado"
 
 === PAGAMENTO ===
 pagamento_hospedagem: "20% entrada + saldo em até 6x sem juros no ato da reserva, OU 50% entrada + saldo em 5x sem juros no resort. Não aceita cheque"
-pagamento_dayuse: "50% entrada para confirmação + saldo no check-in em até 5x sem juros. Não aceita cheque"
 
 === PRIMEIRA MENSAGEM ===
 primeira_mensagem: |
@@ -102,9 +86,8 @@ primeira_mensagem: |
 === CASOS ESPECIAIS DO HOTEL ===
 casos_especiais: |
   - Serviço de praia: trenzinho a cada 30 min para quiosque exclusivo com cadeiras e guarda-sol — informar como diferencial
-  - Day use em feriados/temáticos: não disponível — informar e oferecer hospedagem como alternativa
+  - Day use: mensagem padrão enviada automaticamente + handoff. Feriados e toalhas: informação já consta na mensagem
   - Recreação: a partir de 6 anos. Menores de 6 → Espaço Kids (acompanhados pelos pais)
-  - Toalhas no day use: NÃO fornecidas — informar se perguntarem
   - Agência/operadora de turismo: handoff_only
 
 === TERMINOLOGIA PROTEGIDA ===

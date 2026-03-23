@@ -63,27 +63,10 @@ pagante_hospedagem: "0–12 anos → tarifa criança"
 adulto_hospedagem: "13+ → tarifa adulto"
 
 === DAY USE ===
-day_use_mode: "cotar"
-
-=== FAIXAS ETÁRIAS — DAY USE ===
-cortesia_dayuse: ""
-meia_dayuse: ""
-pagante_dayuse: ""
-adulto_dayuse: ""
-
-=== DAY USE — PACOTES ===
-pacotes_dayuse: |
-  R$ 280,00/pessoa — inclui café (07h30–10h), almoço exceto bebidas (12h–14h), café da tarde (16h–17h), piscinas, ofurôs externos, sala de jogos, quadra de futebol, quadra de beach tênis, vôlei de areia, demais áreas externas, atividades com recreacionistas
-  Máximo 10 pessoas por reserva
-  Reserva antecipada obrigatória
-  Não válido em feriados
-  NÃO inclui: apartamento, balneário (banheiras de hidromassagem individuais)
-horario_dayuse: "08h–17h"
-minimo_pagantes_dayuse: ""
+mensagem_dayuse: "☀ Day Use – Cabanas Termas Hotel\n\nNo Cabanas Termas Hotel, você pode desfrutar de um dia completo de lazer com café da manhã e almoço inclusos (exceto bebidas), além do acesso às áreas externas e piscinas.\n\n✦ Valor e Condições\n▶ R$ 280,00 por pessoa\n▶ Máximo de 10 pessoas\n▶ Horário: 08h00 às 17h00\n▶ Reserva obrigatória, mediante consulta de disponibilidade\n▶ Não válido em feriados\n\n☀ Incluso:\n✔ Café da manhã (07h30 às 10h00)\n✔ Almoço exceto bebidas (12h00 às 14h00)\n✔ Café da tarde (16h00 às 17h00)\n✔ Piscinas\n✔ Ofurôs externos\n✔ Sala de jogos\n✔ Quadra de futebol\n✔ Quadra de beach tênis\n✔ Vôlei de areia\n✔ Demais áreas externas\n✔ Atividades com recreacionistas (conforme programação)\n\n⚠ Não inclui: apartamento, balneário (banheiras de hidromassagem individuais)\n\n⚠ Valores apenas orçados, nada reservado"
 
 === PAGAMENTO ===
 pagamento_hospedagem: "sinal de 30% via PIX ou depósito + saldo ao final da hospedagem parcelado no cartão em até 3x, ou total via link antecipado em até 6x sem juros (parcelas mínimas R$ 200)"
-pagamento_dayuse: ""
 
 === PRIMEIRA MENSAGEM ===
 primeira_mensagem: ""
@@ -94,7 +77,7 @@ casos_especiais: |
   - Balneário termal: hidromassagem em cabines individuais (manhã 07h30–09h / tarde 17h–19h) — NÃO incluso no day use
   - Piscinas termais: funcionamento 24h (interna e externa)
   - Feriados/datas especiais: pacotes temáticos com programação especial — consultar valores e condições
-  - Day use em feriados: não disponível
+  - Day use: mensagem padrão enviada automaticamente + handoff. Feriados: informação já consta na mensagem
   - Cortesia hospedagem: apenas 01 criança até 10 anos por apartamento — não afeta categorização na cotação, apenas informação da base de conhecimento
 
 === TERMINOLOGIA PROTEGIDA ===
@@ -114,4 +97,4 @@ terminologia: |
 - Valores sujeitos a disponibilidade e alteração sem aviso prévio
 - Reserva confirmada somente após pagamento do sinal
 - Atualizar tabela de preços sempre que o cliente enviar novos valores
-- Day use: faixas etárias e condições de pagamento não detalhadas no material — informar valor único (R$ 280/pessoa) conforme material enviado ao cliente
+- Day use: mensagem padrão enviada automaticamente via prompt, sem cotação — valor único R$ 280/pessoa

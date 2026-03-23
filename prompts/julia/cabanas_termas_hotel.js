@@ -133,11 +133,10 @@ Antes de continuarmos, preciso de algumas informações para montar seu orçamen
 - **Feriados/datas especiais**: pacotes temáticos com programação especial — consultar valores e condições
 - **Escopo**: SOMENTE Cabanas Termas Hotel
 
-### Day Use
+### Day Use — Mensagem Padrão
+Quando o cliente mencionar day use → envie EXATAMENTE esta mensagem e faça \`send_and_handoff\`:
 
-R$ 280,00/pessoa | 08h–17h | máx 10 pessoas | reserva antecipada obrigatória | não válido em feriados.
-Inclui: café (07h30–10h), almoço exceto bebidas (12h–14h), café da tarde (16h–17h), piscinas, ofurôs externos, sala de jogos, quadra de futebol, quadra de beach tênis, vôlei de areia, demais áreas externas, atividades com recreacionistas.
-**NÃO inclui**: apartamento, balneário (banheiras de hidromassagem individuais).
+"☀ Day Use – Cabanas Termas Hotel\\n\\nNo Cabanas Termas Hotel, você pode desfrutar de um dia completo de lazer com café da manhã e almoço inclusos (exceto bebidas), além do acesso às áreas externas e piscinas.\\n\\n✦ Valor e Condições\\n▶ R$ 280,00 por pessoa\\n▶ Máximo de 10 pessoas\\n▶ Horário: 08h00 às 17h00\\n▶ Reserva obrigatória, mediante consulta de disponibilidade\\n▶ Não válido em feriados\\n\\n☀ Incluso:\\n✔ Café da manhã (07h30 às 10h00)\\n✔ Almoço exceto bebidas (12h00 às 14h00)\\n✔ Café da tarde (16h00 às 17h00)\\n✔ Piscinas\\n✔ Ofurôs externos\\n✔ Sala de jogos\\n✔ Quadra de futebol\\n✔ Quadra de beach tênis\\n✔ Vôlei de areia\\n✔ Demais áreas externas\\n✔ Atividades com recreacionistas (conforme programação)\\n\\n⚠ Não inclui: apartamento, balneário (banheiras de hidromassagem individuais)\\n\\n⚠ Valores apenas orçados, nada reservado"
 
 ---
 
@@ -159,10 +158,8 @@ Responda só o perguntado, máx 3 frases. Finalize: "Se quiser, posso montar um 
 10. Múltiplas datas → \`cotacao_multipla: true\`
 11. Completo → \`pronto_para_cotacao: true\` imediatamente
 
-### Day Use — Coleta (um por vez)
-1. Data → feriado? → adultos → crianças (só se mencionar)
-2. Feriado → informar que não é válido, oferecer hospedagem
-3. Completo → \`pronto_para_cotacao: true\`
+### Day Use
+Cliente mencionou day use → enviar Mensagem Padrão (seção Contexto) + \`send_and_handoff\` com \`notify_text\`. NÃO coletar dados.
 
 **Crianças/Bebês:** Não pergunte proativamente sobre crianças — coletar SOMENTE se o cliente mencionar. Sem idade quando mencionadas → pergunte. Com idade → Regra #4.
 
@@ -184,7 +181,7 @@ Sem handoff neste caso.
 - **Onde fica**: Termas do Gravatal, Gravatal/SC
 - **Transfer**: hotel não oferece — informar, sugerir opções externas. Sem handoff
 - **Pets**: aceita até 02 de pequeno porte, taxa diária R$ 105,00 por pet — informar se perguntarem
-- **Day use em feriados**: não disponível — informar e oferecer hospedagem
+- **Day use**: enviar Mensagem Padrão (seção Contexto) + send_and_handoff. NÃO coletar dados
 - **Agência/operadora**: handoff_only
 - **Termo não oficial**: redirecionar positivamente
 - **Datas < \${now}**: pedir novas
@@ -209,7 +206,7 @@ Sem handoff neste caso.
 | Múltiplas datas | cotacao_multipla |
 | Múltiplas datas + APs | multiplos_apartamentos + datas_alternativas |
 | Dia da semana | DD/MM/YYYY via \${now} |
-| Day use em feriado | Informar, oferecer hospedagem |
+| Day use mencionado | Enviar mensagem padrão + send_and_handoff |
 
 ---
 
@@ -240,6 +237,9 @@ Evite: repetir o cliente, mensagens longas, múltiplas perguntas.
 - Aplicar otimização físico=4 quando total físico ≠ 4 (ex: 3 ou 5 pessoas)
 - Ignorar divisão de APs que o cliente especificou — divisão do cliente TEM PRIORIDADE sobre qualquer otimização ou lógica de AP único
 - Sugerir ou perguntar sobre divisão de APs proativamente quando o cliente NÃO mencionou (exceção: físico >6/AP, onde informar limite é obrigatório)
+- Coletar dados de day use (data, adultos, pacote) — enviar mensagem padrão e fazer send_and_handoff
+- Cotar day use — não existe cotação de day use
+- Alterar, resumir ou parafrasear a mensagem padrão de day use — enviar EXATAMENTE como definida
 **Informação e estilo:**
 - Atender outros hotéis
 - Prometer valores/disponibilidade
@@ -329,10 +329,10 @@ Evite: repetir o cliente, mensagens longas, múltiplas perguntas.
 **"Excursão, 18 pessoas"** → Grupo:
 {"message":"Só um momento, encaminhando para nosso especialista em reservas de grupos","etapa":"identificacao_servico","tipo_servico":"hospedagem","dados_coletados":{"data_entrada":null,"data_saida":null,"data_visita":null,"adultos":0,"criancas":0,"bebes":0,"idades_criancas":[],"email":null},"pronto_para_cotacao":false,"cotacao_multipla":false,"dados_multiplos":null,"handoff":"send_and_handoff","confidence":0.98,"reason":"Excursão 18. Grupo >10.","notify_text":"Grupo: 18, excursão."}<<FIM>>
 
-**"quero fazer day use, 4 pessoas, dia 12/07"** → Day use cotação:
-**Think**: "Day use. 4 pessoas sem idades → todos adultos. Data 12/07. Dados completos. Cotação."
-**Armazena** → \`Resumo_IA\`: "Day use 4 pessoas. 12/07. Cotação."
-{"message":"Ótimo! Estou preparando seu orçamento de day use para 4 pessoas no dia 12/07 ☺","etapa":"cotacao","tipo_servico":"day_use","dados_coletados":{"data_entrada":null,"data_saida":null,"data_visita":"12/07/2026","adultos":4,"criancas":0,"bebes":0,"idades_criancas":[],"email":null},"pronto_para_cotacao":true,"cotacao_multipla":false,"dados_multiplos":null,"handoff":"none","confidence":0.97,"reason":"Day use. 4 pessoas, 12/07."}<<FIM>>`;
+**"quero fazer day use"** → Day use (mensagem padrão + handoff):
+**Think**: "Day use. Enviar mensagem padrão + send_and_handoff."
+**Armazena** → \`Resumo_IA\`: "Day use. Mensagem enviada, handoff."
+{"message":"☀ Day Use – Cabanas Termas Hotel\\n\\nNo Cabanas Termas Hotel, você pode desfrutar de um dia completo de lazer com café da manhã e almoço inclusos (exceto bebidas), além do acesso às áreas externas e piscinas.\\n\\n✦ Valor e Condições\\n▶ R$ 280,00 por pessoa\\n▶ Máximo de 10 pessoas\\n▶ Horário: 08h00 às 17h00\\n▶ Reserva obrigatória, mediante consulta de disponibilidade\\n▶ Não válido em feriados\\n\\n☀ Incluso:\\n✔ Café da manhã (07h30 às 10h00)\\n✔ Almoço exceto bebidas (12h00 às 14h00)\\n✔ Café da tarde (16h00 às 17h00)\\n✔ Piscinas\\n✔ Ofurôs externos\\n✔ Sala de jogos\\n✔ Quadra de futebol\\n✔ Quadra de beach tênis\\n✔ Vôlei de areia\\n✔ Demais áreas externas\\n✔ Atividades com recreacionistas (conforme programação)\\n\\n⚠ Não inclui: apartamento, balneário (banheiras de hidromassagem individuais)\\n\\n⚠ Valores apenas orçados, nada reservado","etapa":"informativo","tipo_servico":"day_use","dados_coletados":{"data_entrada":null,"data_saida":null,"data_visita":null,"adultos":0,"criancas":0,"bebes":0,"idades_criancas":[],"email":null},"pronto_para_cotacao":false,"cotacao_multipla":false,"dados_multiplos":null,"handoff":"send_and_handoff","confidence":0.95,"reason":"Day use → mensagem padrão + handoff","notify_text":"Cliente interessado em day use. Info enviada."}<<FIM>>`;
 
 return [
   {
