@@ -10,6 +10,7 @@ const MAP = {
   machadinho_thermas: "machadinho_thermas",
   aguas_de_palmas: "aguas_de_palmas",
   recanto_cataratas_resort: "recanto_cataratas_resort",
+  cabanas: "cabanas",
 };
 
 const hotel = MAP[raw] ?? "hotel_internacional";
@@ -109,6 +110,18 @@ const CONFIG = {
     estrutura: `☘ *Estrutura & Lazer*\n•♨ Parque aquático com piscinas termais\n•⚃ Pista de boliche\n•⚃ Salão de jogos\n•⚽ Quadras de esportes\n•☺ Equipe de entretenimento para todas as idades\n•✦ 2 restaurantes com especialidades regionais e internacionais\n•✦ Bar aconchegante\n•✦ Academia\n•✦ Spa / Centro de bem-estar\n•✔ Estacionamento gratuito\n•✔ Wi-Fi gratuito em todas as áreas`,
     pagamento: `*Formas de pagamento:*\n\n◆ Á vista via pix\n\n◆ Via link em até 10x sem juros com parcelas mínimas de R$ 250,00`,
     checkin_checkout: `☉ *Check-in & Check-out*\n\n→ Check-in: a partir das 14h00\n→ Check-out: até as 12h00`,
+    aviso: null,
+  },
+
+  cabanas: {
+    titulo: `*Orçamento:*\n♨ *Cabanas Termas Hotel*`,
+    pensao: `✦ *Incluso na diária:*\n☕ Café da manhã\n✦ Almoço\n☕ Café da Tarde\n✦ Jantar\n*Bebidas pagas à parte`,
+    pagamento: `★ *Formas de pagamento:*\n\nSinal de 30% do valor total via depósito bancário ou pix\n\nSaldo pago ao final da hospedagem, parcelado no cartão em até 3x\n\nTotal via link antecipado em ate 6x sem juros com parcelas mínimas de R$ 200,00`,
+    checkin: `→ Horário de check-in: a partir das 14h00`,
+    checkout: `→ Horário de check-out: até às 12h00 (com almoço incluso)`,
+    horarios_refeicoes: `As refeições são servidas no restaurante:\n\n*Café da Manhã* das 07h30 às 10h00;\n*Almoço* das 12h00 às 14h00:\n*Jantar* das 19h00 às 21h00;\n*Café da tarde* das 16h00 às 17h00`,
+    pets: `♞ Aceita Pets: até 02 de pequeno porte, mediante taxa diária ( R$ 105,00 por pet e diaria )`,
+    obs: `⚠ *Observação:* Valores apenas orçados, sujeitos à disponibilidade e alteração sem aviso prévio. A reserva será confirmada somente após o pagamento do sinal.`,
     aviso: null,
   },
 

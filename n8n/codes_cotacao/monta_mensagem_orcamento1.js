@@ -253,6 +253,37 @@ if (hotelResort === "park_hotel") {
   if (config.aviso) mensagem += `\n\n` + config.aviso;
 
   // ============================================================
+  // CABANAS TERMAS HOTEL
+  // ============================================================
+} else if (hotelResort === "cabanas") {
+  let totalPessoasTexto = `${adultos} adulto${adultos > 1 ? "s" : ""}`;
+  if (criancas > 0)
+    totalPessoasTexto += ` + ${criancas} criança${criancas > 1 ? "s" : ""}`;
+
+  mensagem += config.titulo + `\n\n`;
+  mensagem += config.pensao + `\n\n`;
+
+  mensagem += `💵 *Valores Da Hospedagem:*\n\n`;
+  mensagem += `${dataEntrada} - ${dataSaida}\n`;
+  mensagem += `*${primeiraOpcao.apartamento}*\n`;
+  mensagem += `☺ ${totalPessoasTexto}\n`;
+  mensagem += `${diarias} diária${diarias > 1 ? "s" : ""}\n`;
+  mensagem += `▶ *${primeiraOpcao.preco_total}*\n\n`;
+
+  for (let i = 1; i < totalParaMostrar; i++) {
+    mensagem += `*${dados.opcoes[i].apartamento.toUpperCase()}* - consultar\n`;
+  }
+  if (totalParaMostrar > 1) mensagem += "\n";
+
+  mensagem += config.pagamento + `\n\n`;
+  mensagem += config.checkin + `\n`;
+  mensagem += config.checkout + `\n\n`;
+  mensagem += config.horarios_refeicoes + `\n\n`;
+  mensagem += config.pets + `\n\n`;
+  mensagem += config.obs;
+  if (config.aviso) mensagem += `\n\n` + config.aviso;
+
+  // ============================================================
   // HOTEL INTERNACIONAL GRAVATAL
   // ============================================================
 } else {
