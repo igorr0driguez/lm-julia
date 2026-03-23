@@ -22,7 +22,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const lead_id = $input.first().json.lead_id;\nconst pipeline_id = $input.first().json.pipeline_id?.toString();\n\nconst salesbotMap = {\n  \"12621844\": 59742, // Águas de Palmas\n  \"12736543\": 59740, // Vivaz\n  \"9418391\":  59738, // Mabu\n  \"9515771\":  59736, // Recanto\n  \"12074732\": 59734, // Tirolesa\n  \"10637219\": 59732, // Jardins de Jurema\n  \"10637211\": 59730, // Lagos de Jurema\n  \"10835031\": 59728, // Machadinho\n  \"9391183\":  59726, // Fazzenda\n  \"9377947\":  59724, // Termas do Lago\n  \"9361827\":  59722, // Termas\n  \"9379711\":  59720, // Cabanas\n  \"9377539\":  59718, // Inter\n  \"11631008\": 59716, // Termas Park Hotel\n  \"\"\n};\n\nconst salesbot_id = salesbotMap[pipeline_id] ?? null;\n\nif (!salesbot_id) {\n  throw new Error(`Pipeline ${pipeline_id} não mapeado`);\n}\n\nreturn [{ json: { lead_id, salesbot_id } }];"
+        "jsCode": "const lead_id = $input.first().json.lead_id;\nconst pipeline_id = $input.first().json.pipeline_id?.toString();\n\nconst salesbotMap = {\n  \"12621844\": 59742, // Águas de Palmas\n  \"12736543\": 59740, // Vivaz\n  \"9418391\":  59738, // Mabu\n  \"9515771\":  59736, // Recanto\n  \"12074732\": 59734, // Tirolesa\n  \"10637219\": 59732, // Jardins de Jurema\n  \"10637211\": 59730, // Lagos de Jurema\n  \"10835031\": 59728, // Machadinho\n  \"9391183\":  59726, // Fazzenda\n  \"9377947\":  59724, // Termas do Lago\n  \"9361827\":  59722, // Termas\n  \"9379711\":  59720, // Cabanas\n  \"9377539\":  59718, // Inter\n  \"11631008\": 59716, // Termas Park Hotel\n  \"10211815\": 60224, // Costao do Santinho\n};\n\nconst salesbot_id = salesbotMap[pipeline_id] ?? null;\n\nif (!salesbot_id) {\n  throw new Error(`Pipeline ${pipeline_id} não mapeado`);\n}\n\nreturn [{ json: { lead_id, salesbot_id } }];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -159,7 +159,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "e1389398-ac15-41aa-a738-eb164f11f1ae",
+  "versionId": "db93a93d-2955-408e-b68c-82d489a531c3",
   "meta": {
     "instanceId": "e60b74ab053ed0d2b808977bf7f742d40a11fa4d10865b3095732a10341c3c2f"
   },
