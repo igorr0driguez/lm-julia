@@ -173,6 +173,8 @@ terminologia: |
 
 > A IA que monta o prompt deve incorporar TODAS estas regras no prompt final. Não omitir nenhuma. A linguagem pode ser adaptada ao contexto do hotel, mas o conteúdo das regras é inviolável.
 
+> **⚠️ ATENÇÃO — Regras de negócio exclusivas vs compartilhadas:** Este bloco contém SOMENTE regras universais (válidas para todos os hotéis). Regras comerciais específicas de um hotel (ex: otimização de tarifas, tratamento especial de cortesia, exceções de cotação) devem ficar APENAS no prompt daquele hotel. Ao usar um prompt existente como referência (gold standard), copiar apenas **estrutura e estilo** — NUNCA copiar regras de negócio sem confirmar se são exclusivas daquele hotel ou universais.
+
 ---
 
 ## 2.1 Identidade e Posicionamento
@@ -676,3 +678,4 @@ Ex: "remover opção econômica", "hotel não oferece mais day use"
 5. **Sempre destacar o que mudou** — antes de entregar o prompt atualizado, listar as alterações feitas em formato resumido para o usuário validar
 6. **Na dúvida, perguntar** — se a mudança solicitada for ambígua ou puder afetar outras regras, perguntar ao usuário antes de aplicar
 7. **Chave de datas** — em qualquer atualização que envolva `dados_multiplos`, garantir que a chave de datas é `datas_alternativas`
+8. **Regras de negócio exclusivas de um hotel NÃO devem ser propagadas para outros prompts.** Ao criar ou revisar um prompt, se encontrar uma regra comercial específica (ex: otimização de tarifa, tratamento diferenciado de cortesia, exceções de cotação), confirmar com o usuário se é exclusiva daquele hotel ou se é geral antes de replicar. O gold standard é referência de **estrutura e estilo**, não de regras de negócio — cada hotel tem suas próprias condições comerciais

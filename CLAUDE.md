@@ -6,7 +6,7 @@ Dois agentes:
 - Jul.IA: atende leads de hotéis/resorts individuais
 - Gust.IA: triagem nas centrais (Gravatal, Jurema, Piratuba, Foz do Iguaçu, Resorts, Gramado)
 
-Status: 1 hotel em produção (Termas Park Hotel), 7 prompts adicionais criados, expansão em andamento.
+Status: 1 hotel em produção (Termas Park Hotel), 8 prompts adicionais criados, expansão em andamento.
 
 ## Stack
 - Kommo CRM (salesbots, pipelines, custom fields, widget privado)
@@ -36,6 +36,7 @@ Status: 1 hotel em produção (Termas Park Hotel), 7 prompts adicionais criados,
 - Widget: incrementar version no manifest.json a cada update; desinstalar e reinstalar após deploy
 - bind_actions com salesbot:callback não funciona em integrações privadas
 - Prompts: campo `adultos` no JSON = só quem o cliente chamou de adulto. Crianças com tarifa adulto vão em `idades_criancas`, NUNCA em `adultos`. Tabela de categorização deve usar "Tarifa adulto" (nunca só "Adulto") para evitar confusão do modelo
+- Regras de negócio exclusivas de um hotel (otimizações de tarifa, tratamento de cortesia, exceções de cotação) NÃO devem ser copiadas para outros prompts sem confirmação. O gold standard é referência de estrutura/estilo, não de regras comerciais
 
 ## Atenção ao escopo
 - Mudanças nos robôs globais afetam TODOS os pipelines — sempre sinalizar

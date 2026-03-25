@@ -1,7 +1,7 @@
 
 # Context — Estado atual do projeto
 
-Atualizado em: 22/03/2026
+Atualizado em: 25/03/2026
 
 ## Agentes
 - Jul.IA → atende hotéis/resorts individuais
@@ -18,9 +18,9 @@ Atualizado em: 22/03/2026
 - Machadinho Thermas Resort SPA
 - Águas de Palmas Resort
 - Recanto Cataratas Resort
+- Cabanas Termas Hotel
 
 ## Hotéis com ficha preenchida (sem prompt ainda)
-- Cabanas Termas Hotel
 - Costão do Santinho
 - Hotel Tirolesa
 - Jardins de Jurema
@@ -51,11 +51,18 @@ Nenhuma central tem documentação .md ainda — apenas o template existe.
 - Possessivos do hotel permitidos SOMENTE no Termas Park Hotel (propriedade da família do cliente)
 - Crianças com tarifa adulto → campo `idades_criancas`, tabela usa "Tarifa adulto" (nunca "Adulto")
 - Day use → handoff imediato (sem cotação pela IA) — exceto Águas de Palmas e Hotel Internacional (day_use_mode = "cotar")
+- **Otimização físico=4 é EXCLUSIVA do Hotel Internacional Gravatal** — não copiar para outros prompts
+- **Omissão de cortesia na cotação é EXCLUSIVA do Cabanas Termas Hotel** — cotador do hotel cobra indevidamente pela cortesia, Julia omite 1 criança 3-10 do JSON
+- Gold standard (Internacional) é referência de **estrutura e estilo**, não de regras de negócio — sempre confirmar antes de copiar regras comerciais
 
 ## Problemas conhecidos
 - **Hotel inicia conversa via WABA → Jul.IA ativa indevidamente**: equipe usa WhatsApp fora do Kommo (WABA beta). Sem solução técnica — equipe deve acionar [MANUAL] Desativar Jul.IA. Ver `bugs_e_melhorias/001-hotel-iniciou-conversa.md`.
 
 ## Últimas alterações
+- 2026-03-25 | prompts/julia/cabanas_termas_hotel.js | Prompt criado + regra exclusiva de omissão de cortesia no JSON
+- 2026-03-25 | prompts/julia/cabanas_termas_hotel.js | Removida otimização físico=4 (exclusiva do Internacional, estava indevida)
+- 2026-03-25 | prompts/julia/diretrizes_gerais_julia_v8.md | Regra 4.2.8: regras exclusivas não propagam entre hotéis
+- 2026-03-25 | .claude/skills/prompt-julia/ | Critical Pattern #8: hotel-specific rules, aviso no gold standard
 - 2026-03-22 | n8n/codes_cotacao/ | Bug fix: cotação nem sempre retornava a mais barata (multipla e orcamento1)
 - 2026-03-22 | n8n/ | Workflows atualizados (backend_jul.ia, enviar_fotos, pos_venda, legacy_fluxo_zap)
 - 2026-03-20 | prompts/julia/ | 5 prompts revisados e padronizados no gold standard (aguas_de_palmas, hotel_termas, machadinho, recanto_cataratas, termas_do_lago)

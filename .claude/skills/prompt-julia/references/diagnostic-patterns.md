@@ -195,21 +195,21 @@ Catálogo de padrões para diagnosticar e corrigir comportamentos errados da Jul
 **Causa comum:**
 - `idades_criancas` definido como "idades reais de TODAS as crianças" — modelo interpreta literalmente e inclui 0-2
 - Falta regra explícita dizendo que 0-2 NÃO vai em `idades_criancas` nem em `criancas`
-- Único exemplo com bebê ativa otimização físico=4, escondendo o tratamento correto do bebê no JSON
+- Único exemplo com bebê ativa otimização comercial (ex: físico=4, exclusiva de alguns hotéis), escondendo o tratamento correto do bebê no JSON
 - Idade fracionária ("2 anos e meio") arredondada para 3 pelo modelo
 - NÃO FAZER sem proibição explícita de incluir 0-2 em `idades_criancas`
 
 **Onde procurar:**
 - Regra #4: definição de `idades_criancas` — deve dizer "crianças de 3+" (não "TODAS as crianças")
 - ATENÇÃO pós-tabela: deve ter bloco separado para bebês similar ao bloco de 13+
-- Exemplos: deve existir exemplo com bebê SEM otimização, mostrando `criancas:0, bebes:1, idades_criancas:[]`
+- Exemplos: deve existir exemplo com bebê SEM otimização comercial, mostrando `criancas:0, bebes:1, idades_criancas:[]`
 - NÃO FAZER: deve ter proibição explícita sobre idades 0-2 em `idades_criancas`
 - n8n (safety net): `trata_dados1.js` e `trata_multiplos_dados.js` devem filtrar `.filter(idade => idade >= 3)`
 
 **Fix pattern:**
 1. Definição: mudar "TODAS as crianças" para "crianças de 3+ (inclusive 13+). Bebês (0–2) NÃO entram"
 2. Adicionar bloco ⚠️ ATENÇÃO — Bebês (0–2) no JSON, com exemplo inline: "Casal + criança de 2" → adultos:2, criancas:0, bebes:1, idades_criancas:[]. NUNCA criancas:1 ou idades_criancas:[2]
-3. Adicionar exemplo completo (Think → JSON) com bebê SEM otimização físico=4
+3. Adicionar exemplo completo (Think → JSON) com bebê SEM otimização comercial
 4. NÃO FAZER: adicionar "Incluir idades 0–2 em `idades_criancas` ou contar bebês em `criancas`"
 5. Idades fracionárias: instruir a truncar (arredondar para baixo) — "2 anos e meio" = idade 2 = bebê
 6. Safety net no n8n: `.filter(idade => idade >= 3)` antes do `.sort()`
@@ -223,20 +223,20 @@ Catálogo de padrões para diagnosticar e corrigir comportamentos errados da Jul
 **Causa comum:**
 - Step de "cliente especificou divisão" vem DEPOIS de otimizações ou regras de capacidade no fluxo
 - Regra de divisão fraca (uma linha sem destaque, sem exemplo)
-- Otimização comercial (ex: físico=4) dispara antes e sobrepõe a divisão
+- Otimização comercial hotel-specific (ex: físico=4 no Internacional) dispara antes e sobrepõe a divisão
 - Único exemplo multi-AP tem total que não conflita com otimizações
 - Modelo interpreta multi-AP como algo que só existe para resolver limite de capacidade, não como respeito à preferência do cliente
 
 **Onde procurar:**
 - Fluxo de coleta (Condução da Conversa): posição do step "divisão do cliente" em relação a otimizações
-- Regras de otimização comercial: verificar se têm ressalva "em AP único" / "não aplica se cliente dividiu"
-- Exemplos: verificar se existe exemplo multi-AP com total que conflita com otimização (ex: 4 pessoas em 2 APs)
+- Regras de otimização comercial (se existirem no hotel): verificar se têm ressalva "em AP único" / "não aplica se cliente dividiu"
+- Exemplos: verificar se existe exemplo multi-AP com total que conflita com otimização
 - NÃO FAZER: verificar se proíbe ignorar divisão do cliente
 
 **Fix pattern:**
 1. Mover step "cliente especificou divisão" para ANTES de qualquer otimização/capacidade no fluxo
 2. Destacar com ⚠️ e wording forte: "SEMPRE respeitar", "tem PRIORIDADE"
-3. Adicionar ressalva "em AP único" / "não aplica se cliente dividiu em APs" em toda otimização
-4. Adicionar exemplo multi-AP com total que conflita com otimização, mostrando Think com raciocínio de prioridade
+3. Se hotel tiver otimização comercial: adicionar ressalva "em AP único" / "não aplica se cliente dividiu em APs"
+4. Adicionar exemplo multi-AP mostrando Think com raciocínio de prioridade da divisão do cliente
 5. Adicionar ao NÃO FAZER: "Ignorar divisão de APs que o cliente especificou"
 6. Adicionar regra REATIVO: "só quando cliente mencionar — NUNCA sugerir divisão proativamente"

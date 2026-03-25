@@ -159,7 +159,7 @@ Estas decisões foram padronizadas e devem ser seguidas em qualquer modo (create
 ## Key References
 
 - `prompts/julia/diretrizes_gerais_julia_v8.md` — Master guide for all prompts (read Bloco 2 for rules, Bloco 3 for structure)
-- `prompts/julia/hotel_internacional_gravatal.js` — Gold standard para estrutura (melhor alinhamento com diretrizes v8 + GPT-4.1 mini best practices)
+- `prompts/julia/hotel_internacional_gravatal.js` — Gold standard para **estrutura e estilo** (melhor alinhamento com diretrizes v8 + GPT-4.1 mini best practices). **ATENÇÃO:** contém regras de negócio exclusivas (ex: otimização físico=4) que NÃO devem ser copiadas para outros hotéis sem confirmação
 - `prompts/julia/termas_park_hotel.js` — Referência de hotel simples (produção, sem otimizações). Ambos seguem o template canônico
 - Read `references/review-checklist.md` for the complete audit checklist with all check items
 - Read `references/diagnostic-patterns.md` for known bug patterns and fix recipes (used by correct mode)
@@ -176,3 +176,4 @@ These are the most common failure modes discovered in production:
 5. **Visual hierarchy**: All 7 critical rules must have visual markers for the model to parse importance.
 6. **Compression safety**: When reducing tokens, never lose conditional words, Think/Armazena in examples, visual markers, or standalone rules about children.
 7. **Client AP division priority**: When the client specifies AP division (e.g., "2 in each room"), this MUST take priority over any optimization or capacity logic. The flow step for client division must come BEFORE optimization steps. Examples must demonstrate this priority with Think reasoning.
+8. **Hotel-specific business rules must NOT be propagated**: The gold standard (Hotel Internacional) is a reference for **structure and style only** — NOT for business rules. Rules like tariff optimizations, special cortesia handling, quotation exceptions are hotel-specific. When creating a new prompt from the gold standard, ALWAYS ask the user to confirm which business rules from the reference apply to the new hotel before copying them. Never assume a commercial rule is universal.
