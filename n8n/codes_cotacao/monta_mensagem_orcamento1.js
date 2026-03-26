@@ -53,6 +53,7 @@ if (hotelResort === "park_hotel") {
   mensagem += `☺ *Hospedagem para:* ${totalPessoasTexto} (${totalPessoas} pessoa${totalPessoas > 1 ? "s" : ""})\n\n`;
 
   mensagem += `✦ *Valor total do pacote:*\n\n`;
+  mensagem += `*${primeiraOpcao.apartamento}*\n`;
   mensagem += `▶ *${primeiraOpcao.preco_total}*\n`;
   for (let i = 1; i < totalParaMostrar; i++) {
     mensagem += `*${dados.opcoes[i].apartamento.toUpperCase()}* - consultar\n`;
@@ -148,6 +149,7 @@ if (hotelResort === "park_hotel") {
   mensagem += config.titulo + `\n\n`;
   mensagem += `Data: ${dataEntrada} a ${dataSaida}\n\n`;
   mensagem += `Valor total do pacote para o período solicitado para todos\n\n`;
+  mensagem += `*${primeiraOpcao.apartamento}*\n`;
   mensagem += `▶ *${primeiraOpcao.preco_total}*\n\n`;
   mensagem += config.pensao + `\n\n`;
 
@@ -177,6 +179,7 @@ if (hotelResort === "park_hotel") {
   mensagem += `☺ *Hospedagem para:* ${totalPessoasTexto} (${totalPessoas} pessoa${totalPessoas > 1 ? "s" : ""})\n\n`;
 
   mensagem += `✦ *Valor total do pacote:*\n\n`;
+  mensagem += `*${primeiraOpcao.apartamento}*\n`;
   mensagem += `▶ *${primeiraOpcao.preco_total}*\n`;
   for (let i = 1; i < totalParaMostrar; i++) {
     mensagem += `*${dados.opcoes[i].apartamento.toUpperCase()}* - consultar\n`;
@@ -217,6 +220,7 @@ if (hotelResort === "park_hotel") {
   mensagem += `✦ *Orçamento da Hospedagem*\n\n`;
   mensagem += `☉ *Período:* ${dataEntrada} a ${dataSaida} (${diarias} diária${diarias > 1 ? "s" : ""})\n`;
   mensagem += `☺ *Hospedagem para:* ${totalPessoasTexto} (${totalPessoas} pessoa${totalPessoas > 1 ? "s" : ""})\n\n`;
+  mensagem += `*${primeiraOpcao.apartamento}*\n`;
   mensagem += `▶ *${primeiraOpcao.preco_total}*\n`;
   for (let i = 1; i < totalParaMostrar; i++) {
     mensagem += `*${dados.opcoes[i].apartamento.toUpperCase()}* - consultar\n`;
