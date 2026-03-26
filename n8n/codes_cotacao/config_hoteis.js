@@ -11,6 +11,7 @@ const MAP = {
   aguas_de_palmas: "aguas_de_palmas",
   recanto_cataratas_resort: "recanto_cataratas_resort",
   cabanas: "cabanas",
+  costao: "costao",
 };
 
 const hotel = MAP[raw] ?? "hotel_internacional";
@@ -121,6 +122,18 @@ const CONFIG = {
     horarios_refeicoes: `As refeições são servidas no restaurante:\n\n*Café da Manhã* das 07h30 às 10h00;\n*Almoço* das 12h00 às 14h00:\n*Jantar* das 19h00 às 21h00;\n*Café da tarde* das 16h00 às 17h00`,
     pets: `♞ Aceita Pets: até 02 de pequeno porte, mediante taxa diária ( R$ 105,00 por pet e diaria )`,
     obs: `⚠ *Observação:* Valores apenas orçados, sujeitos à disponibilidade e alteração sem aviso prévio. A reserva será confirmada somente após o pagamento do sinal.`,
+    aviso: null,
+  },
+
+  costao: {
+    titulo: `*Orçamento:*\n★ *Costão do Santinho Resort*`,
+    regime: `✦ *Sistema All Inclusive (alimentação e bebidas)*`,
+    desconto: `✦ *T A R I F A   C O M   D E S C O N T O*`,
+    pagamento: `★ *Formas de pagamento:*\n\n◆ 7% de desconto à vista via PIX ou cartão de crédito sem direito a reembolso ou troca de data\n\n◆ 5% de desconto à vista via PIX com direito a reembolso ou troca de data\n\n◆ Valor integral em até 10x com direito a reembolso ou troca de data`,
+    checkin: `→ Check-in: a partir das 15h`,
+    checkout: `→ Check-out: até às 11h (com almoço incluso)`,
+    pets: `♞ Aceita Pets: de pequeno e médio porte até 15 kg (consultar valores)`,
+    obs: `⚠ *Observação:* Tarifas flutuantes, sujeitos à disponibilidade e alteração sem aviso prévio.`,
     aviso: null,
   },
 

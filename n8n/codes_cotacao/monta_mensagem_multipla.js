@@ -74,6 +74,10 @@ if (hotelResort === "park_hotel") {
   mensagem += config.titulo + `\n\n`;
   mensagem += config.pensao + `\n\n`;
   mensagem += `💵 *Valores Da Hospedagem:*\n\n`;
+} else if (hotelResort === "costao") {
+  mensagem += config.titulo + `\n\n`;
+  mensagem += config.regime + `\n\n`;
+  mensagem += `✦ *Valores Da Hospedagem:*\n\n`;
 } else {
   // hotel_internacional
   const primeiroComDados = grupos.find(
@@ -130,6 +134,11 @@ for (const grupo of grupos) {
       if (criancas > 0) mensagem += `Crianças: ${criancas}\n`;
       mensagem += `Pensão: ${opcao.pensao}\n`;
       mensagem += `Tarifa: ${opcao.tarifa}\n`;
+    } else if (hotelResort === "costao") {
+      mensagem += `Adulto(s): ${adultos}\n`;
+      if (criancas > 0) mensagem += `Crianças: ${criancas}\n`;
+      if (opcao.pensao) mensagem += `Pensão: ${opcao.pensao}\n`;
+      if (opcao.tarifa) mensagem += `Tarifa: ${opcao.tarifa}\n`;
     } else {
       let totalPessoasTexto = `${adultos} adulto${adultos > 1 ? "s" : ""}`;
       if (criancas > 0)
@@ -216,6 +225,14 @@ if (hotelResort === "park_hotel") {
   mensagem += config.checkin + `\n`;
   mensagem += config.checkout + `\n\n`;
   mensagem += config.horarios_refeicoes + `\n\n`;
+  mensagem += config.pets + `\n\n`;
+  mensagem += config.obs;
+  if (config.aviso) mensagem += `\n\n` + config.aviso;
+} else if (hotelResort === "costao") {
+  mensagem += config.desconto + `\n\n`;
+  mensagem += config.pagamento + `\n\n`;
+  mensagem += config.checkin + `\n`;
+  mensagem += config.checkout + `\n\n`;
   mensagem += config.pets + `\n\n`;
   mensagem += config.obs;
   if (config.aviso) mensagem += `\n\n` + config.aviso;
