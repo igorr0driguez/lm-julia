@@ -1,7 +1,7 @@
 
 # Context — Estado atual do projeto
 
-Atualizado em: 25/03/2026
+Atualizado em: 26/03/2026
 
 ## Agentes
 - Jul.IA → atende hotéis/resorts individuais
@@ -19,9 +19,9 @@ Atualizado em: 25/03/2026
 - Águas de Palmas Resort
 - Recanto Cataratas Resort
 - Cabanas Termas Hotel
+- Costão do Santinho Resort
 
 ## Hotéis com ficha preenchida (sem prompt ainda)
-- Costão do Santinho
 - Hotel Tirolesa
 - Jardins de Jurema
 - Lagos de Jurema
@@ -59,6 +59,9 @@ Nenhuma central tem documentação .md ainda — apenas o template existe.
 - **Hotel inicia conversa via WABA → Jul.IA ativa indevidamente**: equipe usa WhatsApp fora do Kommo (WABA beta). Sem solução técnica — equipe deve acionar [MANUAL] Desativar Jul.IA. Ver `bugs_e_melhorias/001-hotel-iniciou-conversa.md`.
 
 ## Últimas alterações
+- 2026-03-26 | prompts/julia/costao_do_santinho.js | Prompt criado (all inclusive, sem otimização físico=4, day use handoff_only, faixas 0-2/3/4-11/12+)
+- 2026-03-26 | hoteis/costao_do_santinho.md | Ficha preenchida + material coletado
+- 2026-03-26 | kommo/codigo_hoteis.md | Costão adicionado (costao, ocu_max 6)
 - 2026-03-25 | prompts/julia/cabanas_termas_hotel.js | Prompt criado + regra exclusiva de omissão de cortesia no JSON
 - 2026-03-25 | prompts/julia/cabanas_termas_hotel.js | Removida otimização físico=4 (exclusiva do Internacional, estava indevida)
 - 2026-03-25 | prompts/julia/diretrizes_gerais_julia_v8.md | Regra 4.2.8: regras exclusivas não propagam entre hotéis

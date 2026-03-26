@@ -6,7 +6,7 @@ Dois agentes:
 - Jul.IA: atende leads de hotéis/resorts individuais
 - Gust.IA: triagem nas centrais (Gravatal, Jurema, Piratuba, Foz do Iguaçu, Resorts, Gramado)
 
-Status: 1 hotel em produção (Termas Park Hotel), 8 prompts adicionais criados, expansão em andamento.
+Status: 1 hotel em produção (Termas Park Hotel), 9 prompts adicionais criados, expansão em andamento.
 
 ## Stack
 - Kommo CRM (salesbots, pipelines, custom fields, widget privado)
