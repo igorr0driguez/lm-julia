@@ -1,11 +1,13 @@
 # Hotel Internacional Gravatal
 
 ## Identificador
+
 - hotel_resort param: hotel_internacional_gravatal
 - Pipeline ID: 9377539
 - Nome do pipeline no Kommo: Internacional
 
 ## Status de implementação
+
 - [x] Etapas JUL.IA ATIVADA e JUL.IA DESATIVADA criadas no pipeline
 - [x] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
 - [x] Robô de Entrada configurado (campos, etapa, condicionais)
@@ -15,14 +17,14 @@
 - [x] Material do hotel coletado
 - [x] Ficha preenchida (ver seção abaixo)
 - [x] Prompt criado e publicado no n8n
-- [ ] Revisar Prompt
+- [x] Revisar Prompt
 - [x] Atualizar n8n: Config Hoteis
 - [x] Atualizar n8n: Monta mensagem Orcamento1
 - [x] Atualizar n8n: Monta mensagem Multipla
 - [x] Validação interna (chat de testes)
-- [ ] Validação com o cliente
+- [x] Validação com o cliente
 - [x] Validação de cotação (caso extremo)
-- [ ] Primeiro atendimento real validado
+- [x] Primeiro atendimento real validado
 
 ---
 
@@ -115,6 +117,7 @@ terminologia: |
 ---
 
 ## Prompt Julia — particularidades
+
 - **Possessivos proibidos**: parceiro comercial. Usar "o Hotel Internacional" — nunca "nosso hotel", "nossa piscina" etc. OK para empresa/atendimento ("nosso especialista", "nossa equipe").
 - **Vale do Dinossauro = INTERNA**: nunca descrever como atração externa. É um espaço dentro do hotel com réplicas de dinossauros na natureza.
 - **Aquativo**: incluso para hóspedes; NÃO incluso no day use. Período fechado 08/06–08/07/2026, reabre 09/07.
@@ -123,6 +126,7 @@ terminologia: |
 - **Day use em feriados/temáticos**: não válido — informar e oferecer hospedagem como alternativa
 
 ## Observações operacionais
+
 - Valores sujeitos a disponibilidade e alteração sem aviso prévio
 - Reserva confirmada somente após pagamento da entrada
 - Aquativo: funciona de julho a abril (terça a domingo); verificar período de fechamento anual antes de informar

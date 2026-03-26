@@ -1,11 +1,13 @@
 # Hotel Termas (Gravatal)
 
 ## Identificador
+
 - hotel_resort param: termas_gravatal
 - Pipeline ID: 9361827
 - Nome do pipeline no Kommo: Hotel Termas
 
 ## Status de implementação
+
 - [x] Etapas JUL.IA ATIVADA e JUL.IA DESATIVADA criadas no pipeline
 - [x] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
 - [x] Robô de Entrada configurado (campos, etapa, condicionais)
@@ -15,14 +17,14 @@
 - [x] Material do hotel coletado
 - [x] Ficha preenchida (ver seção abaixo)
 - [x] Prompt criado e publicado no n8n
-- [ ] Revisar Prompt
+- [x] Revisar Prompt
 - [x] Atualizar n8n: Config Hoteis
 - [x] Atualizar n8n: Monta mensagem Orcamento1
 - [x] Atualizar n8n: Monta mensagem Multipla
-- [ ] Validação interna (chat de testes)
-- [ ] Validação com o cliente
-- [ ] Validação de cotação (caso extremo)
-- [ ] Primeiro atendimento real validado
+- [x] Validação interna (chat de testes)
+- [x] Validação com o cliente
+- [x] Validação de cotação (caso extremo)
+- [x] Primeiro atendimento real validado
 
 ---
 
@@ -99,9 +101,11 @@ terminologia: |
 ---
 
 ## Prompt Julia — particularidades
+
 (preencher após criar o prompt)
 
 ## Observações operacionais
+
 - Valores sujeitos a alteração sem aviso prévio
 - Reserva confirmada somente após pagamento
 - Atualizar tabela de preços sempre que o cliente enviar novos valores

@@ -17,14 +17,14 @@
 - [x] Material do hotel coletado
 - [x] Ficha preenchida (ver seção abaixo)
 - [x] Prompt criado e publicado no n8n
-- [ ] Revisar Prompt
+- [x] Revisar Prompt
 - [x] Atualizar n8n: Config Hoteis
 - [x] Atualizar n8n: Monta mensagem Orcamento1
 - [x] Atualizar n8n: Monta mensagem Multipla
-- [ ] Validação interna (chat de testes)
-- [ ] Validação com o cliente
-- [ ] Validação de cotação (caso extremo)
-- [ ] Primeiro atendimento real validado
+- [x] Validação interna (chat de testes)
+- [x] Validação com o cliente
+- [x] Validação de cotação (caso extremo)
+- [x] Primeiro atendimento real validado
 
 ---
 

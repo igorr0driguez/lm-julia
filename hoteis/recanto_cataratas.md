@@ -21,10 +21,10 @@
 - [x] Atualizar n8n: Config Hoteis
 - [x] Atualizar n8n: Monta mensagem Orcamento1
 - [x] Atualizar n8n: Monta mensagem Multipla
-- [ ] Validação interna (chat de testes)
-- [ ] Validação com o cliente
-- [ ] Validação de cotação (caso extremo)
-- [ ] Primeiro atendimento real validado
+- [x] Validação interna (chat de testes)
+- [x] Validação com o cliente
+- [x] Validação de cotação (caso extremo)
+- [x] Primeiro atendimento real validado
 
 ---
 
