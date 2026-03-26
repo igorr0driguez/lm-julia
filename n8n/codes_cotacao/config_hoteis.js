@@ -12,6 +12,7 @@ const MAP = {
   recanto_cataratas_resort: "recanto_cataratas_resort",
   cabanas: "cabanas",
   costao: "costao",
+  lagos_de_jurema: "lagos_de_jurema",
 };
 
 const hotel = MAP[raw] ?? "hotel_internacional";
@@ -134,6 +135,15 @@ const CONFIG = {
     checkout: `→ Check-out: até às 11h (com almoço incluso)`,
     pets: `♞ Aceita Pets: de pequeno e médio porte até 15 kg (consultar valores)`,
     obs: `⚠ *Observação:* Tarifas flutuantes, sujeitos à disponibilidade e alteração sem aviso prévio.`,
+    aviso: null,
+  },
+
+  lagos_de_jurema: {
+    titulo: `*Orçamento:*\n⛱ *Lagos de Jurema Family Resort*`,
+    horarios_refeicoes: `☉ *Horários das Refeições*\n☕ Café da manhã: 07h30 às 10h\n✦ Almoço: 12h às 15h\n☕ Chá da tarde: 16h30 às 17h30\n✦ Jantar: 19h às 22h`,
+    sobre_resort: `✅ *Sobre o resort*\n\nEstrutura tradicional do complexo Jurema Águas Quentes\nClassificado como Family Resort\nIdeal para dias tranquilos em meio à natureza, sem abrir mão da diversão\n\n◆ *Estrutura & Acomodações*\n• 184 acomodações decoradas em estilo contemporâneo\n• Variedade de piscinas, bares e restaurantes\n• Atividades e lazer para todas as idades\n• Ambiente agradável para toda a família\n\n♨ *Águas termais*\nPrincipal atrativo do resort\nAcesso às atividades e áreas de lazer compartilhadas com o Jardins de Jurema (exceto refeições e pernoites)`,
+    checkin_checkout: `→ Check-in: a partir das 17h\n→ Check-out: até às 15h`,
+    obs: `⚠ *Observações:*\nConceito voltado para famílias\nPerfeito para dias de lazer e diversão em meio à natureza\nAtividades compartilhadas entre os resorts, mas refeições vinculadas ao resort contratado`,
     aviso: null,
   },
 

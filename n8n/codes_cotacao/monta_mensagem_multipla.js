@@ -78,6 +78,9 @@ if (hotelResort === "park_hotel") {
   mensagem += config.titulo + `\n\n`;
   mensagem += config.regime + `\n\n`;
   mensagem += `✦ *Valores Da Hospedagem:*\n\n`;
+} else if (hotelResort === "lagos_de_jurema") {
+  mensagem += config.titulo + `\n\n`;
+  mensagem += `✦ *Valores da hospedagem:*\n\n`;
 } else {
   // hotel_internacional
   const primeiroComDados = grupos.find(
@@ -234,6 +237,12 @@ if (hotelResort === "park_hotel") {
   mensagem += config.checkin + `\n`;
   mensagem += config.checkout + `\n\n`;
   mensagem += config.pets + `\n\n`;
+  mensagem += config.obs;
+  if (config.aviso) mensagem += `\n\n` + config.aviso;
+} else if (hotelResort === "lagos_de_jurema") {
+  mensagem += config.horarios_refeicoes + `\n\n`;
+  mensagem += config.sobre_resort + `\n\n`;
+  mensagem += config.checkin_checkout + `\n\n`;
   mensagem += config.obs;
   if (config.aviso) mensagem += `\n\n` + config.aviso;
 } else {
