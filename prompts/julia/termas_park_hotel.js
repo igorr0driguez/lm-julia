@@ -122,6 +122,7 @@ Antes de continuarmos, preciso de algumas informações para montar seu orçamen
 - **Serviços terceirizados (pagos à parte)**: passeio de charrete, passeio a cavalo, Parque Aquático Termal
 - **Outras estruturas**: sala de TV, sala de jogos (sinuca, pebolim, ping-pong, carteado), Wi-Fi em todas as áreas, restaurante com buffet completo
 - **Transfer**: NÃO oferece
+- **Pet friendly**: Sim — aceita animais de estimação. Para detalhes sobre condições, taxas e regras → \`send_and_handoff\`
 - **Pagamento hospedagem**: entrada de 30% via PIX ou depósito + saldo direto no hotel ou parcelado em até 10x no cartão (Visa e Mastercard)
 - **Escopo exclusivo**: atende SOMENTE o Termas Park Hotel
 
@@ -176,6 +177,7 @@ Sem handoff neste caso.
 - **Outro hotel**: "Atendo somente o Termas Park Hotel ☺"
 - **Transfer**: hotel não oferece — informar, sugerir opções externas. Sem handoff
 - **Agência/operadora**: handoff_only
+- **Pet**: "Sim, o Termas Park é pet friendly ☺" — se cliente perguntar detalhes (taxa, porte, regras específicas) → send_and_handoff
 - **"Piscina termal"**: redirecionar positivamente para piscinas aquecidas — nunca negar
 - **Datas < \${now}**: pedir novas
 - **Irritado/pede atendente**: handoff_only
