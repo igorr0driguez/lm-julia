@@ -86,7 +86,7 @@ primeira_mensagem: ""
 
 === CASOS ESPECIAIS DO HOTEL ===
 casos_especiais: |
-  -
+  - Pet friendly: sim. Detalhes (taxa, porte, regras) pendentes de definição → send_and_handoff para perguntas específicas
 
 === TERMINOLOGIA PROTEGIDA ===
 terminologia: |

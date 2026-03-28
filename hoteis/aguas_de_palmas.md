@@ -30,7 +30,7 @@
 
 ## Ficha do Hotel
 
-> Baseada no Bloco 1 das diretrizes_gerais_julia_v8.md. Preencher antes de criar o prompt.
+> Baseada no Bloco 1 das diretrizes_gerais_julia.md. Preencher antes de criar o prompt.
 
 ```
 === IDENTIFICAÇÃO ===

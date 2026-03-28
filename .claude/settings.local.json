@@ -25,7 +25,8 @@
       "Bash(find /c/Projects/lm-julia -type f -name *cotador* -o -name *cotacao*)",
       "Bash(node:*)",
       "Bash(find C:Usersitr.claude -type f -name *.md)",
-      "Bash(echo \"exit: $?\")"
+      "Bash(echo \"exit: $?\")",
+      "Bash(git mv:*)"
     ]
   }
 }
