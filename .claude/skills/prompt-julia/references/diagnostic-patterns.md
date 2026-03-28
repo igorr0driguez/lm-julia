@@ -18,20 +18,23 @@ Catálogo de padrões para diagnosticar e corrigir comportamentos errados da Jul
 **Sintoma:** Cliente diz "2 pessoas, 10 a 15 de março" e Julia pergunta sobre crianças, mesmo sem ninguém ter mencionado crianças.
 
 **Causa comum:**
+- "Crianças:" como cabeçalho incondicional no Think — o modelo considera crianças em TODA interação mesmo quando não mencionadas
 - Wording incondicional no Think step (ex: "idades → categorizar" em vez de "idades **informadas** → categorizar")
 - Exemplo de "N pessoas" sem Think explícito mostrando "Crianças NÃO mencionadas → NÃO perguntar"
 - Think forçando "calcular total de pessoas antes de tudo", o que leva o modelo a buscar informação de crianças
 
 **Onde procurar:**
-- Regra #4 (Think step / categorização de idades)
+- Regra #2 (Think step): verificar se a linha de crianças começa com "**Se**" condicional ou com "Crianças:" incondicional
+- Regra #4 (categorização de idades)
 - Exemplos: o exemplo de "N pessoas sem idades" (geralmente Ex2 ou Ex3)
 - Qualquer step que force cálculo de total de hóspedes antes de coletar dados
 
 **Fix pattern:**
-1. Adicionar palavra condicional: "idades **informadas**" em vez de "idades"
-2. No exemplo "N pessoas", adicionar Think com: `Crianças NÃO mencionadas → NÃO perguntar`
-3. Remover ou condicionar qualquer cálculo forçado de total no Think
-4. Reforçar no NÃO FAZER: `❌ CRÍTICO: Perguntar sobre crianças quando o cliente não mencionou`
+1. Linha de crianças no Think DEVE começar com "**Se**": `**Se** crianças com idades mencionadas → categorizar automaticamente (Regra #4)`. NUNCA "Crianças:" como checklist header
+2. Adicionar palavra condicional: "idades **informadas**" em vez de "idades"
+3. No exemplo "N pessoas", adicionar Think com: `Crianças NÃO mencionadas → NÃO perguntar`
+4. Remover ou condicionar qualquer cálculo forçado de total no Think
+5. Reforçar no NÃO FAZER: `❌ CRÍTICO: Perguntar sobre crianças quando o cliente não mencionou`
 
 ---
 
@@ -216,7 +219,52 @@ Catálogo de padrões para diagnosticar e corrigir comportamentos errados da Jul
 
 ---
 
-## Padrão 10: Julia ignora divisão de APs pedida pelo cliente (antigo Padrão 9)
+## Padrão 10: Julia pergunta composição do segundo AP quando já dá para deduzir
+
+**Sintoma:** Cliente informa total (ex: 6ad + 1 criança), Julia pede divisão, cliente dá config de UM AP ("2 adultos e a criança em um"), mas Julia pergunta "e no outro quarto?" em vez de deduzir que o restante é 4 adultos.
+
+**Causa comum:**
+- Regra de dedução por subtração ausente — Julia espera config explícita de CADA AP
+- Fluxo de divisão termina em "perguntar como quer dividir" mas não instrui o que fazer quando o cliente informa apenas um lado
+- Sem exemplo few-shot demonstrando a dedução automática
+
+**Onde procurar:**
+- Fluxo de coleta (Condução da Conversa): verificar se há step de "dedução por subtração"
+- Exemplos: verificar se existe exemplo de multi-AP onde cliente informa apenas um AP
+- NÃO FAZER: verificar se proíbe perguntar o segundo AP quando dedutível
+
+**Fix pattern:**
+1. Adicionar step no fluxo: "Dedução por subtração em divisão de APs: quando total é conhecido e cliente informa apenas UM AP → DEDUZIR o outro (restante = total − AP informado). NÃO perguntar 'e no outro?'. Think registra cálculo → cotação direto"
+2. Adicionar exemplo few-shot com Think mostrando: total conhecido, AP1 informado pelo cliente, AP2 calculado por subtração, cotação direta
+3. Adicionar ao NÃO FAZER: "Perguntar composição do segundo AP quando já é possível deduzir por subtração do total conhecido"
+
+---
+
+## Padrão 11: Julia se enrola ao informar limite de AP (múltiplas perguntas, opções de quantidade)
+
+**Sintoma:** Quando o total excede o limite do AP, Julia faz múltiplas perguntas ("Quer dividir? Como? Quer ajuda? 2 ou 3 apartamentos?"), confundindo o cliente. Ou oferece opções de quantidade de APs em vez de assumir o menor número.
+
+**Causa comum:**
+- Step de lotação diz apenas "informar limite, perguntar divisão" sem especificar formato exato da mensagem
+- Sem regra de "menor número de APs possível" — modelo oferece todas as possibilidades
+- Sem proibição de múltiplas perguntas no contexto de divisão
+- Exemplo de lotação ausente ou mostrando mensagem com múltiplas perguntas
+
+**Onde procurar:**
+- Fluxo de coleta: step de lotação máxima
+- Exemplos: verificar se existe exemplo de "físico > limite" com mensagem correta
+- NÃO FAZER: verificar proibições de múltiplas perguntas e opções de quantidade
+
+**Fix pattern:**
+1. Reescrever step de lotação: "Informar limite + UMA pergunta objetiva: 'Como você prefere fazer a divisão dos hóspedes?' — sem 'quer ajuda?', sem oferecer quantidade de APs"
+2. Adicionar regra: "Assumir sempre menor número de APs possível"
+3. Adicionar sub-step: "Cliente pediu ajuda → sugerir UMA divisão lógica (equilibrada, criança com adulto) e cotar direto, sem pedir confirmação"
+4. Adicionar exemplo few-shot: (a) Julia informa limite com 1 pergunta, (b) cliente pede ajuda → Julia sugere e cota
+5. NÃO FAZER: proibir oferecer qtd de APs, múltiplas perguntas, pedir confirmação após sugestão
+
+---
+
+## Padrão 12: Julia ignora divisão de APs pedida pelo cliente (antigo Padrão 9/10/11)
 
 **Sintoma:** Cliente pede "4 pessoas, 2 em cada quarto" e Julia cota 4 pessoas em AP único, ignorando a divisão.
 

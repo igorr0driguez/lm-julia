@@ -22,7 +22,7 @@ Run every item against the prompt being reviewed. Report severity and specific f
 
 | # | Check | Severity | What to look for |
 |---|-------|----------|-----------------|
-| 2.1 | Conditional wording for children | CRITICAL | Must say "idades **informadas**" (not "idades"). Must say "NUNCA supor idades **não declaradas**" (not just "NUNCA supor idades") |
+| 2.1 | Conditional wording for children | CRITICAL | Children line in Think MUST start with "**Se**" conditional (e.g., "**Se** crianças com idades mencionadas"). NEVER "Crianças:" as unconditional checklist header. Must say "idades **informadas**" (not "idades"). Must say "NUNCA supor idades **não declaradas**" |
 | 2.2 | No forced total calculation | HIGH | Think should NOT force "calcular total de pessoas antes de tudo" — this pushes the model to seek children info. Use "Se >10 → grupo" as a check, not a prerequisite calculation |
 | 2.3 | Analysis items present | MEDIUM | Think must analyze: service type, first msg vs continuation, collected/missing data, next single data point, quote or handoff |
 | 2.4 | Date resolution instruction | MEDIUM | Must instruct to resolve weekday/relative dates to DD/MM/YYYY via `${now}` |
@@ -59,6 +59,8 @@ Run every item against the prompt being reviewed. Report severity and specific f
 | 5.5 | Multiple APs/dates handled | MEDIUM | `cotacao_multipla`, `dados_multiplos` with correct key `datas_alternativas` (never `datas`) |
 | 5.6 | Client-specified AP division step exists | HIGH | Must have explicit step "client specified division → cotacao_multipla direto" in hospedagem flow, BEFORE any optimization or capacity step |
 | 5.7 | NÃO FAZER prohibits ignoring client division | HIGH | Must prohibit both: (1) ignoring client-specified AP division, (2) suggesting AP division proactively when client didn't mention it |
+| 5.8 | Deduction by subtraction rule exists | HIGH | Flow must have step: when total is known and client gives only ONE AP config → deduce the other by subtraction, don't ask. Must also have NÃO FAZER prohibition and a few-shot example |
+| 5.9 | AP limit flow is structured (single question + help path) | HIGH | When physical total > AP limit: (a) inform limit + ONE objective question ("Como prefere fazer a divisão?"), (b) assume minimum APs, (c) if client asks for help → suggest ONE logical division and quote directly. NÃO FAZER must prohibit: multiple questions, offering AP quantity options, asking confirmation after suggestion. Must have few-shot examples for both paths |
 
 ## 6. Output Schema
 

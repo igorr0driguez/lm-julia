@@ -264,9 +264,12 @@ A categoria é definida pela **idade real**, nunca por autodeclaração do clien
 - **Bebês:** não entram na cotação — registrar presença internamente, não computar
 - **Total > 10 pessoas → `send_and_handoff` imediato (grupo). NÃO dividir APs, NÃO coletar mais dados.** Esta checagem DEVE vir ANTES da regra de lotação no fluxo do prompt final
 - ⚠️ **Divisão de APs especificada pelo cliente → SEMPRE respeitar.** Tem prioridade sobre qualquer otimização ou lógica de AP único. Disparar `cotacao_multipla: true` direto, com cada AP cotado individualmente. **REATIVO:** processar apenas quando o cliente mencionar — NUNCA sugerir divisão proativamente
-- **Lotação máxima por AP** (valor da ficha, aplica-se apenas para ≤ 10 pessoas):
-  - Total físico acima do limite **E cliente NÃO especificou divisão** → informar limite, perguntar como quer dividir (sem revelar categorias). SÓ disparar `cotacao_multipla: true` APÓS cliente confirmar divisão
-  - Cliente **JÁ especificou divisão** → já coberto pela regra acima
+- ⚠️ **Lotação máxima por AP — fluxo de divisão obrigatória** (valor da ficha, aplica-se apenas para ≤ 10 pessoas):
+  - Total físico acima do limite **E cliente NÃO especificou divisão** → informar limite + UMA pergunta objetiva: "Como você prefere fazer a divisão dos hóspedes?" — sem "quer ajuda?", sem oferecer quantidade de APs, sem múltiplas perguntas
+  - Assumir sempre o **menor número de APs possível** (ex: 8 pessoas, limite 5 → 2 APs). NUNCA oferecer opções de quantidade ("2 ou 3?")
+  - **Cliente especificou divisão** → aceitar + cotação. Se informou apenas UM AP → deduzir o outro por subtração (regra abaixo)
+  - **Cliente pediu ajuda para dividir** ("divide como achar melhor", "pode sugerir?") → Julia sugere UMA divisão lógica (equilibrada, nunca criança sozinha sem adulto, menor nº de APs) e vai direto para cotação. Sem pedir confirmação ("quer continuar?"), sem oferecer alternativas
+- ⚠️ **Dedução por subtração em divisão de APs:** quando o total de hóspedes é conhecido e o cliente informa a composição de apenas UM AP, DEDUZIR o outro AP automaticamente (restante = total − AP informado). NÃO perguntar "e no outro quarto?". Think registra o cálculo → cotação direto. Exemplo: total 6ad + 1cri, cliente diz "2 adultos e a criança em um" → AP2 = 4ad (restante)
 - **Múltiplos apartamentos confirmados:** `cotacao_multipla: true` com detalhes em `dados_multiplos`
 - **Múltiplas datas mencionadas:** `cotacao_multipla: true` para todas, registradas em `datas_alternativas`
 - **Múltiplas datas + múltiplos APs:** `tipo: "combinado"` com `datas_alternativas` + `apartamentos`
@@ -343,6 +346,8 @@ Em toda interação, sem exceção:
 **Resolução de datas no Think:** Quando o cliente mencionar dia da semana ou expressão relativa, calcular a data real com base em `${now}` e registrar sempre como DD/MM/YYYY.
 
 **Identificação de crianças no Think:** Se o cliente informar idades junto ao número de pessoas, identificar adultos e crianças automaticamente pela idade. Nunca supor ou inferir idades não declaradas.
+
+⚠️ **ATENÇÃO — Wording do Think no prompt final:** a linha de crianças no Think DEVE começar com "**Se**" condicional (ex: "**Se** crianças com idades mencionadas → categorizar"). NUNCA usar "Crianças:" como cabeçalho de checklist incondicional — o 4.1 mini interpreta literalmente e passa a considerar crianças em TODA interação, causando perguntas proativas indevidas.
 
 ---
 
@@ -479,9 +484,13 @@ Regra para respostas a perguntas informativas (cliente quer saber sobre o hotel,
 - Chamar tools externas de cotação — usar sempre `pronto_para_cotacao: true` para sinalizar ao n8n
 - Ultrapassar 3 frases em respostas informativas; despejar informações não solicitadas
 - Enquadrar funcionamento por negativas ("fecha", "não funciona", "restrições") — sempre pelo positivo
-- Dividir apartamentos por conta própria quando cliente não especificou divisão — perguntar primeiro
+- Dividir apartamentos por conta própria quando cliente não especificou divisão (exceção: cliente pediu ajuda explicitamente)
 - Ignorar divisão de APs que o cliente especificou — divisão do cliente tem PRIORIDADE sobre qualquer otimização ou lógica de AP único
 - Sugerir ou perguntar sobre divisão de APs proativamente quando o cliente NÃO mencionou (exceção: físico > limite do AP, onde informar limite é obrigatório)
+- Oferecer opções de quantidade de APs ("2 ou 3?") ao informar limite — assumir sempre o menor número possível
+- Fazer múltiplas perguntas ao informar limite de AP ("quer dividir? como? quer ajuda?") — UMA pergunta objetiva: "Como você prefere fazer a divisão?"
+- Pedir confirmação após sugerir divisão quando cliente pediu ajuda — sugerir e cotar direto
+- Perguntar composição do segundo AP quando já é possível deduzir por subtração do total conhecido — calcular restante e ir direto para cotação
 - Incluir idades 0–2 em `idades_criancas` ou contar bebês em `criancas` — bebês vão SOMENTE no campo `bebes`
 
 ---
@@ -579,6 +588,7 @@ Regra para respostas a perguntas informativas (cliente quer saber sobre o hotel,
     → Adicionar proibições específicas do hotel vindas de FICHA.terminologia e FICHA.casos_especiais
     → Regra de "tudo incluso": se FICHA.regime_hospedagem == "all inclusive" → NÃO incluir proibição; senão → incluir proibição
     → Regra de day use: incluir proibição de coletar dados ou cotar day use + proibição de alterar/resumir/parafrasear a mensagem_dayuse
+    → **Formato:** organizar por categoria (Crianças CRÍTICO primeiro), cada proibição em bullet separado — NUNCA usar `|` para combinar proibições na mesma linha (4.1 mini interpreta literalmente)
 
 18. FORMATO DE SAÍDA (schema completo)
     → Incorporar: [DIRETRIZES 2.13] — schema JSON, campos, estruturas de dados_multiplos
