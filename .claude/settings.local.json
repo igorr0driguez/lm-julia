@@ -26,7 +26,8 @@
       "Bash(node:*)",
       "Bash(find C:Usersitr.claude -type f -name *.md)",
       "Bash(echo \"exit: $?\")",
-      "Bash(git mv:*)"
+      "Bash(git mv:*)",
+      "WebFetch(domain:github.com)"
     ]
   }
 }
