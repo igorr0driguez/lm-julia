@@ -27,7 +27,11 @@
       "Bash(find C:Usersitr.claude -type f -name *.md)",
       "Bash(echo \"exit: $?\")",
       "Bash(git mv:*)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:promptaa.com)",
+      "WebFetch(domain:blog.galaxy.ai)",
+      "WebFetch(domain:help.openai.com)",
+      "WebFetch(domain:www.godofprompt.ai)"
     ]
   }
 }

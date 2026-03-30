@@ -11,6 +11,7 @@ This skill handles creation and review of Jul.IA prompts optimized for GPT-4.1 m
 
 Understanding these behaviors is essential — they drive every decision in this skill:
 
+0. **No built-in reasoning**: 4.1 mini is NOT a reasoning model — it has no internal chain-of-thought. The Think step in Julia prompts exists because without it, the model skips multi-step logic (age categorization, total calculations, AP checks). Think is structural, not optional.
 1. **Literal interpretation**: 4.1 mini follows instructions LITERALLY. "idades → categorizar" (unconditional) behaves differently from "idades informadas → categorizar" (conditional). Every word matters.
 2. **End-of-prompt precedence**: When instructions conflict, the one closer to the END wins. Place critical rules at the beginning AND reinforce near the end (sandwich pattern).
 3. **Markdown hierarchy**: Headers, bold, lists give 10-13% accuracy boost. Use visual markers to signal importance.
