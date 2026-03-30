@@ -9,7 +9,7 @@
 ## Status de implementação
 
 - [x] Etapas JUL.IA ATIVADA e JUL.IA DESATIVADA criadas no pipeline
-- [ ] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
+- [x] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
 - [ ] Robô de Entrada configurado (campos, etapa, condicionais)
 - [x] Atualizar Dicionário Pipeline:Salesbot ID no Workflow Enviar Fotos
 - [x] Salesbot Enviar Fotos configurado

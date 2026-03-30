@@ -9,7 +9,7 @@
 ## Status de implementação
 
 - [x] Etapas JUL.IA ATIVADA e JUL.IA DESATIVADA criadas no pipeline
-- [ ] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
+- [x] Gatilho do salesbot "Chamar Jul.IA" configurado na etapa JUL.IA ATIVADA
 - [ ] Robô de Entrada configurado (campos, etapa, condicionais)
 - [x] Atualizar Dicionário Pipeline:Salesbot ID no Workflow Enviar Fotos
 - [x] Salesbot Enviar Fotos configurado
@@ -17,11 +17,11 @@
 - [x] Material do hotel coletado
 - [x] Ficha preenchida (ver seção abaixo)
 - [x] Prompt criado e publicado no n8n
-- [ ] Revisar Prompt
+- [x] Revisar Prompt
 - [x] Atualizar n8n: Config Hoteis
 - [x] Atualizar n8n: Monta mensagem Orcamento1
 - [x] Atualizar n8n: Monta mensagem Multipla
-- [ ] Validação interna (chat de testes)
+- [x] Validação interna (chat de testes)
 - [ ] Validação com o cliente
 - [ ] Validação de cotação (caso extremo)
 - [ ] Primeiro atendimento real validado
