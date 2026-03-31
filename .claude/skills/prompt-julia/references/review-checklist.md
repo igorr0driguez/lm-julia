@@ -25,7 +25,7 @@ Run every item against the prompt being reviewed. Report severity and specific f
 | 2.1 | Conditional wording for children | CRITICAL | Children line in Think MUST start with "**Se**" conditional (e.g., "**Se** crianças com idades mencionadas"). NEVER "Crianças:" as unconditional checklist header. Must say "idades **informadas**" (not "idades"). Must say "NUNCA supor idades **não declaradas**" |
 | 2.2 | No forced total calculation | HIGH | Think should NOT force "calcular total de pessoas antes de tudo" — this pushes the model to seek children info. Use "Se >10 → grupo" as a check, not a prerequisite calculation |
 | 2.3 | Analysis items present | MEDIUM | Think must analyze: service type, first msg vs continuation, collected/missing data, next single data point, quote or handoff |
-| 2.4 | Date resolution instruction | MEDIUM | Must instruct to resolve weekday/relative dates to DD/MM/YYYY via `${now}` |
+| 2.4 | Date resolution instruction | MEDIUM | Must instruct to resolve weekday/relative dates to DD/MM/YYYY via `${now}`. Must also cover day-without-month ("dia 3 ao 5") → next occurrence from `${now}` (never assume current month blindly) |
 
 ## 3. Children Handling
 

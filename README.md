@@ -66,8 +66,7 @@ Fluxo detalhado em [ARQUITETURA.md](./ARQUITETURA.md).
 │   ├── *.json             # Workflows exportados (14 ativos + 1 legacy)
 │   └── codes_cotacao/     # Scripts JS para montar mensagens de orçamento
 ├── prompts/
-│   ├── julia/             # Prompts da Jul.IA (diretrizes v8 + 8 prompts de hotel)
-│   │   ├── diretrizes_gerais_julia.md
+│   ├── julia/             # Prompts da Jul.IA (8 prompts de hotel; diretrizes na skill prompt-julia)
 │   │   └── {hotel}.js     # 8 prompts: termas_park, hotel_internacional, hotel_termas,
 │   │                      #   termas_do_lago, fazzenda_park, machadinho_thermas,
 │   │                      #   aguas_de_palmas, recanto_cataratas
