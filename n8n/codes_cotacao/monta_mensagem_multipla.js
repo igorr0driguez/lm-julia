@@ -16,6 +16,32 @@ function calcPix(str) {
   return formatPreco(valor * 0.97);
 }
 
+// --- Helpers Recanto Cataratas: agrupa por pensão ---
+function normalizePensaoRecanto(pensao) {
+  if (!pensao) return 'cafe';
+  const lower = pensao.toLowerCase();
+  if (lower.includes('pensão completa') || lower.includes('pensao completa')) return 'completa';
+  if (lower.includes('meia pensão') || lower.includes('meia pensao')) return 'meia';
+  return 'cafe';
+}
+
+function agruparPorPensaoRecanto(opcoes) {
+  const grupos = {};
+  for (const op of opcoes) {
+    const key = normalizePensaoRecanto(op.pensao);
+    if (!grupos[key] || parsePreco(op.preco_total) < parsePreco(grupos[key].preco_total)) {
+      grupos[key] = op;
+    }
+  }
+  const ordem = ['cafe', 'meia', 'completa'];
+  const labels = {
+    cafe: '☕ Café da Manhã',
+    meia: '✦ Meia Pensão',
+    completa: '✦ Pensão Completa',
+  };
+  return ordem.filter(k => grupos[k]).map(k => ({ label: labels[k], opcao: grupos[k] }));
+}
+
 const primeiroTrata = $item(0).$node["Trata multiplos dados"].json;
 const totalApartamentos = primeiroTrata.total_apartamentos;
 
@@ -130,6 +156,42 @@ for (const grupo of grupos) {
   for (const ap of apComOpcoes) {
     if (!ap.opcao) {
       mensagem += `*QUARTO ${ap.ap_num}:* ✖ Sem disponibilidade\n\n`;
+      continue;
+    }
+
+    // --- Recanto Cataratas: mostra uma opção por tipo de pensão ---
+    if (hotelResort === "recanto_cataratas_resort") {
+      const dados = ap.dados_api;
+      const adultos = dados.busca.hospedes.adultos;
+      const criancasIdades = dados.busca.hospedes.criancas_idades;
+      const criancas = criancasIdades
+        ? criancasIdades.split(",").filter((x) => x.trim() !== "").length
+        : 0;
+
+      mensagem += `*QUARTO ${ap.ap_num}:*\n`;
+      mensagem += `${dataEntrada} - ${dataSaida}\n`;
+      let totalPessoasTexto = `${adultos} adulto${adultos > 1 ? "s" : ""}`;
+      if (criancas > 0)
+        totalPessoasTexto += ` + ${criancas} criança${criancas > 1 ? "s" : ""}`;
+      mensagem += `☺ ${totalPessoasTexto}\n`;
+      mensagem += `${diarias} diária${diarias > 1 ? "s" : ""}\n\n`;
+
+      const opsPorPensao = agruparPorPensaoRecanto(dados.opcoes);
+      const todasMesmaCategoria = opsPorPensao.length > 1 &&
+        opsPorPensao.every(o => o.opcao.apartamento === opsPorPensao[0].opcao.apartamento);
+
+      if (todasMesmaCategoria) {
+        mensagem += `*${opsPorPensao[0].opcao.apartamento}*\n`;
+        for (const { label, opcao } of opsPorPensao) {
+          mensagem += `${label}: ▶ *${opcao.preco_total}*\n`;
+        }
+      } else {
+        for (const { label, opcao } of opsPorPensao) {
+          mensagem += `${label} — *${opcao.apartamento}*\n`;
+          mensagem += `▶ *${opcao.preco_total}*\n`;
+        }
+      }
+      mensagem += "\n";
       continue;
     }
 
