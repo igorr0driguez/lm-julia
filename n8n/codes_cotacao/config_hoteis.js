@@ -59,8 +59,7 @@ const CONFIG = {
 
   fazzenda: {
     titulo: `*Orçamento:*\n☘ *Fazzenda Park Resort*`,
-    obs_pix: `OBS: valor enviado acima com desconto via pix aplicado (3% para pagamento à vista)`,
-    pagamento: `★ *Formas de pagamento:*\n\nPagamento TOTAL no ato da reserva para garantia da reserva e valores.\n\n◆ PIX à vista com 3% de desconto\n◆ Cartão de crédito em até 12x sem juros (parcelas mínimas de R$200,00, via link)`,
+    pagamento: `Pagamento TOTAL no ato da reserva para garantia da reserva e valores.\n\n◆ Cartão de crédito em até 12x sem juros (parcelas mínimas de R$200,00, via link)`,
     checkin: `⏰ Check-in: entrada na estrutura e acomodação a partir das 15h`,
     checkout: `⏰ Check-out: liberação do quarto até 12h — permanência na estrutura, atrações e refeições até 15h`,
     atividades: `★ *ATIVIDADES:*\n♨ Piscina interna (09h às 21h) e externa (09h às 20h)\n✦ Complexo de piscinas aquecidas (interna e externa)\n♨ +17 Jacuzzis (internas e externas)\n♞ Passeio de charrete\n♞ Passeio a cavalo\n♞ Passeio de pôneis\n✦ Passeio de bicicleta\n✦ Passeio de pedalinho\n✦ Stand up paddle\n⚓ Pescaria\n♫ Bailes\n✦ Ordenha\n♨ Sauna\n☘ Trilhas ecológicas\n⚽ Campo de futebol\n✦ Quadras de esporte\n✦ Playground aquático\n✦ Playground\n✦ Clube do Gasparinho Kids\n⚃ Sala de jogos\n✦ Interação com os animais\n✦ Academia\n✦ Recreação para crianças, adultos e melhor idade (09h30 às 00h)`,

@@ -6,6 +6,16 @@ function parsePreco(str) {
   return Number(str.replace(/[R$\s.]/g, '').replace(',', '.'));
 }
 
+function formatPreco(value) {
+  return 'R$ ' + value.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?=,))/g, '.');
+}
+
+function calcPix(str) {
+  const valor = parsePreco(str);
+  if (!isFinite(valor)) return str;
+  return formatPreco(valor * 0.97);
+}
+
 const primeiroTrata = $item(0).$node["Trata multiplos dados"].json;
 const totalApartamentos = primeiroTrata.total_apartamentos;
 
@@ -153,7 +163,12 @@ for (const grupo of grupos) {
     }
 
     mensagem += `${diarias} diária${diarias > 1 ? "s" : ""}\n`;
-    mensagem += `▶ *${opcao.preco_total}*\n\n`;
+    if (hotelResort === "fazzenda") {
+      mensagem += `◆ PIX à vista com 3% de desconto: ▶ *${calcPix(opcao.preco_total)}*\n`;
+      mensagem += `◆ Cartão em até 12x sem juros: ${opcao.preco_total}\n\n`;
+    } else {
+      mensagem += `▶ *${opcao.preco_total}*\n\n`;
+    }
   }
 }
 
@@ -176,7 +191,6 @@ if (hotelResort === "park_hotel") {
   mensagem += config.obs;
   if (config.aviso) mensagem += `\n\n` + config.aviso;
 } else if (hotelResort === "fazzenda") {
-  mensagem += config.obs_pix + `\n\n`;
   mensagem += config.pagamento + `\n\n`;
   mensagem += config.checkin + `\n`;
   mensagem += config.checkout + `\n\n`;

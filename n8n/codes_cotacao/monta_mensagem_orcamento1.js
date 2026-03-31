@@ -5,6 +5,16 @@ function parsePreco(str) {
   if (!str) return Infinity;
   return Number(str.replace(/[R$\s.]/g, '').replace(',', '.'));
 }
+
+function formatPreco(value) {
+  return 'R$ ' + value.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?=,))/g, '.');
+}
+
+function calcPix(str) {
+  const valor = parsePreco(str);
+  if (!isFinite(valor)) return str;
+  return formatPreco(valor * 0.97);
+}
 if (dados && dados.opcoes) {
   dados.opcoes.sort((a, b) => parsePreco(a.preco_total) - parsePreco(b.preco_total));
 }
@@ -122,7 +132,8 @@ if (hotelResort === "park_hotel") {
   mensagem += `☉ *Período:* ${dataEntrada} a ${dataSaida} (${diarias} diária${diarias > 1 ? "s" : ""})\n`;
   mensagem += `☺ *Hospedagem para:* ${totalPessoasTexto} (${totalPessoas} pessoa${totalPessoas > 1 ? "s" : ""})\n\n`;
   mensagem += `*${primeiraOpcao.apartamento}*\n`;
-  mensagem += `▶ *${primeiraOpcao.preco_total}*\n`;
+  mensagem += `◆ PIX à vista com 3% de desconto: ▶ *${calcPix(primeiraOpcao.preco_total)}*\n`;
+  mensagem += `◆ Cartão em até 12x sem juros: ${primeiraOpcao.preco_total}\n`;
   for (let i = 1; i < totalParaMostrar; i++) {
     mensagem += `*${dados.opcoes[i].apartamento.toUpperCase()}* - consultar\n`;
   }
