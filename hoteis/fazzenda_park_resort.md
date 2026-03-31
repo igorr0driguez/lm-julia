@@ -40,7 +40,7 @@ escopo: "SOMENTE Fazzenda Park Resort"
 regime_hospedagem: "all inclusive completo — 7 refeições/dia + bebidas liberadas o dia inteiro"
 regime_bebidas: "ALL INCLUSIVE — bebidas liberadas o dia inteiro: vinhos (tintos nacionais/importados, rosé, branco, espumantes brut/moscatel/sem álcool), coquetéis (Margarita, Mojito, Sex on the Beach, Alexander, Piña Colada, Tequila Sunrise, Gin Tropical, batidas), doses (Campari, Red Label, White Horse, Martini, Smirnoff), cervejas (Heineken, Corona, Budweiser, Original, Amstel, Ultra Amstel, Brahma Malzbier, Heineken Zero, Chopp Pilsen Brahma), caipirinhas (cachaça, Smirnoff, Bacardi, vinho, sakê, tropicais), sem álcool (águas, refrigerantes, sucos naturais, batidas sem álcool, caipiras)"
 tipos_quarto: "Apartamento Standard | Apartamento Luxo | Suíte Superluxo | Suíte Nupcial | Suíte Prime"
-lotacao_maxima_ap: 4
+lotacao_maxima_ap: 5
 checkin: "a partir das 15h (acesso à estrutura e acomodação)"
 checkout: "até às 12h (permanência na estrutura, atrações e refeições até às 15h)"
 refeicoes_detalhadas: "7 refeições/dia: café da manhã (07h30–10h), petiscos na piscina (11h–19h), almoço (12h–14h), café colonial (16h–18h), pizzaria (16h30–21h), jantar (20h–22h), lanche da madrugada (00h–02h)"

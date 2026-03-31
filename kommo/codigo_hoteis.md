@@ -9,7 +9,7 @@
 | Cabanas Termas Hotel          | cabanas                       | Cabanas Termas Hotel                  | 6         |
 | Costão do Santinho Resort     | costao                        | Costao do Santinho Resort             | 6         |
 | Termas Park Hotel             | park_hotel                    | Termas Park Hotel - termaspark.com.br | 5         |
-| Fazzenda Park Resort          | fazzenda                      | Fazzenda                              | 4         |
+| Fazzenda Park Resort          | fazzenda                      | Fazzenda                              | 5         |
 | Itá Thermas Resort e Spa      | ita_thermas                   | Itá Thermas                           | 5         |
 | Machadinho Thermas Resort SPA | machadinho_thermas            | Machadinho Thermas                    | 5         |
 | Central Jurema Águas Quentes  | central_jurema                | Central Juremas                       | —         |
