@@ -266,22 +266,23 @@ O conteúdo dos hotéis se divide em dois tipos que precisam de tratamento difer
 
 Cada chunk recebe uma categoria que permite filtro fino no Qdrant:
 
-| content_type           | Descrição                                   | Exemplo                                                            | Estimativa chunks/hotel |
-| ---------------------- | ------------------------------------------- | ------------------------------------------------------------------ | ----------------------- |
-| `descricao_hotel`      | Visão geral, localização, destaques         | "O Termas Park Hotel fica em Gravatal/SC, com piscinas termais..." | 2-4                     |
-| `quartos`              | Tipos de quarto, capacidade, amenidades     | "Suíte Standard: até 5 pessoas, ar-condicionado, TV..."            | 3-6                     |
-| `regime_refeicoes`     | Regime, refeições, horários, bebidas        | "Pensão completa: café 7h-10h, almoço 12h-14h..."                  | 2-4                     |
-| `lazer_recreacao`      | Atividades, recreação, piscinas, spa        | "Recreação infantil das 9h às 12h e 14h às 17h..."                 | 3-8                     |
-| `politicas`            | Cancelamento, pagamento, check-in/out, pets | "Check-in a partir das 14h, checkout até 12h..."                   | 3-6                     |
-| `day_use`              | Info de day use, valores, horários          | "Day use disponível: R$280/pessoa, inclui almoço..."               | 1-2                     |
-| `promocoes`            | Promoções sazonais, pacotes especiais       | "Pacote Páscoa 2026: 3 diárias pelo preço de 2..."                 | 2-10                    |
-| `faq`                  | Perguntas frequentes                        | "O hotel aceita pets? Sim, cães de pequeno porte..."               | 5-15                    |
-| `sazonalidade`         | Temporadas, fechamentos, eventos            | "Parque Aquático: funciona de terça a domingo, fecha jun-jul"      | 2-5                     |
-| `exemplos_few_shot`    | Exemplos de fluxo completo (Think+JSON)     | Exemplo de day use, multi-AP, informativo, etc.                    | 4-8                     |
-| `servicos_extras`      | Serviços terceirizados, transfer, SPA       | "SPA terceirizado, agendar com antecedência..."                    | 1-4                     |
-| `atracoes_especificas` | Atrações internas, parques, mascotes        | "Vale do Dinossauro: atração INTERNA com réplicas..."              | 1-4                     |
+| content_type           | Descrição                                                 | Exemplo                                                            | Estimativa chunks/hotel |
+| ---------------------- | --------------------------------------------------------- | ------------------------------------------------------------------ | ----------------------- |
+| `descricao_hotel`      | Visão geral, localização, destaques                       | "O Termas Park Hotel fica em Gravatal/SC, com piscinas termais..." | 2-4                     |
+| `quartos`              | Tipos de quarto, capacidade, amenidades                   | "Suíte Standard: até 5 pessoas, ar-condicionado, TV..."            | 3-6                     |
+| `regime_refeicoes`     | Regime, refeições, horários, bebidas                      | "Pensão completa: café 7h-10h, almoço 12h-14h..."                  | 2-4                     |
+| `lazer_recreacao`      | Atividades, recreação, piscinas, spa                      | "Recreação infantil das 9h às 12h e 14h às 17h..."                 | 3-8                     |
+| `politicas`            | Cancelamento, pagamento, check-in/out, pets               | "Check-in a partir das 14h, checkout até 12h..."                   | 3-6                     |
+| `day_use`              | Info de day use, valores, horários                        | "Day use disponível: R$280/pessoa, inclui almoço..."               | 1-2                     |
+| `promocoes`            | Promoções sazonais, pacotes especiais                     | "Pacote Páscoa 2026: 3 diárias pelo preço de 2..."                 | 2-10                    |
+| `faq`                  | Perguntas frequentes                                      | "O hotel aceita pets? Sim, cães de pequeno porte..."               | 5-15                    |
+| `sazonalidade`         | Temporadas, fechamentos, eventos                          | "Parque Aquático: funciona de terça a domingo, fecha jun-jul"      | 2-5                     |
+| `exemplos_few_shot`    | Exemplos de fluxo completo (Think+JSON)                   | Exemplo de day use, multi-AP, informativo, etc.                    | 4-8                     |
+| `servicos_extras`      | Serviços terceirizados, transfer, SPA                     | "SPA terceirizado, agendar com antecedência..."                    | 1-4                     |
+| `atracoes_especificas` | Atrações internas, parques, mascotes                      | "Vale do Dinossauro: atração INTERNA com réplicas..."              | 1-4                     |
+| `midia`                | URLs de fotos/vídeos por contexto (preparado para futuro) | Ver seção 4.5 abaixo                                               | 3-10                    |
 
-**Estimativa total: 30-80 chunks por hotel / 360-960 vetores no total**
+**Estimativa total: 30-90 chunks por hotel / 360-1.080 vetores no total**
 
 ### 4.3 Template de chunk
 
@@ -321,6 +322,59 @@ Armazena: Resumo_IA = "Interesse em day use, mensagem padrão enviada"
 ```
 
 Cada exemplo vira um chunk com `content_type: "exemplos_few_shot"` e metadados adicionais (`cenario: "day_use"`, `cenario: "multi_ap"`, etc.) para recuperação precisa.
+
+### 4.5 Chunks de mídia — fotos e vídeos (preparação para futuro)
+
+> **Status:** NÃO implementar agora. Deixar o schema e a categoria prontos para quando formos usar.
+
+Hoje o salesbot "Enviar Fotos" dispara fotos fixas via Kommo após cotação. No futuro, o RAG pode servir fotos/vídeos **contextualizados** — se o cliente perguntou sobre piscina, recuperar fotos de piscina; se perguntou sobre quarto, fotos do quarto.
+
+**Estrutura do chunk de mídia:**
+
+```
+[Termas Park Hotel] Fotos — Piscina termal principal
+
+Piscina termal aquecida a 38°C, ao ar livre, com vista para a Serra do Rio do Rastro.
+Funcionamento: 7h às 22h. Profundidade: 1,20m.
+
+media_urls:
+- https://cdn.hotel.com/piscina_01.jpg
+- https://cdn.hotel.com/piscina_02.jpg
+```
+
+**Payload no Qdrant:**
+
+```json
+{
+  "hotel_slug": "park_hotel",
+  "content_type": "midia",
+  "section": "piscinas",
+  "title": "Fotos — Piscina termal principal",
+  "text": "[Termas Park Hotel] Fotos — Piscina termal...",
+  "metadata": {
+    "media_urls": [
+      "https://cdn.hotel.com/piscina_01.jpg",
+      "https://cdn.hotel.com/piscina_02.jpg"
+    ],
+    "media_type": "foto"
+  }
+}
+```
+
+**Como funcionaria (futuro):**
+
+1. RAG recupera chunk de mídia junto com chunks textuais (mesmo query, mesmo filtro)
+2. O Code node de montagem detecta chunks com `content_type: "midia"` e separa as URLs
+3. Após a resposta da Julia, o n8n envia as fotos relevantes via API Kommo (similar ao salesbot atual)
+4. Ou: as URLs são injetadas no prompt e a Julia menciona "confira as fotos que estou enviando ☺"
+
+**Por que preparar agora:**
+
+- O campo `metadata` JSONB no `content_chunks` já suporta `media_urls` sem alteração de schema
+- O `content_type: "midia"` já está na tabela de categorias
+- Quando for implementar, basta: (1) popular os chunks com URLs, (2) adaptar o Code node para separar mídia, (3) adicionar step de envio de fotos no backend
+
+**O que NÃO muda:** o texto descritivo do chunk é vetorizado normalmente (o texto "Piscina termal aquecida a 38°C..."). As URLs ficam no payload/metadata e NÃO são vetorizadas — são dados estruturados recuperados junto com o vetor.
 
 ---
 
@@ -661,6 +715,7 @@ Tom acolhedor, humano, direto. SEMPRE em português brasileiro.
 {para cada item em faixas_etarias: renderizar linha com min-max e categoria}
 
 [O Code node itera o array JSONB e monta a tabela markdown. Exemplos:]
+
 - Hotel com 4 faixas: Bebê 0-2 | Cortesia 3-8 | Pagante 9-12 | Adulto 13+
 - Águas de Palmas (5 faixas): Bebê 0-2 | Cortesia 3-7 | Pagante 8-12 | Jovem 13-15 | Adulto 16+
 - Cabanas (cortesia ampla): Bebê 0-2 | Cortesia 3-12 | Adulto 13+
@@ -987,13 +1042,14 @@ Adicionar campos `validade_inicio` e `validade_fim` no payload do Qdrant. Na que
 ```json
 {
   "filter": {
-    "must": [
-      { "key": "hotel_slug", "match": { "value": "park_hotel" } }
-    ],
+    "must": [{ "key": "hotel_slug", "match": { "value": "park_hotel" } }],
     "should": [
       {
         "must": [
-          { "key": "metadata.validade_inicio", "range": { "lte": "2026-04-01" } },
+          {
+            "key": "metadata.validade_inicio",
+            "range": { "lte": "2026-04-01" }
+          },
           { "key": "metadata.validade_fim", "range": { "gte": "2026-04-01" } }
         ]
       },
@@ -1211,20 +1267,20 @@ Sem RAG, cada nova feature (promoções, FAQ, sazonalidade) adicionaria ~500-2.0
 
 Dados a popular na tabela `rag.hotel_config`. A coluna `hotel_resort_code` é o código que o n8n/Kommo/Cotador já usam — **não mudar esses códigos**.
 
-| hotel_slug (PK) | hotel_resort_code (n8n) | hotel_name | cortesia | pagante | adulto_min | lotacao_max | day_use | regras_exclusivas |
-|---|---|---|---|---|---|---|---|---|
-| `aguas_de_palmas` | `aguas_de_palmas` | Águas de Palmas Resort | 3-7 | 8-12 (+13-15 jovem) | 16 | 4 | send_and_handoff | 5 faixas etárias (único) |
-| `cabanas` | `cabanas` | Cabanas Termas Hotel | 3-12 | — (cortesia até 12) | 13 | 6 | send_and_handoff | cortesia_omissao: 1 cri 3-10/AP |
-| `costao` | `costao` | Costão do Santinho | 3 (only) | 4-11 | 12 | **6** | send_and_handoff | cortesia_age_3_only |
-| `fazzenda` | `fazzenda` | Fazzenda Park Resort | 3-5 | 6-12 | 13 | 5 | handoff_only | all_inclusive, pix_3pct |
-| `hotel_internacional` | `hotel_internacional` | Hotel Internacional Gravatal | 3-4 | 5-12 | 13 | 5 | send_and_handoff | fisico4_otimizacao |
-| `termas_gravatal` | `termas_gravatal` | Hotel Termas Gravatal | 3-8 | 9-12 | 13 | 5 | handoff_only | — |
-| `jardins_de_jurema` | `jardins_de_jurema` | Jardins de Jurema | 3-12 | 13-14 | 15 | 5 | handoff_only | max 2 cortesias/AP |
-| `lagos_de_jurema` | `lagos_de_jurema` | Lagos de Jurema | 3-12 | 13-14 | 15 | 5 | handoff_only | max 2 cortesias/AP |
-| `machadinho_thermas` | `machadinho_thermas` | Machadinho Thermas Resort | 3-5 | 6-12 | 13 | 5 | handoff_only | ISS 2,5% incluso |
-| `recanto_cataratas_resort` | `recanto_cataratas_resort` | Recanto Cataratas Resort | 3-10 | — | 11 | **4** | handoff_only | max_ap=4, max 2 cortesias/AP |
-| `termas_do_lago` | `termas_do_lago` | Termas do Lago | 3-8 | 9-12 | 13 | 5 | handoff_only | — |
-| `park_hotel` | `park_hotel` | Termas Park Hotel | 3-8 | 9-12 | 13 | 5 | send_and_handoff | possessivos_hotel: true |
+| hotel_slug (PK)            | hotel_resort_code (n8n)    | hotel_name                   | cortesia | pagante             | adulto_min | lotacao_max | day_use          | regras_exclusivas               |
+| -------------------------- | -------------------------- | ---------------------------- | -------- | ------------------- | ---------- | ----------- | ---------------- | ------------------------------- |
+| `aguas_de_palmas`          | `aguas_de_palmas`          | Águas de Palmas Resort       | 3-7      | 8-12 (+13-15 jovem) | 16         | 4           | send_and_handoff | 5 faixas etárias (único)        |
+| `cabanas`                  | `cabanas`                  | Cabanas Termas Hotel         | 3-12     | — (cortesia até 12) | 13         | 6           | send_and_handoff | cortesia_omissao: 1 cri 3-10/AP |
+| `costao`                   | `costao`                   | Costão do Santinho           | 3 (only) | 4-11                | 12         | **6**       | send_and_handoff | cortesia_age_3_only             |
+| `fazzenda`                 | `fazzenda`                 | Fazzenda Park Resort         | 3-5      | 6-12                | 13         | 5           | handoff_only     | all_inclusive, pix_3pct         |
+| `hotel_internacional`      | `hotel_internacional`      | Hotel Internacional Gravatal | 3-4      | 5-12                | 13         | 5           | send_and_handoff | fisico4_otimizacao              |
+| `termas_gravatal`          | `termas_gravatal`          | Hotel Termas Gravatal        | 3-8      | 9-12                | 13         | 5           | handoff_only     | —                               |
+| `jardins_de_jurema`        | `jardins_de_jurema`        | Jardins de Jurema            | 3-12     | 13-14               | 15         | 5           | handoff_only     | max 2 cortesias/AP              |
+| `lagos_de_jurema`          | `lagos_de_jurema`          | Lagos de Jurema              | 3-12     | 13-14               | 15         | 5           | handoff_only     | max 2 cortesias/AP              |
+| `machadinho_thermas`       | `machadinho_thermas`       | Machadinho Thermas Resort    | 3-5      | 6-12                | 13         | 5           | handoff_only     | ISS 2,5% incluso                |
+| `recanto_cataratas_resort` | `recanto_cataratas_resort` | Recanto Cataratas Resort     | 3-10     | —                   | 11         | **4**       | handoff_only     | max_ap=4, max 2 cortesias/AP    |
+| `termas_do_lago`           | `termas_do_lago`           | Termas do Lago               | 3-8      | 9-12                | 13         | 5           | handoff_only     | —                               |
+| `park_hotel`               | `park_hotel`               | Termas Park Hotel            | 3-8      | 9-12                | 13         | 5           | send_and_handoff | possessivos_hotel: true         |
 
 > **IMPORTANTE:** Os `hotel_resort_code` acima vêm do `config_hoteis.js` e do mapeamento do Cotador HAI+. Verificar na VPS se os códigos batem exatamente com o que o Kommo envia no campo `hotel_resort` do webhook. Se houver divergência, ajustar aqui.
 
