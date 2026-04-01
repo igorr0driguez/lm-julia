@@ -340,7 +340,9 @@ Configuração estruturada por hotel. Dados que vão na **Camada 2** do prompt (
 
 ```sql
 CREATE TABLE rag.hotel_config (
-    hotel_slug          TEXT PRIMARY KEY,           -- ex: "termas_park", "hotel_internacional"
+    hotel_slug          TEXT PRIMARY KEY,           -- ex: "park_hotel", "hotel_internacional"
+    hotel_resort_code   TEXT UNIQUE NOT NULL,         -- código usado no n8n/cotador — DEVE ser idêntico ao campo hotel_resort do Kommo
+                                                     -- ex: "park_hotel", "cabanas", "termas_gravatal", "fazzenda"
     hotel_name          TEXT NOT NULL,               -- ex: "Termas Park Hotel"
     hotel_location      TEXT NOT NULL,               -- ex: "Gravatal/SC"
 
@@ -348,16 +350,22 @@ CREATE TABLE rag.hotel_config (
     regime_hospedagem   TEXT NOT NULL,               -- "pensao_completa" | "all_inclusive" | "meia_pensao"
     regime_descricao    TEXT,                         -- descrição curta do regime
 
-    -- Faixas etárias
-    bebe_max_idade      INT NOT NULL DEFAULT 2,      -- universal: 0-2
-    cortesia_min_idade  INT NOT NULL,                -- ex: 3
-    cortesia_max_idade  INT NOT NULL,                -- ex: 8
-    pagante_min_idade   INT,                         -- ex: 9 (NULL se não tem faixa pagante separada)
-    pagante_max_idade   INT,                         -- ex: 12
-    adulto_min_idade    INT NOT NULL,                -- ex: 13
+    -- Faixas etárias (JSONB — suporta 3, 4 ou 5 faixas por hotel)
+    faixas_etarias      JSONB NOT NULL,              -- array de objetos, ex:
+                                                     -- [{"faixa":"bebe","min":0,"max":2,"categoria":"nao_cotado"},
+                                                     --  {"faixa":"cortesia","min":3,"max":8,"categoria":"cortesia"},
+                                                     --  {"faixa":"pagante","min":9,"max":12,"categoria":"tarifa_crianca"},
+                                                     --  {"faixa":"adulto","min":13,"max":null,"categoria":"tarifa_adulto"}]
+                                                     -- Águas de Palmas tem 5 faixas (inclui "jovem" 13-15)
+    adulto_min_idade    INT NOT NULL,                -- campo auxiliar para placeholders de exemplo (ex: 13)
 
     -- Capacidade
     lotacao_max_ap      INT NOT NULL DEFAULT 5,      -- máximo de pessoas por AP
+
+    -- Horários e pagamento (dados que vão no template do prompt e na montagem de orçamento)
+    checkin             TEXT,                         -- ex: "a partir das 14h"
+    checkout            TEXT,                         -- ex: "até às 12h (almoço incluso)"
+    pagamento           TEXT,                         -- ex: "entrada de 25% via PIX + saldo até 10x cartão"
 
     -- Day use
     day_use_modo        TEXT NOT NULL DEFAULT 'handoff_only', -- "handoff_only" | "send_and_handoff"
@@ -384,9 +392,12 @@ CREATE TABLE rag.hotel_config (
     prompt_estatico     TEXT                          -- prompt .js completo para fallback
 );
 
--- Índice para busca rápida
+-- Índices
 CREATE INDEX idx_hotel_config_ativo ON rag.hotel_config(hotel_slug) WHERE ativo = true;
+-- idx_hotel_config_resort_code já criado implicitamente pela constraint UNIQUE na coluna
 ```
+
+> **ATENÇÃO — Mapeamento hotel_resort ↔ hotel_slug:** O n8n e o Kommo usam o campo `hotel_resort` (ex: `park_hotel`, `cabanas`, `termas_gravatal`). O RAG usa `hotel_slug` como PK. Para simplificar, **usar o mesmo código em ambos** — ou seja, `hotel_slug = hotel_resort_code`. O campo `hotel_resort_code` existe como referência explícita para o implementador saber qual código o n8n envia. No Code node de montagem do prompt, buscar config pelo código que vem do handler: `SELECT * FROM rag.hotel_config WHERE hotel_resort_code = $1`.
 
 ### 5.3 Tabela: `rag.content_chunks`
 
@@ -539,7 +550,7 @@ PUT /collections/hotel_knowledge/index
     "id": "uuid-do-chunk",
     "vector": [0.12, 0.34, ...],
     "payload": {
-        "hotel_slug": "termas_park",
+        "hotel_slug": "park_hotel",
         "content_type": "lazer_recreacao",
         "section": "piscinas",
         "title": "Piscinas termais e área de lazer",
@@ -564,7 +575,7 @@ POST /collections/hotel_knowledge/points/query
         "must": [
             {
                 "key": "hotel_slug",
-                "match": { "value": "termas_park" }
+                "match": { "value": "park_hotel" }
             }
         ]
     },
@@ -616,9 +627,10 @@ const prompt = assemblePrompt(templates, config, chunks, { now: new Date() });
 // assemblePrompt faz:
 // 1. Substitui placeholders nos templates: {hotel_name}, {hotel_location}, {faixas_etarias}, etc.
 // 2. Injeta config do hotel na Regra #4 e na Condução da Conversa
-// 3. Injeta chunks RAG em seção delimitada <contexto_adicional>
-// 4. Garante que os 4 exemplos core estão presentes
-// 5. Adiciona exemplos recuperados via RAG (se houver)
+// 3. Injeta ${now} (data atual) — o prompt referencia essa variável para resolução de datas relativas
+// 4. Injeta chunks RAG em seção delimitada <contexto_adicional>
+// 5. Garante que os 4 exemplos core estão presentes
+// 6. Adiciona exemplos recuperados via RAG (se houver)
 ```
 
 ### 7.2 Template de prompt montado (resultado final)
@@ -643,14 +655,17 @@ Tom acolhedor, humano, direto. SEMPRE em português brasileiro.
 
 ## 🚨 REGRA CRÍTICA #4 — CATEGORIZAÇÃO ESTRITA POR IDADE
 
-[template com faixas injetadas do hotel_config]
+[template — a tabela abaixo é GERADA pelo Code node a partir do campo faixas_etarias JSONB]
 | Faixa | Idade | Categoria |
 |-------|-------|-----------|
-| Bebê | 0-{bebe_max} | Não entra na cotação |
-| Cortesia | {cortesia_min}-{cortesia_max} | Cortesia (ocupa lugar físico) |
-| Pagante | {pagante_min}-{pagante_max} | Tarifa criança |
-| Adulto | {adulto_min}+ | Tarifa adulto |
-{regras_exclusivas_se_houver}
+{para cada item em faixas_etarias: renderizar linha com min-max e categoria}
+
+[O Code node itera o array JSONB e monta a tabela markdown. Exemplos:]
+- Hotel com 4 faixas: Bebê 0-2 | Cortesia 3-8 | Pagante 9-12 | Adulto 13+
+- Águas de Palmas (5 faixas): Bebê 0-2 | Cortesia 3-7 | Pagante 8-12 | Jovem 13-15 | Adulto 16+
+- Cabanas (cortesia ampla): Bebê 0-2 | Cortesia 3-12 | Adulto 13+
+
+{regras_exclusivas renderizadas do JSONB — ex: "Se físico=4 em AP único → cotar como 4 adultos"}
 
 ## 🚨 REGRA CRÍTICA #5 — COTAÇÃO DIRETA
 
@@ -672,7 +687,7 @@ Tom acolhedor, humano, direto. SEMPRE em português brasileiro.
 
 ## Contexto do Hotel
 
-{config_hotel_basico: regime, check-in, checkout, pagamento}
+{regime_hospedagem}, {regime_descricao}, check-in: {checkin}, checkout: {checkout}, pagamento: {pagamento}
 
 <contexto_adicional>
 {chunks_rag_recuperados}
@@ -745,7 +760,7 @@ Tom acolhedor, humano, direto. SEMPRE em português brasileiro.
         ▼
 [OpenAI API] POST /v1/embeddings
              model: "text-embedding-3-small"
-             input: chunk.text (com prefixo "[hotel_name] title\n\ncontent")
+             input: chunk.content (campo content do Postgres — já deve conter o prefixo "[hotel_name] title\n\n...")
         │
         ▼
 [Qdrant API] PUT /collections/hotel_knowledge/points
@@ -781,6 +796,8 @@ Com RAG:
 ```
 handler → backend (NOVO) → [embed + qdrant + montar prompt] → agente_jul.ia (prompt dinâmico) → resposta
 ```
+
+> **Nota:** o n8n tem um **node nativo de Qdrant Vector Store** (Insert Documents, Get Many, Retrieve Documents). Pode ser usado no lugar dos HTTP Request nodes para simplificar. A vantagem do HTTP Request é mais controle sobre filtros e score_threshold. Testar ambos e usar o que for mais prático.
 
 **Passos novos no backend (antes de chamar agente_jul.ia):**
 
@@ -856,8 +873,6 @@ Adicionar ao docker-compose existente ou criar arquivo separado:
 
 ```yaml
 # docker-compose.qdrant.yml
-version: "3.8"
-
 services:
   qdrant:
     image: qdrant/qdrant:latest
@@ -937,7 +952,7 @@ Igor/equipe → Claude Code (MCP Postgres)
     │
     ▼
 Claude Code → INSERT INTO rag.content_chunks (
-    hotel_slug: 'termas_park',
+    hotel_slug: 'park_hotel',
     content_type: 'promocoes',
     title: 'Promoção Páscoa 2026',
     content: '[Termas Park Hotel] Promoção Páscoa 2026\n\nPacote especial: 3 diárias...',
@@ -967,15 +982,24 @@ Qdrant (disponível para a Julia na próxima interação)
 Promoções e conteúdo sazonal têm validade. Duas opções:
 
 **Opção A — Filtro por validade no Qdrant (recomendada):**
-Adicionar campos `valid_from` e `valid_until` no payload do Qdrant. Na query, filtrar:
+Adicionar campos `validade_inicio` e `validade_fim` no payload do Qdrant. Na query, filtrar por: (1) não expirado E (2) já começou OU sem validade definida:
 
 ```json
 {
   "filter": {
-    "must": [{ "key": "hotel_slug", "match": { "value": "termas_park" } }],
+    "must": [
+      { "key": "hotel_slug", "match": { "value": "park_hotel" } }
+    ],
     "should": [
-      { "key": "metadata.validade_fim", "range": { "gte": "2026-04-01" } },
-      { "key": "metadata.validade_fim", "match": { "value": null } }
+      {
+        "must": [
+          { "key": "metadata.validade_inicio", "range": { "lte": "2026-04-01" } },
+          { "key": "metadata.validade_fim", "range": { "gte": "2026-04-01" } }
+        ]
+      },
+      {
+        "is_empty": { "key": "metadata.validade_fim" }
+      }
     ]
   }
 }
@@ -1105,7 +1129,7 @@ Sem RAG, cada nova feature (promoções, FAQ, sazonalidade) adicionaria ~500-2.0
 - [ ] Criar função assemblePrompt no n8n (Code node)
 - [ ] Testar montagem com dados reais de cada hotel
 - [ ] Comparar prompt montado vs prompt estático original — validar que regras críticas estão presentes
-- [ ] Validar com a skill review-checklist se o prompt montado passa todos os checks
+- [ ] Validar com a skill `prompt-julia review` se o prompt montado passa todos os checks
 
 ### Fase 5 — Integração no Fluxo (1-2 dias)
 
@@ -1177,28 +1201,36 @@ Sem RAG, cada nova feature (promoções, FAQ, sazonalidade) adicionaria ~500-2.0
 
 8. **Atualização da skill `prompt-julia`:** quando o RAG estiver implementado, a skill precisa ser atualizada para refletir a nova arquitetura (chunks em vez de prompt monolítico). Isso é responsabilidade do Igor com o Claude Code, não do implementador.
 
+9. **Mapeamento exato dos `hotel_resort_code`:** antes de popular a tabela `hotel_config`, verificar na VPS os valores exatos que o Kommo envia no webhook. Os códigos no Anexo A vêm do `config_hoteis.js` do cotador, mas o Kommo pode usar variações (ex: `park_hotel` vs `termas_park`). Um mismatch aqui faz o RAG não encontrar o hotel. **Checar com `docker exec n8n` + logs do handler.**
+
+10. **Regra #4 com regras exclusivas complexas:** hotéis como Cabanas (omissão de cortesia) e Internacional (físico=4) têm lógica de negócio que precisa ser renderizada no prompt pelo Code node. O `faixas_etarias` JSONB resolve a tabela, mas o texto descritivo das regras exclusivas (ex: "Se grupo contém exatamente 1 criança 3-10 por AP, omitir do JSON") precisa estar no `regras_exclusivas` JSONB de forma que o Code node consiga renderizar como texto markdown. Definir um formato padrão para esse campo durante a Fase 2.
+
 ---
 
 ## Anexo A — Configuração dos 12 Hotéis
 
-Dados a popular na tabela `rag.hotel_config`:
+Dados a popular na tabela `rag.hotel_config`. A coluna `hotel_resort_code` é o código que o n8n/Kommo/Cotador já usam — **não mudar esses códigos**.
 
-| hotel_slug             | hotel_name                   | cortesia | pagante             | adulto_min | lotacao_max | day_use          | regras_exclusivas               |
-| ---------------------- | ---------------------------- | -------- | ------------------- | ---------- | ----------- | ---------------- | ------------------------------- |
-| `aguas_de_palmas`      | Águas de Palmas Resort       | 3-7      | 8-12 (+13-15 jovem) | 16         | 4           | send_and_handoff | 5 faixas etárias (único)        |
-| `cabanas_termas_hotel` | Cabanas Termas Hotel         | 3-12     | — (cortesia até 12) | 13         | 6           | send_and_handoff | cortesia_omissao: 1 cri 3-10/AP |
-| `costao_do_santinho`   | Costão do Santinho           | 3 (only) | 4-11                | 12         | 5           | send_and_handoff | cortesia_age_3_only             |
-| `fazzenda_park_resort` | Fazzenda Park Resort         | 3-5      | 6-12                | 13         | 5           | handoff_only     | all_inclusive, pix_3pct         |
-| `hotel_internacional`  | Hotel Internacional Gravatal | 3-4      | 5-12                | 13         | 5           | send_and_handoff | fisico4_otimizacao              |
-| `hotel_termas`         | Hotel Termas Gravatal        | 3-8      | 9-12                | 13         | 5           | handoff_only     | —                               |
-| `jardins_de_jurema`    | Jardins de Jurema            | 3-12     | 13-14               | 15         | 5           | handoff_only     | max 2 cortesias/AP              |
-| `lagos_de_jurema`      | Lagos de Jurema              | 3-12     | 13-14               | 15         | 5           | handoff_only     | max 2 cortesias/AP              |
-| `machadinho_thermas`   | Machadinho Thermas Resort    | 3-5      | 6-12                | 13         | 5           | handoff_only     | ISS 2,5% incluso                |
-| `recanto_cataratas`    | Recanto Cataratas Resort     | 3-10     | —                   | 11         | **4**       | handoff_only     | max_ap=4, max 2 cortesias/AP    |
-| `termas_do_lago`       | Termas do Lago               | 3-8      | 9-12                | 13         | 5           | handoff_only     | —                               |
-| `termas_park`          | Termas Park Hotel            | 3-8      | 9-12                | 13         | 5           | send_and_handoff | possessivos_hotel: true         |
+| hotel_slug (PK) | hotel_resort_code (n8n) | hotel_name | cortesia | pagante | adulto_min | lotacao_max | day_use | regras_exclusivas |
+|---|---|---|---|---|---|---|---|---|
+| `aguas_de_palmas` | `aguas_de_palmas` | Águas de Palmas Resort | 3-7 | 8-12 (+13-15 jovem) | 16 | 4 | send_and_handoff | 5 faixas etárias (único) |
+| `cabanas` | `cabanas` | Cabanas Termas Hotel | 3-12 | — (cortesia até 12) | 13 | 6 | send_and_handoff | cortesia_omissao: 1 cri 3-10/AP |
+| `costao` | `costao` | Costão do Santinho | 3 (only) | 4-11 | 12 | **6** | send_and_handoff | cortesia_age_3_only |
+| `fazzenda` | `fazzenda` | Fazzenda Park Resort | 3-5 | 6-12 | 13 | 5 | handoff_only | all_inclusive, pix_3pct |
+| `hotel_internacional` | `hotel_internacional` | Hotel Internacional Gravatal | 3-4 | 5-12 | 13 | 5 | send_and_handoff | fisico4_otimizacao |
+| `termas_gravatal` | `termas_gravatal` | Hotel Termas Gravatal | 3-8 | 9-12 | 13 | 5 | handoff_only | — |
+| `jardins_de_jurema` | `jardins_de_jurema` | Jardins de Jurema | 3-12 | 13-14 | 15 | 5 | handoff_only | max 2 cortesias/AP |
+| `lagos_de_jurema` | `lagos_de_jurema` | Lagos de Jurema | 3-12 | 13-14 | 15 | 5 | handoff_only | max 2 cortesias/AP |
+| `machadinho_thermas` | `machadinho_thermas` | Machadinho Thermas Resort | 3-5 | 6-12 | 13 | 5 | handoff_only | ISS 2,5% incluso |
+| `recanto_cataratas_resort` | `recanto_cataratas_resort` | Recanto Cataratas Resort | 3-10 | — | 11 | **4** | handoff_only | max_ap=4, max 2 cortesias/AP |
+| `termas_do_lago` | `termas_do_lago` | Termas do Lago | 3-8 | 9-12 | 13 | 5 | handoff_only | — |
+| `park_hotel` | `park_hotel` | Termas Park Hotel | 3-8 | 9-12 | 13 | 5 | send_and_handoff | possessivos_hotel: true |
 
-> **Nota:** Águas de Palmas tem 5 faixas etárias (3-7 cortesia, 8-12 pagante criança, 13-15 pagante jovem, 16+ adulto). O schema `hotel_config` pode precisar de um campo extra (`faixas_etarias_json JSONB`) para esse caso. Alternativa: usar o campo `regras_exclusivas` para armazenar faixas custom.
+> **IMPORTANTE:** Os `hotel_resort_code` acima vêm do `config_hoteis.js` e do mapeamento do Cotador HAI+. Verificar na VPS se os códigos batem exatamente com o que o Kommo envia no campo `hotel_resort` do webhook. Se houver divergência, ajustar aqui.
+
+> **ALIASES:** O `config_hoteis.js` tem alias `ita_thermas` → `park_hotel`. Se o Kommo pode enviar `ita_thermas` como `hotel_resort`, o handler ou o Code node de lookup precisa resolver o alias antes de consultar `rag.hotel_config`. Opção simples: tabela `rag.hotel_aliases (alias TEXT PK, hotel_slug TEXT REFERENCES hotel_config)` ou um JSONB de aliases no hotel_config. Opção mais simples: resolver no handler do n8n com um MAP de aliases, igual ao que o `config_hoteis.js` já faz.
+
+> **Nota sobre faixas_etarias JSONB:** O schema agora usa JSONB para faixas etárias, suportando qualquer número de faixas. Águas de Palmas (5 faixas) e Cabanas (cortesia até 12, sem faixa pagante separada) são representados naturalmente sem gambiarras.
 
 ---
 
@@ -1307,7 +1339,7 @@ curl -X PUT http://localhost:6333/collections/hotel_knowledge/points \
       "id": "550e8400-e29b-41d4-a716-446655440000",
       "vector": [0.12, 0.34, ...],
       "payload": {
-        "hotel_slug": "termas_park",
+        "hotel_slug": "park_hotel",
         "content_type": "lazer_recreacao",
         "section": "piscinas",
         "title": "Piscinas termais",
@@ -1327,7 +1359,7 @@ curl -X POST http://localhost:6333/collections/hotel_knowledge/points/query \
   -d '{
     "query": [0.12, 0.34, ...],
     "filter": {
-      "must": [{ "key": "hotel_slug", "match": { "value": "termas_park" } }]
+      "must": [{ "key": "hotel_slug", "match": { "value": "park_hotel" } }]
     },
     "limit": 5,
     "with_payload": true,
