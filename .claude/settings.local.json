@@ -31,7 +31,15 @@
       "WebFetch(domain:promptaa.com)",
       "WebFetch(domain:blog.galaxy.ai)",
       "WebFetch(domain:help.openai.com)",
-      "WebFetch(domain:www.godofprompt.ai)"
+      "WebFetch(domain:www.godofprompt.ai)",
+      "Bash(where python:*)",
+      "Bash(where python3:*)",
+      "Bash(where node:*)",
+      "WebFetch(domain:qdrant.tech)",
+      "WebFetch(domain:docs.n8n.io)",
+      "WebFetch(domain:www.stackai.com)",
+      "WebFetch(domain:docker.recipes)",
+      "WebFetch(domain:api.qdrant.tech)"
     ]
   }
 }
