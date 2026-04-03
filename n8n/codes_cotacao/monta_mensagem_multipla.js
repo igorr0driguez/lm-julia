@@ -120,6 +120,9 @@ if (hotelResort === "park_hotel") {
 } else if (hotelResort === "jardins_de_jurema") {
   mensagem += config.titulo + `\n\n`;
   mensagem += `✦ *Valores da hospedagem:*\n\n`;
+} else if (hotelResort === "mabu_thermas") {
+  mensagem += config.titulo + `\n\n`;
+  mensagem += `✦ *Valores da hospedagem:*\n\n`;
 } else {
   // hotel_internacional
   const primeiroComDados = grupos.find(
@@ -159,8 +162,8 @@ for (const grupo of grupos) {
       continue;
     }
 
-    // --- Recanto Cataratas: mostra uma opção por tipo de pensão ---
-    if (hotelResort === "recanto_cataratas_resort") {
+    // --- Agrupamento por pensão (Recanto Cataratas / Mabu Thermas) ---
+    if (hotelResort === "recanto_cataratas_resort" || hotelResort === "mabu_thermas") {
       const dados = ap.dados_api;
       const adultos = dados.busca.hospedes.adultos;
       const criancasIdades = dados.busca.hospedes.criancas_idades;
@@ -327,6 +330,11 @@ if (hotelResort === "park_hotel") {
 } else if (hotelResort === "jardins_de_jurema") {
   mensagem += config.horarios_refeicoes + `\n\n`;
   mensagem += config.sobre_resort + `\n\n`;
+  mensagem += config.checkin_checkout + `\n\n`;
+  mensagem += config.obs;
+  if (config.aviso) mensagem += `\n\n` + config.aviso;
+} else if (hotelResort === "mabu_thermas") {
+  mensagem += config.estrutura + `\n\n`;
   mensagem += config.checkin_checkout + `\n\n`;
   mensagem += config.obs;
   if (config.aviso) mensagem += `\n\n` + config.aviso;

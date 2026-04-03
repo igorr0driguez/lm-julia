@@ -14,6 +14,7 @@ const MAP = {
   costao: "costao",
   lagos_de_jurema: "lagos_de_jurema",
   jardins_de_jurema: "jardins_de_jurema",
+  mabu_thermas: "mabu_thermas",
 };
 
 const hotel = MAP[raw] ?? "hotel_internacional";
@@ -153,6 +154,14 @@ const CONFIG = {
     sobre_resort: `✅ *Sobre o resort*\n\nParte do complexo Jurema Águas Quentes\nHotel mais novo e sofisticado\nIdeal para experiência de hospedagem sofisticada e momentos inesquecíveis em família\n\n◆ *Estrutura & Acomodações*\n• Dividido em 4 prédios\n• 152 apartamentos decorados com bom gosto\n• Áreas de lazer e fitness center\n• Piscinas magníficas\n• Centro de convenções sofisticado\n\n♨ *Águas termais*\nPrincipal atrativo do resort\nAcesso às atividades e áreas de lazer compartilhadas com o Lagos de Jurema (exceto refeições e pernoites)`,
     checkin_checkout: `→ Check-in: a partir das 17h\n→ Check-out: até às 15h`,
     obs: `⚠ *Observações:*\nConceito diferenciado em relação ao Lagos de Jurema\nAtividades compartilhadas entre os resorts, mas refeições vinculadas ao resort contratado\nIdeal para hóspedes que buscam sofisticação e conforto`,
+    aviso: null,
+  },
+
+  mabu_thermas: {
+    titulo: `*Orçamento:*\n♨ *Mabu Thermas Grand Resort – Foz do Iguaçu, PR*`,
+    estrutura: `♨ *Estrutura & Lazer*\n• Parque aquático com águas termais\n• Piscinas externas e internas\n• Toboáguas e áreas de lazer aquático\n• Bar molhado\n• Sala de jogos e recreação\n• Sauna úmida e academia\n• Quadras esportivas e atividades ao ar livre\n• Hidroginástica e equipe de recreação infantil\n• Caminhadas ecológicas e espaços de descanso`,
+    checkin_checkout: `☉ *Check-in & Check-out*\n\n→ Check-in: a partir das 15h\n→ Check-out: até às 12h`,
+    obs: `⚠ *Observações:*\n• Regimes de alimentação dependem da tarifa contratada (café da manhã / meia pensão / pensão completa)\n• O resort não é all inclusive\n• Bebidas e consumos extras fora dos regimes contratados podem ter custo adicional\n• Tarifas flutuantes, sujeitas a alteração sem aviso prévio`,
     aviso: null,
   },
 
