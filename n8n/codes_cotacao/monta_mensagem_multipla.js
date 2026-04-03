@@ -42,6 +42,32 @@ function agruparPorPensaoRecanto(opcoes) {
   return ordem.filter(k => grupos[k]).map(k => ({ label: labels[k], opcao: grupos[k] }));
 }
 
+// --- Helpers Mabu Thermas: agrupa por pensão ---
+function normalizePensaoMabu(pensao) {
+  if (!pensao) return 'cafe';
+  const lower = pensao.toLowerCase();
+  if (lower.includes('pensão completa') || lower.includes('pensao completa')) return 'completa';
+  if (lower.includes('jantar')) return 'meia';
+  return 'cafe';
+}
+
+function agruparPorPensaoMabu(opcoes) {
+  const grupos = {};
+  for (const op of opcoes) {
+    const key = normalizePensaoMabu(op.pensao);
+    if (!grupos[key] || parsePreco(op.preco_total) < parsePreco(grupos[key].preco_total)) {
+      grupos[key] = op;
+    }
+  }
+  const ordem = ['cafe', 'meia', 'completa'];
+  const labels = {
+    cafe: '☕ Café da Manhã',
+    meia: '✦ Meia Pensão (Café + Jantar)',
+    completa: '✦ Pensão Completa (Café + Almoço + Jantar)',
+  };
+  return ordem.filter(k => grupos[k]).map(k => ({ label: labels[k], opcao: grupos[k] }));
+}
+
 const primeiroTrata = $item(0).$node["Trata multiplos dados"].json;
 const totalApartamentos = primeiroTrata.total_apartamentos;
 
@@ -179,7 +205,9 @@ for (const grupo of grupos) {
       mensagem += `☺ ${totalPessoasTexto}\n`;
       mensagem += `${diarias} diária${diarias > 1 ? "s" : ""}\n\n`;
 
-      const opsPorPensao = agruparPorPensaoRecanto(dados.opcoes);
+      const opsPorPensao = hotelResort === "mabu_thermas"
+        ? agruparPorPensaoMabu(dados.opcoes)
+        : agruparPorPensaoRecanto(dados.opcoes);
       const todasMesmaCategoria = opsPorPensao.length > 1 &&
         opsPorPensao.every(o => o.opcao.apartamento === opsPorPensao[0].opcao.apartamento);
 
