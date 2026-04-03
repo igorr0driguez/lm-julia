@@ -492,6 +492,45 @@ if (hotelResort === "park_hotel") {
   if (config.aviso) mensagem += `\n\n` + config.aviso;
 
   // ============================================================
+  // VIVAZ CATARATAS RESORT
+  // ============================================================
+} else if (hotelResort === "vivaz_cataratas") {
+  let totalPessoasTexto = `${adultos} adulto${adultos > 1 ? "s" : ""}`;
+  if (criancas > 0)
+    totalPessoasTexto += ` + ${criancas} criança${criancas > 1 ? "s" : ""}`;
+
+  mensagem += config.titulo + `\n\n`;
+  mensagem += config.subtitulo + `\n\n`;
+  mensagem += `✦ *Valores da hospedagem:*\n\n`;
+  mensagem += `${dataEntrada} - ${dataSaida}\n`;
+  mensagem += `☺ ${totalPessoasTexto}\n`;
+  mensagem += `${diarias} diária${diarias > 1 ? "s" : ""}\n\n`;
+
+  const opsPorPensao = agruparPorPensaoMabu(dados.opcoes);
+  const todasMesmaCategoria = opsPorPensao.length > 1 &&
+    opsPorPensao.every(o => o.opcao.apartamento === opsPorPensao[0].opcao.apartamento);
+
+  if (todasMesmaCategoria) {
+    mensagem += `*${opsPorPensao[0].opcao.apartamento}*\n`;
+    for (const { label, opcao } of opsPorPensao) {
+      mensagem += `${label}: ▶ *${opcao.preco_total}*\n`;
+    }
+  } else {
+    for (const { label, opcao } of opsPorPensao) {
+      mensagem += `${label} — *${opcao.apartamento}*\n`;
+      mensagem += `▶ *${opcao.preco_total}*\n`;
+    }
+  }
+  mensagem += "\n";
+
+  mensagem += config.estrutura + `\n\n`;
+  mensagem += config.lazer + `\n\n`;
+  mensagem += config.refeicoes + `\n\n`;
+  mensagem += config.checkin_checkout + `\n\n`;
+  mensagem += config.obs;
+  if (config.aviso) mensagem += `\n\n` + config.aviso;
+
+  // ============================================================
   // HOTEL INTERNACIONAL GRAVATAL
   // ============================================================
 } else {

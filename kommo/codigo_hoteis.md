@@ -22,7 +22,7 @@
 | Recanto Cataratas Resort      | recanto_cataratas_resort      | Recanto Cataratas Thermas Resort      | 4         |
 | Central Resorts               | central_resorts               | Central Resorts.com.br                | —         |
 | Mabu Thermas Grand Resort     | mabu_thermas                  | Mabu Thermas Foz                      | 4         |
-| Vivaz Cataratas Resort        | vivaz_cataratas               | Vivaz Cataratas Resort                | 4         |
+| Vivaz Cataratas Resort        | vivaz_cataratas               | Vivaz Cataratas Resort                | 5         |
 | Central Gramado               | central_gramado               | Central Gramado                       | —         |
 
 ## Observações

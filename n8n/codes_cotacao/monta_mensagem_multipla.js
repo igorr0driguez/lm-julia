@@ -149,6 +149,10 @@ if (hotelResort === "park_hotel") {
 } else if (hotelResort === "mabu_thermas") {
   mensagem += config.titulo + `\n\n`;
   mensagem += `✦ *Valores da hospedagem:*\n\n`;
+} else if (hotelResort === "vivaz_cataratas") {
+  mensagem += config.titulo + `\n\n`;
+  mensagem += config.subtitulo + `\n\n`;
+  mensagem += `✦ *Valores da hospedagem:*\n\n`;
 } else {
   // hotel_internacional
   const primeiroComDados = grupos.find(
@@ -189,7 +193,7 @@ for (const grupo of grupos) {
     }
 
     // --- Agrupamento por pensão (Recanto Cataratas / Mabu Thermas) ---
-    if (hotelResort === "recanto_cataratas_resort" || hotelResort === "mabu_thermas") {
+    if (hotelResort === "recanto_cataratas_resort" || hotelResort === "mabu_thermas" || hotelResort === "vivaz_cataratas") {
       const dados = ap.dados_api;
       const adultos = dados.busca.hospedes.adultos;
       const criancasIdades = dados.busca.hospedes.criancas_idades;
@@ -205,7 +209,7 @@ for (const grupo of grupos) {
       mensagem += `☺ ${totalPessoasTexto}\n`;
       mensagem += `${diarias} diária${diarias > 1 ? "s" : ""}\n\n`;
 
-      const opsPorPensao = hotelResort === "mabu_thermas"
+      const opsPorPensao = (hotelResort === "mabu_thermas" || hotelResort === "vivaz_cataratas")
         ? agruparPorPensaoMabu(dados.opcoes)
         : agruparPorPensaoRecanto(dados.opcoes);
       const todasMesmaCategoria = opsPorPensao.length > 1 &&
@@ -363,6 +367,13 @@ if (hotelResort === "park_hotel") {
   if (config.aviso) mensagem += `\n\n` + config.aviso;
 } else if (hotelResort === "mabu_thermas") {
   mensagem += config.estrutura + `\n\n`;
+  mensagem += config.checkin_checkout + `\n\n`;
+  mensagem += config.obs;
+  if (config.aviso) mensagem += `\n\n` + config.aviso;
+} else if (hotelResort === "vivaz_cataratas") {
+  mensagem += config.estrutura + `\n\n`;
+  mensagem += config.lazer + `\n\n`;
+  mensagem += config.refeicoes + `\n\n`;
   mensagem += config.checkin_checkout + `\n\n`;
   mensagem += config.obs;
   if (config.aviso) mensagem += `\n\n` + config.aviso;

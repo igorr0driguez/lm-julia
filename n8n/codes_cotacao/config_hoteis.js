@@ -15,6 +15,7 @@ const MAP = {
   lagos_de_jurema: "lagos_de_jurema",
   jardins_de_jurema: "jardins_de_jurema",
   mabu_thermas: "mabu_thermas",
+  vivaz_cataratas: "vivaz_cataratas",
 };
 
 const hotel = MAP[raw] ?? "hotel_internacional";
@@ -162,6 +163,17 @@ const CONFIG = {
     estrutura: `♨ *Estrutura & Lazer*\n• Parque aquático com águas termais\n• Piscinas externas e internas\n• Toboáguas e áreas de lazer aquático\n• Bar molhado\n• Sala de jogos e recreação\n• Sauna úmida e academia\n• Quadras esportivas e atividades ao ar livre\n• Hidroginástica e equipe de recreação infantil\n• Caminhadas ecológicas e espaços de descanso`,
     checkin_checkout: `☉ *Check-in & Check-out*\n\n→ Check-in: a partir das 15h\n→ Check-out: até às 12h`,
     obs: `⚠ *Observações:*\n• Regimes de alimentação dependem da tarifa contratada (café da manhã / meia pensão / pensão completa)\n• O resort não é all inclusive\n• Bebidas e consumos extras fora dos regimes contratados podem ter custo adicional\n• Tarifas flutuantes, sujeitas a alteração sem aviso prévio`,
+    aviso: null,
+  },
+
+  vivaz_cataratas: {
+    titulo: `🏝️ *Vivaz Cataratas Resort*`,
+    subtitulo: `O Vivaz Cataratas Resort é um resort moderno e completo localizado em Foz do Iguaçu – PR, cercado pela natureza e próximo aos principais atrativos turísticos da região. Possui estrutura ideal para famílias, casais e grupos que buscam conforto, lazer e experiências ao ar livre.\n\nClassificado como Family Resort, combina diversão, descanso e contato com a natureza em um único espaço.`,
+    estrutura: `🏢 *Estrutura & Acomodações*\n\n• Acomodações modernas e confortáveis, com opções para casais e famílias\n• Resort integrado à Mata Atlântica\n• Piscinas ao ar livre e piscina coberta\n• Parque aquático Aquamania incluso para hóspedes\n• Restaurante, bar da piscina e opções gastronômicas variadas\n• Spa, academia e centro de bem-estar\n• Recreação infantil e atividades para todas as idades\n• Trilhas ecológicas e área verde dentro do resort\n• Sala de jogos e espaços de convivência\n• Wi-Fi gratuito em todo o resort\n• Recepção 24 horas`,
+    lazer: `🌊 *Lazer & Experiências*\n\n• Parque aquático com toboáguas e atrações para adultos e crianças\n• Piscinas integradas à natureza\n• Atividades recreativas monitoradas\n• Espaços de descanso e relaxamento\n• Estrutura ideal para dias de lazer, diversão e descanso`,
+    refeicoes: `🍽 *Refeições*\n\n• Café da manhã incluso na diária\n• Almoço e jantar disponíveis conforme pensão contratada (meia pensão ou pensão completa)\n• Resort não é all inclusive\n• É cobrado R$ 20,00 de estacionamento p/dia`,
+    checkin_checkout: `📅 *Horários de Check-in / Check-out*\n\n• Check-in: a partir das 15:00\n• Check-out: até 12:00`,
+    obs: `⚡ *Observações Importantes*\n\n• Resort com conceito voltado para famílias e lazer\n• Parque aquático incluso para hóspedes, com funcionamento conforme calendário do resort\n• Excelente opção para combinar turismo em Foz do Iguaçu com dias de descanso\n• Estrutura completa, porém refeições são vinculadas ao tipo de pensão contratada`,
     aviso: null,
   },
 
