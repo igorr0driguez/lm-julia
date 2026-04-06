@@ -4,6 +4,7 @@
 > **Data:** 01/04/2026
 > **Status:** Planejamento — aguardando revisão antes da implementação
 > **Objetivo:** Reduzir custo e tokens por chamada, permitir crescimento de conteúdo (promoções, FAQ, sazonalidade) sem inflar os prompts, e centralizar a gestão de conteúdo dos hotéis.
+> **Documento complementar:** `planejamento_update_rag_skill_prompt_julia.md` — evolução da skill prompt-julia para gerenciar prompts no modelo RAG (modos migrate, chunk, preview, sync-status + adaptação dos modos existentes)
 
 ---
 
@@ -1255,7 +1256,7 @@ Sem RAG, cada nova feature (promoções, FAQ, sazonalidade) adicionaria ~500-2.0
 
 7. **Concurrency:** o n8n tem limit de 15 concurrent. Com o passo extra de embed + qdrant, verificar se o tempo total não causa bottleneck. Dado que o adicional é ~200ms, não deve ser problema.
 
-8. **Atualização da skill `prompt-julia`:** quando o RAG estiver implementado, a skill precisa ser atualizada para refletir a nova arquitetura (chunks em vez de prompt monolítico). Isso é responsabilidade do Igor com o Claude Code, não do implementador.
+8. **Atualização da skill `prompt-julia`:** planejamento detalhado em `planejamento_update_rag_skill_prompt_julia.md`. A skill será evoluída (não substituída) para operar em modo RAG: modos existentes (create/review/update/correct) ganham versão RAG-aware + 4 modos novos (migrate, chunk, preview, sync-status). Inclui setup de MCP Postgres via SSH tunnel para gestão direta do schema `rag`. Implementação da skill acompanha o roadmap RAG por fases.
 
 9. **Mapeamento exato dos `hotel_resort_code`:** antes de popular a tabela `hotel_config`, verificar na VPS os valores exatos que o Kommo envia no webhook. Os códigos no Anexo A vêm do `config_hoteis.js` do cotador, mas o Kommo pode usar variações (ex: `park_hotel` vs `termas_park`). Um mismatch aqui faz o RAG não encontrar o hotel. **Checar com `docker exec n8n` + logs do handler.**
 
