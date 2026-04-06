@@ -42,6 +42,27 @@ function agruparPorPensaoRecanto(opcoes) {
   return ordem.filter(k => grupos[k]).map(k => ({ label: labels[k], opcao: grupos[k] }));
 }
 
+// --- Helpers Costão do Santinho: agrupa por tarifa ---
+function normalizeTarifaCostao(tarifa) {
+  if (!tarifa) return 'pix7';
+  const lower = tarifa.toLowerCase();
+  if (lower.includes('5%')) return 'cartao5';
+  if (lower.includes('reembolsável') && !lower.includes('não reembolsável')) return 'reembolsavel';
+  return 'pix7';
+}
+
+function agruparPorTarifaCostao(opcoes) {
+  const grupos = {};
+  for (const op of opcoes) {
+    const key = normalizeTarifaCostao(op.tarifa);
+    if (!grupos[key] || parsePreco(op.preco_total) < parsePreco(grupos[key].preco_total)) {
+      grupos[key] = op;
+    }
+  }
+  const ordem = ['pix7', 'cartao5', 'reembolsavel'];
+  return ordem.filter(k => grupos[k]).map(k => ({ key: k, opcao: grupos[k] }));
+}
+
 // --- Helpers Mabu Thermas: agrupa por pensão ---
 function normalizePensaoMabu(pensao) {
   if (!pensao) return 'cafe';
@@ -371,30 +392,39 @@ if (hotelResort === "park_hotel") {
   // COSTÃO DO SANTINHO
   // ============================================================
 } else if (hotelResort === "costao") {
-  let totalPessoasTexto = `${adultos} adulto${adultos > 1 ? "s" : ""}`;
-  if (criancas > 0)
-    totalPessoasTexto += ` + ${criancas} criança${criancas > 1 ? "s" : ""}`;
-
   mensagem += config.titulo + `\n\n`;
   mensagem += config.regime + `\n\n`;
 
   mensagem += `✦ *Valores Da Hospedagem:*\n\n`;
   mensagem += `${dataEntrada} - ${dataSaida}\n`;
-  mensagem += `*${primeiraOpcao.apartamento}*\n`;
   mensagem += `Adulto(s): ${adultos}\n`;
   if (criancas > 0) mensagem += `Crianças: ${criancas}\n`;
-  if (primeiraOpcao.pensao) mensagem += `Pensão: ${primeiraOpcao.pensao}\n`;
-  if (primeiraOpcao.tarifa) mensagem += `Tarifa: ${primeiraOpcao.tarifa}\n`;
-  mensagem += `${diarias} diária${diarias > 1 ? "s" : ""}\n`;
-  mensagem += `▶ *${primeiraOpcao.preco_total}*\n\n`;
+  mensagem += `${diarias} diária${diarias > 1 ? "s" : ""}\n\n`;
 
-  for (let i = 1; i < totalParaMostrar; i++) {
-    mensagem += `*${dados.opcoes[i].apartamento.toUpperCase()}* - consultar\n`;
+  const opsPorTarifa = agruparPorTarifaCostao(dados.opcoes);
+  const todasMesmaCategoria = opsPorTarifa.length > 1 &&
+    opsPorTarifa.every(o => o.opcao.apartamento === opsPorTarifa[0].opcao.apartamento);
+
+  if (todasMesmaCategoria) {
+    mensagem += `*${opsPorTarifa[0].opcao.apartamento}*\n\n`;
+    for (const { key, opcao } of opsPorTarifa) {
+      mensagem += `Tarifa: ${opcao.tarifa}\n`;
+      mensagem += `▶ *${opcao.preco_total}*\n`;
+      if (key === 'cartao5' || key === 'reembolsavel') mensagem += `_em até 10x com parcela mínima de R$100_\n`;
+      mensagem += `\n`;
+    }
+  } else {
+    for (const { key, opcao } of opsPorTarifa) {
+      mensagem += `*${opcao.apartamento}*\n`;
+      mensagem += `Tarifa: ${opcao.tarifa}\n`;
+      mensagem += `▶ *${opcao.preco_total}*\n`;
+      if (key === 'cartao5' || key === 'reembolsavel') mensagem += `_em até 10x com parcela mínima de R$100_\n`;
+      mensagem += `\n`;
+    }
   }
-  if (totalParaMostrar > 1) mensagem += "\n";
+  mensagem += "\n";
 
   mensagem += config.desconto + `\n\n`;
-  mensagem += config.pagamento + `\n\n`;
   mensagem += config.checkin + `\n`;
   mensagem += config.checkout + `\n\n`;
   mensagem += config.pets + `\n\n`;

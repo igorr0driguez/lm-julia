@@ -42,6 +42,27 @@ function agruparPorPensaoRecanto(opcoes) {
   return ordem.filter(k => grupos[k]).map(k => ({ label: labels[k], opcao: grupos[k] }));
 }
 
+// --- Helpers Costão do Santinho: agrupa por tarifa ---
+function normalizeTarifaCostao(tarifa) {
+  if (!tarifa) return 'pix7';
+  const lower = tarifa.toLowerCase();
+  if (lower.includes('5%')) return 'cartao5';
+  if (lower.includes('reembolsável') && !lower.includes('não reembolsável')) return 'reembolsavel';
+  return 'pix7';
+}
+
+function agruparPorTarifaCostao(opcoes) {
+  const grupos = {};
+  for (const op of opcoes) {
+    const key = normalizeTarifaCostao(op.tarifa);
+    if (!grupos[key] || parsePreco(op.preco_total) < parsePreco(grupos[key].preco_total)) {
+      grupos[key] = op;
+    }
+  }
+  const ordem = ['pix7', 'cartao5', 'reembolsavel'];
+  return ordem.filter(k => grupos[k]).map(k => ({ key: k, opcao: grupos[k] }));
+}
+
 // --- Helpers Mabu Thermas: agrupa por pensão ---
 function normalizePensaoMabu(pensao) {
   if (!pensao) return 'cafe';
@@ -230,6 +251,46 @@ for (const grupo of grupos) {
       continue;
     }
 
+    // --- Agrupamento por tarifa (Costão do Santinho) ---
+    if (hotelResort === "costao") {
+      const dados = ap.dados_api;
+      const adultos = dados.busca.hospedes.adultos;
+      const criancasIdades = dados.busca.hospedes.criancas_idades;
+      const criancas = criancasIdades
+        ? criancasIdades.split(",").filter((x) => x.trim() !== "").length
+        : 0;
+
+      mensagem += `*QUARTO ${ap.ap_num}:*\n`;
+      mensagem += `${dataEntrada} - ${dataSaida}\n`;
+      mensagem += `Adulto(s): ${adultos}\n`;
+      if (criancas > 0) mensagem += `Crianças: ${criancas}\n`;
+      mensagem += `${diarias} diária${diarias > 1 ? "s" : ""}\n\n`;
+
+      const opsPorTarifa = agruparPorTarifaCostao(dados.opcoes);
+      const todasMesmaCategoria = opsPorTarifa.length > 1 &&
+        opsPorTarifa.every(o => o.opcao.apartamento === opsPorTarifa[0].opcao.apartamento);
+
+      if (todasMesmaCategoria) {
+        mensagem += `*${opsPorTarifa[0].opcao.apartamento}*\n\n`;
+        for (const { key, opcao } of opsPorTarifa) {
+          mensagem += `Tarifa: ${opcao.tarifa}\n`;
+          mensagem += `▶ *${opcao.preco_total}*\n`;
+          if (key === 'cartao5' || key === 'reembolsavel') mensagem += `_em até 10x com parcela mínima de R$100_\n`;
+          mensagem += `\n`;
+        }
+      } else {
+        for (const { key, opcao } of opsPorTarifa) {
+          mensagem += `*${opcao.apartamento}*\n`;
+          mensagem += `Tarifa: ${opcao.tarifa}\n`;
+          mensagem += `▶ *${opcao.preco_total}*\n`;
+          if (key === 'cartao5' || key === 'reembolsavel') mensagem += `_em até 10x com parcela mínima de R$100_\n`;
+          mensagem += `\n`;
+        }
+      }
+      mensagem += "\n";
+      continue;
+    }
+
     const dados = ap.dados_api;
     const opcao = ap.opcao;
     const adultos = dados.busca.hospedes.adultos;
@@ -247,11 +308,6 @@ for (const grupo of grupos) {
       if (criancas > 0) mensagem += `Crianças: ${criancas}\n`;
       mensagem += `Pensão: ${opcao.pensao}\n`;
       mensagem += `Tarifa: ${opcao.tarifa}\n`;
-    } else if (hotelResort === "costao") {
-      mensagem += `Adulto(s): ${adultos}\n`;
-      if (criancas > 0) mensagem += `Crianças: ${criancas}\n`;
-      if (opcao.pensao) mensagem += `Pensão: ${opcao.pensao}\n`;
-      if (opcao.tarifa) mensagem += `Tarifa: ${opcao.tarifa}\n`;
     } else {
       let totalPessoasTexto = `${adultos} adulto${adultos > 1 ? "s" : ""}`;
       if (criancas > 0)
@@ -347,7 +403,6 @@ if (hotelResort === "park_hotel") {
   if (config.aviso) mensagem += `\n\n` + config.aviso;
 } else if (hotelResort === "costao") {
   mensagem += config.desconto + `\n\n`;
-  mensagem += config.pagamento + `\n\n`;
   mensagem += config.checkin + `\n`;
   mensagem += config.checkout + `\n\n`;
   mensagem += config.pets + `\n\n`;
